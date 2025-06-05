@@ -1,14 +1,70 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-      "./app/**/*.{js,ts,jsx,tsx}",
-      "./components/**/*.{js,ts,jsx,tsx}",
-    ],
-    theme: {
-      extend: {},
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  safelist: [
+    // All specific red burgundy classes found in your codebase
+    'bg-red-burgundy',
+    'text-red-burgundy',
+    'border-red-burgundy',
+    'hover:bg-red-burgundy',
+    'hover:text-red-burgundy',
+    'hover:border-red-burgundy',
+    'bg-red-burgundy/5',
+    'bg-red-burgundy/10',
+    'bg-red-burgundy/20',
+    'bg-red-burgundy/30',
+    'hover:bg-red-burgundy/5',
+    'hover:bg-red-burgundy/10',
+    'hover:bg-red-burgundy/90',
+    'from-red-burgundy/5',
+    'from-red-burgundy/3',
+    'via-red-burgundy/20',
+    'via-red-burgundy/15',
+    'to-red-burgundy/2',
+    'bg-red-wine',
+    'text-red-wine',
+    'hover:bg-red-wine',
+    'hover:text-red-wine',
+    // Additional variants
+    'text-white',
+    'bg-white',
+    'border-white',
+    'rounded-full',
+    'animate-pulse',
+    'group-hover:w-full',
+    'transition-all',
+    'duration-300',
+    'duration-500',
+    'hover:-translate-y-1',
+    'shadow-xl',
+    'hover:shadow-2xl',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'red-burgundy': '#8B0000',
+        'red-wine': '#7F1D1D',
+        'ivory': '#FAF9F7',
+        'text': '#2C2A24',
+        'subtext': '#5E5A4E',
+        'border': '#E5E7EB',
+      },
+      fontFamily: {
+        'serif': ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
+        'sans': ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
     },
-    plugins: [require("daisyui")],
-    daisyui: {
-      themes: ["light", "dark"],
-    },
-  }
+  },
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["light"],
+  },
+} 

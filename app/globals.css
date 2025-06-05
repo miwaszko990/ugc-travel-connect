@@ -1,27 +1,188 @@
 @import "tailwindcss";
-@import "tailwindcss/preflight";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Force Tailwind to include these classes */
+.bg-red-burgundy { background-color: #8B0000 !important; }
+.text-red-burgundy { color: #8B0000 !important; }
+.border-red-burgundy { border-color: #8B0000 !important; }
+.hover\:bg-red-burgundy:hover { background-color: #8B0000 !important; }
+.hover\:text-red-burgundy:hover { color: #8B0000 !important; }
+
+/* Override DaisyUI button styles for our custom buttons */
+button.bg-red-burgundy {
+  background-color: #8B0000 !important;
+  color: white !important;
 }
 
-:root {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+button.bg-red-burgundy:hover {
+  background-color: rgba(139, 0, 0, 0.9) !important;
+  color: white !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+button.text-white {
+  color: white !important;
+}
+
+button.hover\:text-white:hover {
+  color: white !important;
+}
+
+/* Ensure border buttons work properly */
+button.border-red-burgundy {
+  border-color: #8B0000 !important;
+  color: #8B0000 !important;
+  background-color: transparent !important;
+}
+
+button.border-red-burgundy:hover {
+  background-color: #8B0000 !important;
+  color: white !important;
+}
+
+/* Force text color inheritance for icons in buttons */
+button.bg-red-burgundy svg,
+button.bg-red-burgundy:hover svg {
+  color: white !important;
+}
+
+button.border-red-burgundy svg {
+  color: #8B0000 !important;
+}
+
+button.border-red-burgundy:hover svg {
+  color: white !important;
+}
+
+/* CSS Custom Properties for red colors */
+:root {
+  --red-burgundy: #8B0000;
+  --red-wine: #7F1D1D;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slideInFromRight {
+  animation: slideInFromRight 0.8s ease-out;
+}
+
+/* Calendar styles */
+.react-calendar {
+  border: none !important;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  font-family: inherit;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 16px;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: #f3f4f6;
+  color: #8B0000;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.react-calendar__tile {
+  background: none;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.react-calendar__tile:hover {
+  background-color: #f3f4f6;
+  color: #8B0000;
+}
+
+.react-calendar__tile--active {
+  background-color: #8B0000 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.react-calendar__tile--hasActive {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .react-calendar {
+    padding: 12px;
+  }
+  
+  .react-calendar__tile {
+    padding: 8px;
+    font-size: 14px;
+  }
 }
