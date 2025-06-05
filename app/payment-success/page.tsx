@@ -7,13 +7,14 @@ import { useAuth } from '@/app/hooks/useAuth';
 export default function PaymentSuccess() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { user, userRole } = useAuth();
+  const { /* user, */ userRole } = useAuth();
   const [countdown, setCountdown] = useState(3);
 
-  const sessionId = searchParams.get('session_id');
-  const offerId = searchParams.get('offer_id');
-  const creatorId = searchParams.get('creator_id');
-  const brandId = searchParams.get('brand_id');
+  // Keep these commented but available for future webhook implementation
+  // const sessionId = searchParams.get('session_id');
+  // const offerId = searchParams.get('offer_id');
+  // const creatorId = searchParams.get('creator_id');
+  // const brandId = searchParams.get('brand_id');
 
   useEffect(() => {
     // Countdown timer and redirect

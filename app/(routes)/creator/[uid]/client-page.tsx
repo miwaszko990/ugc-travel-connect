@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/app/lib/firebase';
-import { doc, getDoc, collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { doc, getDoc, collection, query, /* where, */ getDocs, orderBy, limit } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
 import NewMessageModal from '@/app/components/messages/new-message-modal';
 import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
 import Navigation from '@/app/components/ui/navigation';
-import { CalendarIcon, MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import Calendar from 'react-calendar';
+import { MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+// import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import InstagramFeed from '@/app/components/creator/InstagramFeed';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -164,7 +164,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
     }
     
     if (!creator) return;
-    let message = `Hi ${creator.firstName}! I'm interested in collaborating with you on a potential UGC campaign. Could we discuss the details?`;
+    const message = `Hi ${creator.firstName}! I&apos;m interested in collaborating with you on a potential UGC campaign. Could we discuss the details?`;
     setPrefilledMessage(message);
     setIsMessageModalOpen(true);
   };

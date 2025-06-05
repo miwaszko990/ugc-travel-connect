@@ -8,7 +8,7 @@ import { useAuth } from '@/app/hooks/useAuth';
 import Navigation from '@/app/components/ui/navigation';
 import CreatorCard from '@/app/components/creator/creator-card';
 import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
-import { MagnifyingGlassIcon, FunnelIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, /* FunnelIcon, */ ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface Creator {
   uid: string;
@@ -43,7 +43,6 @@ export default function SearchPage() {
   const [creators, setCreators] = useState<Creator[]>([]);
   const [allCreators, setAllCreators] = useState<Creator[]>([]); // Store all creators
   const [loading, setLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
   
@@ -109,7 +108,6 @@ export default function SearchPage() {
       setLoading(true);
       console.log('🔍 Fetching all creators...');
       
-      // Simple query without combining where + orderBy to avoid index issues
       const q = query(
         collection(db, "users"),
         where("role", "==", "creator"),
@@ -122,7 +120,6 @@ export default function SearchPage() {
       const creatorsData = await Promise.all(snap.docs.map(async (doc) => {
         const d = doc.data();
         
-        // Create base creator object
         const creator: Creator = {
           uid: doc.id,
           firstName: d.firstName || '',
@@ -132,7 +129,6 @@ export default function SearchPage() {
           followers: d.followerCount || 0,
         };
 
-        // Try to get upcoming trip data
         try {
           const tripsRef = collection(db, 'users', doc.id, 'travelPlans');
           const futureTripsQuery = query(
@@ -156,7 +152,7 @@ export default function SearchPage() {
               endDate: endDate
             };
           }
-        } catch (tripError) {
+        } catch (/* tripError */) {
           console.log('No trips found for creator:', doc.id);
         }
 

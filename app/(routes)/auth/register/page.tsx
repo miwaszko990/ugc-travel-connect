@@ -142,7 +142,7 @@ export default function RegisterPage() {
               <Listbox value={selectedRole} onChange={handleRoleChange}>
                 <div className="relative">
                   <Listbox.Button 
-                    className={({ open }) => `relative h-12 w-full flex items-center justify-between px-4 rounded-xl font-medium ${
+                    className={`relative h-12 w-full flex items-center justify-between px-4 rounded-xl font-medium ${
                       errors.role 
                         ? 'bg-white border-2 border-red-500' 
                         : 'bg-[#F4F4F5] border-0'
