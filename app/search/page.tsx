@@ -152,7 +152,7 @@ export default function SearchPage() {
               endDate: endDate
             };
           }
-        } catch (/* tripError */) {
+        } catch {
           console.log('No trips found for creator:', doc.id);
         }
 
