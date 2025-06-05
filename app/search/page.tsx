@@ -153,6 +153,7 @@ export default function SearchPage() {
             };
           }
         } catch {
+          // Silently handle missing trip data
           console.log('No trips found for creator:', doc.id);
         }
 
