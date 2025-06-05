@@ -10,7 +10,7 @@
     "analyze": "ANALYZE=true next build",
     "analyze:win": "set ANALYZE=true && next build",
     "lint:fix": "eslint --fix .",
-    "prepare": "husky install",
+    "prepare": "if [ \"$VERCEL\" != \"1\" ]; then husky install; fi",
     "init-demo": "ts-node scripts/init-demo-messages.ts"
   },
   "dependencies": {
