@@ -32,8 +32,6 @@ const nextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
-  // Only build and allow access to the landing page
-  pageExtensions: ['ts', 'tsx'],
   // Temporarily exclude all routes except landing page
   async rewrites() {
     return {
@@ -50,17 +48,6 @@ const nextConfig = {
         },
       ],
     };
-  },
-  // Only include specific pages in the build
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Only include the landing page in client-side builds
-      config.entry = async () => {
-        const entries = { 'main.js': './app/lumo/page.tsx' };
-        return entries;
-      };
-    }
-    return config;
   },
 };
 
