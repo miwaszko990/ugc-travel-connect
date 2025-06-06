@@ -1,13 +1,14 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
 
-export default function PaymentSuccess() {
+function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { /* user, */ userRole } = useAuth();
+  const { userRole } = useAuth();
   const [countdown, setCountdown] = useState(3);
 
   // Keep these commented but available for future webhook implementation
@@ -115,5 +116,17 @@ export default function PaymentSuccess() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentSuccess() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    }>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 } 
