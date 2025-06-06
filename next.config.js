@@ -26,6 +26,19 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  // Redirect all routes to home in production except allowed paths
+  async redirects() {
+    if (process.env.NODE_ENV === 'production') {
+      return [
+        {
+          source: '/:path((?!api|_next|static|favicon.ico).*)',
+          destination: '/',
+          permanent: false,
+        },
+      ];
+    }
+    return [];
+  },
 };
 
 module.exports = withBundleAnalyzer(nextConfig); 
