@@ -32,22 +32,18 @@ const nextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
-  // Temporarily exclude all routes except landing page
-  async rewrites() {
-    return {
-      beforeFiles: [
-        // Only allow the landing page and its assets
+  // Redirect all routes to home in production except allowed paths
+  async redirects() {
+    if (process.env.NODE_ENV === 'production') {
+      return [
         {
-          source: '/',
+          source: '/:path((?!api|_next|static|favicon.ico).*)',
           destination: '/lumo',
+          permanent: false,
         },
-        // Block all other routes
-        {
-          source: '/:path*',
-          destination: '/lumo',
-        },
-      ],
-    };
+      ];
+    }
+    return [];
   },
 };
 
