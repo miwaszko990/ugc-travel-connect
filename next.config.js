@@ -32,24 +32,35 @@ const nextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
-  // Only include the landing page route during build
+  // Only build and allow access to the landing page
   pageExtensions: ['ts', 'tsx'],
   // Temporarily exclude all routes except landing page
   async rewrites() {
     return {
       beforeFiles: [
-        // Only allow the landing page
+        // Only allow the landing page and its assets
         {
           source: '/',
-          destination: '/',
+          destination: '/lumo',
         },
-        // Temporarily block all other routes
+        // Block all other routes
         {
           source: '/:path*',
-          destination: '/',
+          destination: '/lumo',
         },
       ],
     };
+  },
+  // Only include specific pages in the build
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Only include the landing page in client-side builds
+      config.entry = async () => {
+        const entries = { 'main.js': './app/lumo/page.tsx' };
+        return entries;
+      };
+    }
+    return config;
   },
 };
 
