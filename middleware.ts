@@ -10,10 +10,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Only allow access to the landing page in production
+  // Only allow access to the lumo landing page in production
   if (process.env.NODE_ENV === 'production' && 
+      request.nextUrl.pathname !== '/lumo' &&
       request.nextUrl.pathname !== '/') {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/lumo', request.url))
   }
 
   return NextResponse.next()
