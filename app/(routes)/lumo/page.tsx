@@ -19,12 +19,12 @@ export default function LumoLandingPage() {
     e.preventDefault();
     
     if (!email.trim()) {
-      setMessage({ type: 'error', text: 'Please enter your email address' });
+      setMessage({ type: 'error', text: 'Proszę podać swój adres email' });
       return;
     }
 
     if (!validateEmail(email)) {
-      setMessage({ type: 'error', text: 'Please enter a valid email address' });
+      setMessage({ type: 'error', text: 'Proszę podać prawidłowy adres email' });
       return;
     }
 
@@ -38,11 +38,11 @@ export default function LumoLandingPage() {
         source: 'lumo-landing'
       });
 
-      setMessage({ type: 'success', text: 'Thank you! You\'re on the waitlist.' });
+      setMessage({ type: 'success', text: 'Dziękujemy! Jesteś na liście oczekujących.' });
       setEmail('');
     } catch (error) {
       console.error('Error adding email to waitlist:', error);
-      setMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
+      setMessage({ type: 'error', text: 'Coś poszło nie tak. Spróbuj ponownie.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -80,7 +80,7 @@ export default function LumoLandingPage() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm border border-red-burgundy/20 rounded-full">
               <div className="w-2 h-2 bg-red-burgundy rounded-full animate-pulse"></div>
               <span className="text-sm font-medium text-red-burgundy tracking-wide">
-                TRAVEL CONTENT MARKETPLACE
+                PLATFORMA TREŚCI PODRÓŻNICZYCH
               </span>
             </div>
             
@@ -90,10 +90,10 @@ export default function LumoLandingPage() {
                 LUMO
               </h1>
               <h2 className="text-2xl lg:text-3xl xl:text-4xl font-serif text-text leading-tight max-w-4xl mx-auto">
-                Create & Collect Travel Content from the Real World
+                Twórz i Zbieraj Treści Podróżnicze z Prawdziwego Świata
               </h2>
               <p className="text-xl text-subtext max-w-3xl mx-auto leading-relaxed">
-                Lumo connects brands with creators already heading to your next campaign city. Authentic content, delivered fast — no scouting, no waiting.
+                Lumo łączy marki z twórcami, którzy już jadą do twojego następnego miasta kampanii. Autentyczne treści, dostarczone szybko — bez poszukiwań, bez czekania.
               </p>
             </div>
           </div>
@@ -109,11 +109,11 @@ export default function LumoLandingPage() {
             <div className="space-y-8">
               <div className="space-y-6">
                 <h2 className="text-4xl lg:text-5xl font-serif font-bold text-red-burgundy">
-                  For Brands
+                  Dla Marek
                 </h2>
                 <div className="w-20 h-1 bg-red-burgundy rounded-full"></div>
                 <p className="text-lg text-subtext leading-relaxed">
-                  Launching in Paris? Need a shot in Tokyo? We've got creators on the ground — before they even land.
+                  Debiutujesz w Paryżu? Potrzebujesz zdjęcia w Tokio? Mamy twórców na miejscu — zanim jeszcze wylądują.
                 </p>
               </div>
               
@@ -123,9 +123,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">See who's already going where you need</p>
+                    <p className="text-lg font-medium text-text mb-1">Zobacz, kto już jedzie tam, gdzie potrzebujesz</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Filter creators by city and travel dates
+                      Filtruj twórców według miasta i dat podróży
                     </p>
                   </div>
                 </div>
@@ -135,9 +135,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Ask for the shots you need</p>
+                    <p className="text-lg font-medium text-text mb-1">Poproś o zdjęcia, których potrzebujesz</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Request short-form video or travel-style product photos
+                      Zamów krótkie filmy lub podróżnicze zdjęcia produktów
                     </p>
                   </div>
                 </div>
@@ -147,9 +147,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Get content delivered, not excuses</p>
+                    <p className="text-lg font-medium text-text mb-1">Otrzymuj treści, nie wymówki</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      We hold the money until your content is approved
+                      Przechowujemy pieniądze do momentu zatwierdzenia treści
                     </p>
                   </div>
                 </div>
@@ -160,11 +160,11 @@ export default function LumoLandingPage() {
             <div className="space-y-8">
               <div className="space-y-6">
                 <h2 className="text-4xl lg:text-5xl font-serif font-bold text-red-burgundy">
-                  For Creators
+                  Dla Twórców
                 </h2>
                 <div className="w-20 h-1 bg-red-burgundy rounded-full"></div>
                 <p className="text-lg text-subtext leading-relaxed">
-                  Monetize your next trip — no pitching, no guessing. Lumo helps you get discovered and booked by real brands before you board the plane.
+                  Zarabiaj na swojej następnej podróży — bez oferowania się, bez zgadywania. Lumo pomaga ci zostać odkrytym i zarezerwowanym przez prawdziwe marki, zanim wsiądziesz do samolotu.
                 </p>
               </div>
               
@@ -174,9 +174,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">List your next trips</p>
+                    <p className="text-lg font-medium text-text mb-1">Dodaj swoje następne podróże</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Add cities + dates — brands see it instantly
+                      Dodaj miasta + daty — marki widzą to natychmiast
                     </p>
                   </div>
                 </div>
@@ -186,9 +186,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Accept offers that fit your vibe</p>
+                    <p className="text-lg font-medium text-text mb-1">Akceptuj oferty, które pasują do twojego stylu</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      No cold outreach — just relevant requests
+                      Bez zimnego kontaktu — tylko trafne zapytania
                     </p>
                   </div>
                 </div>
@@ -198,9 +198,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Get paid when content is approved</p>
+                    <p className="text-lg font-medium text-text mb-1">Otrzymaj zapłatę po zatwierdzeniu treści</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      We hold funds until delivery — no ghosting, no drama
+                      Przechowujemy środki do dostarczenia — bez ignorowania, bez dramatu
                     </p>
                   </div>
                 </div>
@@ -217,10 +217,10 @@ export default function LumoLandingPage() {
             
             <div className="space-y-6">
               <h2 className="text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-red-burgundy">
-                Join the early access waitlist
+                Dołącz do listy wczesnego dostępu
               </h2>
               <p className="text-xl text-subtext max-w-2xl mx-auto leading-relaxed">
-                Be the first to access a smarter way to create & buy travel content. Creators earn on the go. Brands get real-world UGC — without the chase.
+                Bądź pierwszą osobą, która uzyska dostęp do inteligentniejszego sposobu tworzenia i kupowania treści podróżniczych. Twórcy zarabiają w podróży. Marki otrzymują autentyczny UGC — bez gonitwы.
               </p>
             </div>
             
@@ -230,7 +230,7 @@ export default function LumoLandingPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
+                  placeholder="Podaj swój adres email"
                   className="flex-1 px-6 py-4 border border-red-burgundy/20 rounded-2xl font-sans text-base focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm"
                   disabled={isSubmitting}
                 />
@@ -241,7 +241,7 @@ export default function LumoLandingPage() {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-burgundy/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   <span className="relative">
-                    {isSubmitting ? 'Joining...' : 'Join Now'}
+                    {isSubmitting ? 'Dołączanie...' : 'Dołącz Teraz'}
                   </span>
                   {!isSubmitting && (
                     <svg className="relative w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
