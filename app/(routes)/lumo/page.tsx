@@ -90,10 +90,10 @@ export default function LumoLandingPage() {
                 LUMO
               </h1>
               <h2 className="text-2xl lg:text-3xl xl:text-4xl font-serif text-text leading-tight max-w-4xl mx-auto">
-                Twórz i Zbieraj Treści Podróżnicze z Prawdziwego Świata
+                Zamawiaj i twórz autentyczne treści z całego świata
               </h2>
               <p className="text-xl text-subtext max-w-3xl mx-auto leading-relaxed">
-                Lumo łączy marki z twórcami, którzy już jadą do twojego następnego miasta kampanii. Autentyczne treści, dostarczone szybko — bez poszukiwań, bez czekania.
+                Lumo łączy marki z twórcami, którzy już planują podróże do miast, z których chcesz pozyskać treści na swoje social media. Zamów zdjęcia i wideo z konkretnych lokalizacji — zanim twórca jeszcze wsiądzie do samolotu.
               </p>
             </div>
           </div>
@@ -109,11 +109,11 @@ export default function LumoLandingPage() {
             <div className="space-y-8">
               <div className="space-y-6">
                 <h2 className="text-4xl lg:text-5xl font-serif font-bold text-red-burgundy">
-                  Dla Marek
+                  Dla marek
                 </h2>
                 <div className="w-20 h-1 bg-red-burgundy rounded-full"></div>
                 <p className="text-lg text-subtext leading-relaxed">
-                  Debiutujesz w Paryżu? Potrzebujesz zdjęcia w Tokio? Mamy twórców na miejscu — zanim jeszcze wylądują.
+                  Zamów treści z miejsca, zanim ktoś tam dotrze
                 </p>
               </div>
               
@@ -123,9 +123,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Zobacz, kto już jedzie tam, gdzie potrzebujesz</p>
+                    <p className="text-lg font-medium text-text mb-1">Zobacz, kto jedzie do Twojej lokalizacji</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Filtruj twórców według miasta i dat podróży
+                      Przeglądaj twórców według miasta i dat podróży
                     </p>
                   </div>
                 </div>
@@ -135,9 +135,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Poproś o zdjęcia, których potrzebujesz</p>
+                    <p className="text-lg font-medium text-text mb-1">Zamów autentyczne materiały</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Zamów krótkie filmy lub podróżnicze zdjęcia produktów
+                      Wideo i zdjęcia wykonane w konkretnym miejscu, zgodnie z Twoimi potrzebami
                     </p>
                   </div>
                 </div>
@@ -147,9 +147,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Otrzymuj treści, nie wymówki</p>
+                    <p className="text-lg font-medium text-text mb-1">Otrzymuj treści bez opóźnień</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Przechowujemy pieniądze do momentu zatwierdzenia treści
+                      Wynagrodzenie wypłacane dopiero po Twoim zatwierdzeniu contentu
                     </p>
                   </div>
                 </div>
@@ -160,11 +160,11 @@ export default function LumoLandingPage() {
             <div className="space-y-8">
               <div className="space-y-6">
                 <h2 className="text-4xl lg:text-5xl font-serif font-bold text-red-burgundy">
-                  Dla Twórców
+                  Dla twórców
                 </h2>
                 <div className="w-20 h-1 bg-red-burgundy rounded-full"></div>
                 <p className="text-lg text-subtext leading-relaxed">
-                  Zarabiaj na swojej następnej podróży — bez oferowania się, bez zgadywania. Lumo pomaga ci zostać odkrytym i zarezerwowanym przez prawdziwe marki, zanim wsiądziesz do samolotu.
+                  Zarabiaj na podróżach bez nachalnych ofert
                 </p>
               </div>
               
@@ -174,9 +174,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Dodaj swoje następne podróże</p>
+                    <p className="text-lg font-medium text-text mb-1">Dodaj swoje nadchodzące wyjazdy</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Dodaj miasta + daty — marki widzą to natychmiast
+                      Miasta i daty — marki zobaczą Cię dokładnie wtedy, kiedy trzeba
                     </p>
                   </div>
                 </div>
@@ -186,9 +186,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Akceptuj oferty, które pasują do twojego stylu</p>
+                    <p className="text-lg font-medium text-text mb-1">Otrzymuj trafne oferty</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Bez zimnego kontaktu — tylko trafne zapytania
+                      Bez cold pitchu — tylko konkretne zapytania od zainteresowanych marek
                     </p>
                   </div>
                 </div>
@@ -198,9 +198,9 @@ export default function LumoLandingPage() {
                     <div className="w-3 h-3 bg-red-burgundy rounded-full"></div>
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-text mb-1">Otrzymaj zapłatę po zatwierdzeniu treści</p>
+                    <p className="text-lg font-medium text-text mb-1">Wynagrodzenie po akceptacji treści</p>
                     <p className="text-base text-subtext leading-relaxed">
-                      Przechowujemy środki do dostarczenia — bez ignorowania, bez dramatu
+                      Środki są bezpieczne i trafiają do Ciebie po zatwierdzeniu przez markę
                     </p>
                   </div>
                 </div>
@@ -217,10 +217,10 @@ export default function LumoLandingPage() {
             
             <div className="space-y-6">
               <h2 className="text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-red-burgundy">
-                Dołącz do listy wczesnego dostępu
+                Otrzymaj dostęp do platformy jako pierwsza
               </h2>
               <p className="text-xl text-subtext max-w-2xl mx-auto leading-relaxed">
-                Bądź pierwszą osobą, która uzyska dostęp do inteligentniejszego sposobu tworzenia i kupowania treści podróżniczych. Twórcy zarabiają w podróży. Marki otrzymują autentyczny UGC — bez gonitwы.
+                Zgarnij pierwszeństwo — jako twórca zarabiaj i dostarczaj content z miejsc, w których właśnie jesteś, a jako marka zamawiaj treści szybciej i mądrzej. Autentyczny UGC — bez niepotrzebnych wiadomości i chaosu.
               </p>
             </div>
             
@@ -230,7 +230,7 @@ export default function LumoLandingPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Podaj swój adres email"
+                  placeholder="Podaj swój adres e-mail"
                   className="flex-1 px-6 py-4 border border-red-burgundy/20 rounded-2xl font-sans text-base focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm"
                   disabled={isSubmitting}
                 />
@@ -241,7 +241,7 @@ export default function LumoLandingPage() {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-burgundy/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   <span className="relative">
-                    {isSubmitting ? 'Dołączanie...' : 'Dołącz Teraz'}
+                    {isSubmitting ? 'Dołączanie...' : 'Dołącz teraz'}
                   </span>
                   {!isSubmitting && (
                     <svg className="relative w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
