@@ -17,8 +17,8 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Lumo - Luxury Travel Creator Marketplace",
-  description: "Connect with premium travel creators who transform destinations into captivating stories. Elevate your brand with authentic, luxury content.",
+  title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
+  description: "Połącz się z najlepszymi twórcami treści podróżniczych, którzy przekształcają destynacje w fascynujące historie. Wzmocnij swoją markę autentycznymi, luksusowymi treściami.",
   viewport: "width=device-width, initial-scale=1",
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfairDisplay.variable}`}>
+    <html lang="pl" className={`${inter.variable} ${playfairDisplay.variable}`}>
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
           {children}
