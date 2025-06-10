@@ -10,8 +10,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // In production, redirect everything to /lumo except /lumo itself
-  if (process.env.NODE_ENV === 'production') {
+  // Only restrict in production AND if we're on the main branch deployment
+  // This allows full development on other branches
+  if (process.env.NODE_ENV === 'production' && 
+      process.env.VERCEL_GIT_COMMIT_REF === 'main') {
     if (request.nextUrl.pathname === '/') {
       return NextResponse.redirect(new URL('/lumo', request.url))
     }
