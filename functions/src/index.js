@@ -268,4 +268,4 @@ async function handlePaymentCompleted(session) {
   } catch (error) {
     console.error('💥 Error updating offer status:', error);
   }
-} 
+} // review trigger

@@ -67,4 +67,4 @@ module.exports = {
   daisyui: {
     themes: ["light"],
   },
-} 
+} // review trigger

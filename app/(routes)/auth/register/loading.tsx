@@ -4,4 +4,4 @@ export default function Loading() {
       <span className="loading loading-spinner loading-lg text-red-burgundy"></span>
     </div>
   );
-} 
+} // review trigger

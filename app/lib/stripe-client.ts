@@ -79,4 +79,4 @@ export async function redirectToCheckout(url: string) {
   
   // Redirect to the Stripe Checkout URL
   window.location.href = url;
-} 
+} // review trigger

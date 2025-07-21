@@ -412,4 +412,4 @@ export default function CreatorProfileSetup() {
       </div>
     </div>
   );
-} 
+} // review trigger

@@ -318,4 +318,4 @@ export default function OfferMessage({
       </div>
     </motion.div>
   );
-} 
+} // review trigger

@@ -190,4 +190,4 @@ export default function EarningsPanel() {
       </div>
     </div>
   );
-} 
+} // review trigger

@@ -204,4 +204,4 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
       </div>
     </div>
   );
-} 
+} // review trigger
