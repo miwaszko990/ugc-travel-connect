@@ -26,4 +26,4 @@ const InstagramFeed: React.FC<InstagramFeedProps> = ({ instagramHandle }) => {
   );
 };
 
-export default InstagramFeed; 
+export default InstagramFeed; // review trigger

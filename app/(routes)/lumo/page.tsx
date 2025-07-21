@@ -269,4 +269,4 @@ export default function LumoLandingPage() {
       <Footer />
     </div>
   );
-} 
+} // review trigger

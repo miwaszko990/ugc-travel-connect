@@ -324,4 +324,4 @@ export default function BrandProfileSidebar({ profile, isMobile = false, onTabCh
       </div>
     </div>
   );
-} 
+} // review trigger

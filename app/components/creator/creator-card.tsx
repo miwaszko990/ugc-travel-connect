@@ -110,3 +110,4 @@ export default function CreatorCard({ creator, onClick, priority }: CreatorCardP
     </article>
   );
 }
+// review trigger

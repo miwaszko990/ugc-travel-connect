@@ -27,6 +27,27 @@ console.log('Firebase config:', {
   databaseURL: firebaseConfig.databaseURL ? '✓' : '✗'
 });
 
+// Debug logging - remove after fixing
+console.log('Raw env vars:', {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY.substring(0, 10)}...` : 'MISSING',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'MISSING',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'MISSING'
+});
+
+// Validate critical config
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  const error = new Error('Missing critical Firebase environment variables. Check your .env.local file.');
+  
+  // Log error details for debugging
+  console.error('Firebase Config Error:', {
+    apiKeyExists: !!firebaseConfig.apiKey,
+    projectIdExists: !!firebaseConfig.projectId,
+    envVars: Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_FIREBASE'))
+  });
+  
+  throw error;
+}
+
 // Initialize Firebase
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -61,4 +82,4 @@ if (process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_USE_FIREBA
   connectDatabaseEmulator(database, 'localhost', 9000);
 }
 
-export { app, auth, db, storage, database, functions }; 
+export { app, auth, db, storage, database, functions }; // review trigger

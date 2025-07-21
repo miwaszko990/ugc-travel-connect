@@ -48,4 +48,4 @@ export default function ChatColumn({ selectedConversation, user, loading }) {
       </footer>
     </main>
   );
-} 
+} // review trigger

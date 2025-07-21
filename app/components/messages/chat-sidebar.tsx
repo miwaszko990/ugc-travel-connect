@@ -24,4 +24,4 @@ export default function ChatSidebar({ otherUser }: { otherUser: { id: string; na
       </div>
     </div>
   );
-} 
+} // review trigger

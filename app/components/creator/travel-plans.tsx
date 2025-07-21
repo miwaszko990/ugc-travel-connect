@@ -360,4 +360,4 @@ const TravelPlans: React.FC<TravelPlansProps> = ({ onAddTrip }) => {
   );
 };
 
-export default React.memo(TravelPlans); 
+export default React.memo(TravelPlans); // review trigger

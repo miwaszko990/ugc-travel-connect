@@ -294,4 +294,4 @@ export default React.memo(function Earnings() {
       </div>
     </div>
   );
-}); 
+}); // review trigger

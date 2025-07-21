@@ -321,4 +321,4 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
       </div>
     </div>
   );
-} 
+} // review trigger

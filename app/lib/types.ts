@@ -16,4 +16,4 @@ export type ProfileData = {
 
 // Put any non-Firebase related types here
 
-// Firebase-related types have been moved to useAuth.tsx 
+// Firebase-related types have been moved to useAuth.tsx // review trigger

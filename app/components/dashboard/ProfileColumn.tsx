@@ -48,4 +48,4 @@ export default function ProfileColumn({ profile, onEditProfile, onLogout }) {
       </div>
     </aside>
   );
-} 
+} // review trigger

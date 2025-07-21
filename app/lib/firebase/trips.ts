@@ -106,4 +106,4 @@ export async function getUserUpcomingTrips(userId: string): Promise<Trip[]> {
     console.error('💥 Error fetching upcoming trips:', error);
     return [];
   }
-} 
+} // review trigger

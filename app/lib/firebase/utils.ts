@@ -206,4 +206,4 @@ export async function getBrandProfile(uid: string): Promise<any | null> {
     console.error('Error getting brand profile:', error);
     return null;
   }
-} 
+} // review trigger

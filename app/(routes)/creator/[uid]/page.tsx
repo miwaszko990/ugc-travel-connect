@@ -8,4 +8,4 @@ export default function CreatorProfilePage({ params }: { params: { uid: string }
       <ClientCreatorProfile uid={params.uid} />
     </Suspense>
   );
-} 
+} // review trigger
