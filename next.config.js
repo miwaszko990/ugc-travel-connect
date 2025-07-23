@@ -49,10 +49,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Optimize for production
-  experimental: {
-    optimizeCss: true,
-  },
 };
 
 module.exports = withBundleAnalyzer(nextConfig);
