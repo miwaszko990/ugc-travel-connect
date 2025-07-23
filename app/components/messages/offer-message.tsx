@@ -67,22 +67,8 @@ export default function OfferMessage({
     try {
       // Verify authentication state before proceeding
       if (!auth.currentUser) {
-        console.error('❌ User not authenticated when trying to pay');
         throw new Error('Authentication expired. Please try again.');
       }
-
-      console.log('💳 Initiating payment for offer:', message.offerId);
-      console.log('🔍 Payment data being prepared:', {
-        offerId: message.offerId,
-        creatorId: currentUserRole === 'brand' ? otherUserId : currentUserId,
-        brandId: currentUserRole === 'brand' ? currentUserId : otherUserId,
-        amount: message.price,
-        tripDestination: message.trip.destination,
-        tripCountry: message.trip.country,
-        currentUserRole,
-        currentUserId,
-        otherUserId
-      });
       
       const checkoutData = {
         offerId: message.offerId,
@@ -93,13 +79,10 @@ export default function OfferMessage({
         tripCountry: message.trip.country,
       };
 
-      console.log('📤 Calling createCheckoutSession with:', checkoutData);
       const { url } = await createCheckoutSession(checkoutData);
-      console.log('✅ Received checkout URL:', url);
-      
       await redirectToCheckout(url);
     } catch (error: any) {
-      console.error('💥 Error initiating payment:', error);
+      console.error('Payment initiation failed:', error);
       
       // Handle authentication errors specifically
       if (error.message && (error.message.includes('Authentication expired') || error.message.includes('authenticated') || error.message.includes('log in'))) {

@@ -174,21 +174,15 @@ export function AuthProviderInner({ children }: { children: ReactNode }) {
     try {
       dispatch({ type: 'LOADING', payload: true });
       dispatch({ type: 'CLEAR_ERROR' });
-
-      console.log('Starting signup process...', { email, role });
       
       // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       
-      console.log('User created in Auth successfully:', { uid: user.uid, email: user.email });
-      
       // Create user document in Firestore using utility function
-      console.log('Attempting to create user document in Firestore...');
       try {
         // Wait for the createUserDocument to complete
         const userData = await createUserDocument(user.uid, email, role);
-        console.log('User document created/processed:', userData);
 
         // Update state
         dispatch({ type: 'AUTH_STATE_CHANGED', payload: userData });
@@ -200,11 +194,10 @@ export function AuthProviderInner({ children }: { children: ReactNode }) {
         const dashboardPath = role === 'creator' 
           ? '/dashboard/creator/profile-setup' 
           : '/dashboard/brand/profile-setup';
-        console.log(`Redirecting to ${dashboardPath}`);
         
         router.push(dashboardPath);
       } catch (firestoreError) {
-        console.error('Firestore error during signup:', firestoreError);
+        console.error('Failed to create user document:', firestoreError);
         
         // Even if Firestore fails, still proceed with basic user info
         const basicUserData: UserData = {
@@ -216,7 +209,7 @@ export function AuthProviderInner({ children }: { children: ReactNode }) {
         };
         
         dispatch({ type: 'AUTH_STATE_CHANGED', payload: basicUserData });
-        toast.error('Created account with limited functionality...');
+        toast.error('Account created with limited functionality. Please contact support.');
         
         // Still redirect
         const fallbackDashboardPath = role === 'creator' 
@@ -226,8 +219,6 @@ export function AuthProviderInner({ children }: { children: ReactNode }) {
       }
     } catch (error: any) {
       console.error('Signup error:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
       dispatch({ type: 'ERROR', payload: formatError(error) });
       dispatch({ type: 'LOADING', payload: false });
     }

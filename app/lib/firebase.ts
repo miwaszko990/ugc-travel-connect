@@ -27,23 +27,18 @@ console.log('Firebase config:', {
   databaseURL: firebaseConfig.databaseURL ? '✓' : '✗'
 });
 
-// Debug logging - remove after fixing
-console.log('Raw env vars:', {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY.substring(0, 10)}...` : 'MISSING',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'MISSING',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'MISSING'
-});
-
 // Validate critical config
 if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
   const error = new Error('Missing critical Firebase environment variables. Check your .env.local file.');
   
-  // Log error details for debugging
-  console.error('Firebase Config Error:', {
-    apiKeyExists: !!firebaseConfig.apiKey,
-    projectIdExists: !!firebaseConfig.projectId,
-    envVars: Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_FIREBASE'))
-  });
+  // Log error details for debugging (safe for production)
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Firebase Config Error:', {
+      apiKeyExists: !!firebaseConfig.apiKey,
+      projectIdExists: !!firebaseConfig.projectId,
+      envVars: Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_FIREBASE'))
+    });
+  }
   
   throw error;
 }
@@ -62,14 +57,32 @@ const functions = getFunctions(app);
 if (process.env.NODE_ENV === 'development') {
   // More verbose logging in development
   if (typeof window !== 'undefined') {
-    window.addEventListener('online', () => console.log('Network restored'));
-    window.addEventListener('offline', () => console.log('Network lost - using cache'));
+    const handleOnline = () => console.log('Network restored');
+    const handleOffline = () => console.log('Network lost - using cache');
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    // Cleanup function (should be called when component unmounts)
+    const cleanup = () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+    
+    // Store cleanup function for potential use
+    (window as any).__firebaseCleanup = cleanup;
   }
-      } else {
+} else {
   // Only log serious errors in production
   if (typeof window !== 'undefined') {
-    window.addEventListener('offline', () => console.warn('Network connection lost'));
-      }
+    const handleOffline = () => console.warn('Network connection lost');
+    window.addEventListener('offline', handleOffline);
+    
+    // Store cleanup for production too
+    (window as any).__firebaseCleanup = () => {
+      window.removeEventListener('offline', handleOffline);
+    };
+  }
 }
 
 // Add only if you need the emulator

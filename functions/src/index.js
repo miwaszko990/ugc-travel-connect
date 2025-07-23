@@ -18,21 +18,13 @@ function getFrontendUrl() {
 }
 
 exports.createCheckoutSessionV2 = functions.https.onCall(async (data, context) => {
-  console.log('🔥 NEW createCheckoutSessionV2 called');
-  console.log('🔍 Raw data type:', typeof data);
-  console.log('🔍 Data keys:', Object.keys(data || {}));
-  console.log('🔍 Context auth:', context.auth ? 'Present' : 'Missing');
-  console.log('🔍 Data auth:', data.auth ? 'Present' : 'Missing');
-  
   // Check for authentication in both context and data
   const authInfo = context.auth || data.auth;
   
   if (!authInfo) {
-    console.log('❌ Unauthenticated request - no auth in context or data');
+    console.log('Unauthenticated request');
     throw new functions.https.HttpsError('unauthenticated', 'Must be authenticated');
   }
-
-  console.log('✅ Authentication check passed, user ID:', authInfo.uid);
 
   // Handle the nested data structure we're receiving
   let actualData = data;
@@ -40,19 +32,16 @@ exports.createCheckoutSessionV2 = functions.https.onCall(async (data, context) =
   // If we received the full request object, extract the actual data
   if (data && data.data && typeof data.data === 'object') {
     actualData = data.data;
-    console.log('📦 Extracted nested data:', actualData);
   }
   
   // If we received a wrapped data object, extract it
   if (data && data.rawRequest && data.rawRequest.body && data.rawRequest.body.data) {
     actualData = data.rawRequest.body.data;
-    console.log('📦 Extracted from rawRequest:', actualData);
   }
   
   // If the actual data is still nested under a data key, extract it
   if (actualData && actualData.data && typeof actualData.data === 'object') {
     actualData = actualData.data;
-    console.log('📦 Extracted from nested data key:', actualData);
   }
 
   const { 
@@ -65,27 +54,20 @@ exports.createCheckoutSessionV2 = functions.https.onCall(async (data, context) =
     currency = 'usd' 
   } = actualData || {};
 
-  console.log('🔍 Final extracted data:', { offerId, creatorId, brandId, amount, tripDestination, tripCountry });
-
   if (!amount || amount <= 0) {
-    console.log('❌ Invalid amount:', amount);
+    console.log('Invalid amount:', amount);
     throw new functions.https.HttpsError('invalid-argument', 'Invalid amount');
   }
 
   if (!offerId || !creatorId || !brandId || !tripDestination) {
-    console.log('❌ Missing required fields:', { offerId, creatorId, brandId, tripDestination });
+    console.log('Missing required fields');
     throw new functions.https.HttpsError('invalid-argument', 'Missing required fields');
   }
 
   try {
-    console.log('💳 Initializing Stripe client...');
     const stripeClient = getStripeClient();
-    console.log('✅ Stripe client initialized');
-
     const frontendUrl = getFrontendUrl();
-    console.log('🌐 Frontend URL:', frontendUrl);
 
-    console.log('🛒 Creating Stripe checkout session...');
     const session = await stripeClient.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -114,23 +96,23 @@ exports.createCheckoutSessionV2 = functions.https.onCall(async (data, context) =
       },
     });
 
-    console.log('✅ Stripe checkout session created:', session.id);
+    console.log('Stripe checkout session created:', session.id);
     return { sessionId: session.id, url: session.url };
 
   } catch (error) {
-    console.error('❌ Error creating checkout session:', error);
+    console.error('Error creating checkout session:', error);
     throw new functions.https.HttpsError('internal', `Failed to create checkout session: ${error.message}`);
   }
 });
 
 exports.handleStripeWebhook = functions.https.onRequest(async (req, res) => {
-  console.log('🪝 Stripe webhook received');
+  console.log('Stripe webhook received');
   
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   
   if (!webhookSecret) {
-    console.error('❌ Webhook secret not configured');
+    console.error('Webhook secret not configured');
     return res.status(500).send('Webhook secret not configured');
   }
 
@@ -139,23 +121,23 @@ exports.handleStripeWebhook = functions.https.onRequest(async (req, res) => {
   try {
     const stripeClient = getStripeClient();
     event = stripeClient.webhooks.constructEvent(req.body, sig, webhookSecret);
-    console.log('✅ Webhook signature verified');
+    console.log('Webhook signature verified');
   } catch (err) {
-    console.error('❌ Webhook signature verification failed:', err.message);
+    console.error('Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   // Handle the event
   switch (event.type) {
     case 'checkout.session.completed':
-      console.log('💰 Payment completed:', event.data.object.id);
+      console.log('Payment completed:', event.data.object.id);
       await handlePaymentCompleted(event.data.object);
       break;
     case 'payment_intent.payment_failed':
-      console.log('💸 Payment failed:', event.data.object.id);
+      console.log('Payment failed:', event.data.object.id);
       break;
     default:
-      console.log(`🤷 Unhandled event type: ${event.type}`);
+      console.log(`Unhandled event type: ${event.type}`);
   }
 
   res.json({ received: true });

@@ -11,26 +11,19 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
  * @returns Promise with UserData
  */
 export async function createUserDocument(uid: string, email: string, role: UserRole): Promise<UserData> {
-  console.log('Starting createUserDocument with:', { uid, email, role });
-  
-  if (!uid) {
-    console.error('Invalid UID provided to createUserDocument');
+  if (!uid || typeof uid !== 'string' || uid.trim() === '') {
     throw new Error('Invalid UID provided to createUserDocument');
   }
   
   const userRef = doc(db, 'users', uid);
   
-    // First check if the document already exists
+  // First check if the document already exists
   try {
-    console.log('Checking if user document already exists');
     const docSnapshot = await getDoc(userRef);
     
     if (docSnapshot.exists()) {
-      console.log('User document already exists, returning existing data');
       return docSnapshot.data() as UserData;
     }
-    
-    console.log('User document does not exist, creating new document');
     
     // Create the user data object
     const userData: UserData = {
@@ -41,12 +34,8 @@ export async function createUserDocument(uid: string, email: string, role: UserR
       updatedAt: new Date()
     };
     
-    console.log('Writing user document to Firestore:', JSON.stringify(userData, null, 2));
-    
     // Create the document in Firestore
     await setDoc(userRef, userData);
-    
-    console.log(`User document created successfully for ${uid}`);
     
     return userData;
   } catch (error: unknown) {
@@ -54,8 +43,6 @@ export async function createUserDocument(uid: string, email: string, role: UserR
     
     // Type guard for Firebase errors
     if (error && typeof error === 'object' && 'code' in error) {
-      console.error('Firebase error code:', error.code);
-      
       if (error.code === 'permission-denied') {
         console.error('Firebase security rules are preventing write. Check your Firestore rules.');
       } else if (error.code === 'unavailable') {
@@ -83,18 +70,14 @@ export async function createUserDocument(uid: string, email: string, role: UserR
  * @returns Promise with UserData or null
  */
 export async function getUserDocument(uid: string): Promise<UserData | null> {
-  console.log('Getting user document for:', uid);
   try {
     const userDoc = await getDoc(doc(db, 'users', uid));
     if (userDoc.exists()) {
-      console.log('User document found:', userDoc.data());
       return userDoc.data() as UserData;
     }
-    console.log('User document not found');
     return null;
   } catch (error) {
     console.error('Error getting user document:', error);
-    console.error('Error details:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
@@ -102,21 +85,17 @@ export async function getUserDocument(uid: string): Promise<UserData | null> {
 /**
  * Updates a user document in Firestore
  * @param uid User ID
- * @param data Partial UserData to update
- * @returns Promise
+ * @param data Partial user data to update
  */
 export async function updateUserDocument(uid: string, data: Partial<UserData>): Promise<void> {
-  console.log('Updating user document for:', uid, data);
   try {
     const userRef = doc(db, 'users', uid);
     await updateDoc(userRef, {
       ...data,
       updatedAt: new Date()
     });
-    console.log(`User document updated for ${uid}`);
   } catch (error) {
     console.error('Error updating user document:', error);
-    console.error('Error details:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
@@ -133,7 +112,6 @@ export async function uploadImageToStorage(
   path: string, 
   progressCallback?: (progress: number) => void
 ): Promise<string> {
-  console.log(`Uploading image to ${path}`);
   const storage = getStorage();
   const storageRef = ref(storage, path);
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -142,9 +120,8 @@ export async function uploadImageToStorage(
     uploadTask.on(
       'state_changed',
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(`Upload progress: ${progress.toFixed(1)}%`);
         if (progressCallback) {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           progressCallback(progress);
         }
       },
@@ -155,7 +132,6 @@ export async function uploadImageToStorage(
       async () => {
         try {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log('Upload complete, download URL:', downloadURL);
           resolve(downloadURL);
         } catch (error) {
           console.error('Error getting download URL:', error);
@@ -172,14 +148,11 @@ export async function uploadImageToStorage(
  * @returns Promise with creator profile data or null
  */
 export async function getCreatorProfile(uid: string): Promise<any | null> {
-  console.log('Getting creator profile for:', uid);
   try {
     const profileDoc = await getDoc(doc(db, 'creators', uid));
     if (profileDoc.exists()) {
-      console.log('Creator profile found');
       return profileDoc.data();
     }
-    console.log('Creator profile not found');
     return null;
   } catch (error) {
     console.error('Error getting creator profile:', error);
@@ -193,14 +166,11 @@ export async function getCreatorProfile(uid: string): Promise<any | null> {
  * @returns Promise with brand profile data or null
  */
 export async function getBrandProfile(uid: string): Promise<any | null> {
-  console.log('Getting brand profile for:', uid);
   try {
     const profileDoc = await getDoc(doc(db, 'brands', uid));
     if (profileDoc.exists()) {
-      console.log('Brand profile found');
       return profileDoc.data();
     }
-    console.log('Brand profile not found');
     return null;
   } catch (error) {
     console.error('Error getting brand profile:', error);
