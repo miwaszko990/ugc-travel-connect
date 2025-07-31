@@ -10,7 +10,7 @@ import { useAuth } from '@/app/hooks/useAuth';
 import NewMessageModal from '@/app/components/messages/new-message-modal';
 import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
 import Navigation from '@/app/components/ui/navigation';
-import { MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon, CalendarIcon } from '@heroicons/react/24/outline';
 // import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import InstagramFeed from '@/app/components/creator/InstagramFeed';
