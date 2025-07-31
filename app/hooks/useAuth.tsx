@@ -101,7 +101,7 @@ interface AuthContextType {
   user: UserData | null;
   loading: boolean;
   error: string | null;
-  signUp: (email: string, password: string, role: UserRole) => Promise<void>;
+  signUp: (email: string, password: string, role: UserRole) => Promise<UserData | null>;
   signIn: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -176,7 +176,7 @@ export function AuthProviderInner({ children }: { children: ReactNode }) {
   }, [router]);
 
   // Sign up with email and password
-  const signUp = async (email: string, password: string, role: UserRole) => {
+  const signUp = async (email: string, password: string, role: UserRole): Promise<UserData | null> => {
     try {
       dispatch({ type: 'LOADING', payload: true });
       dispatch({ type: 'CLEAR_ERROR' });
@@ -196,12 +196,9 @@ export function AuthProviderInner({ children }: { children: ReactNode }) {
         // Show success message
         toast.success('Account created successfully!');
         
-        // Force role to be properly processed
-        const dashboardPath = role === 'creator' 
-          ? '/dashboard/creator/profile-setup' 
-          : '/dashboard/brand/profile-setup';
+        // Return user data for potential Instagram OAuth redirect
+        return userData;
         
-        router.push(dashboardPath);
       } catch (firestoreError) {
         console.error('Failed to create user document:', firestoreError);
         
@@ -217,16 +214,14 @@ export function AuthProviderInner({ children }: { children: ReactNode }) {
         dispatch({ type: 'AUTH_STATE_CHANGED', payload: basicUserData });
         toast.error('Account created with limited functionality. Please contact support.');
         
-        // Still redirect
-        const fallbackDashboardPath = role === 'creator' 
-          ? '/dashboard/creator/profile-setup' 
-          : '/dashboard/brand/profile-setup';
-        router.push(fallbackDashboardPath);
+        // Return basic user data
+        return basicUserData;
       }
     } catch (error: any) {
       console.error('Signup error:', error);
       dispatch({ type: 'ERROR', payload: formatError(error) });
       dispatch({ type: 'LOADING', payload: false });
+      return null;
     }
   };
 
