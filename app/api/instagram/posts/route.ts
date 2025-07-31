@@ -39,8 +39,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const { creatorId, postUrl, postId, type } = await request.json();
+    
+    console.log('Instagram POST API called with:', { creatorId, postUrl, postId, type });
 
     if (!creatorId || !postUrl || !postId) {
+      console.error('Missing required fields:', { creatorId, postUrl, postId });
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -74,6 +77,8 @@ export async function POST(request: NextRequest) {
     };
 
     const docRef = await addDoc(postsRef, newPost);
+    
+    console.log('Instagram post saved successfully:', docRef.id);
 
     return NextResponse.json({
       success: true,
@@ -85,7 +90,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error adding Instagram post:', error);
-    return NextResponse.json({ error: 'Failed to add post' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to add post', details: error.message }, { status: 500 });
   }
 }
 

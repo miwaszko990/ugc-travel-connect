@@ -88,8 +88,10 @@ const InstagramFeedManual: React.FC<InstagramFeedManualProps> = ({
       if (response.ok) {
         setNewPostUrl('');
         loadInstagramPosts();
+        alert('Instagram post added successfully!');
       } else {
         const error = await response.json();
+        console.error('API Error:', error);
         alert(error.error || 'Failed to add Instagram post');
       }
     } catch (err) {
