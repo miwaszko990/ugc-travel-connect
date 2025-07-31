@@ -32,6 +32,12 @@ export interface UserData {
   homeCity?: string;
   profileImageUrl?: string;
   profileComplete?: boolean;
+  // Instagram integration fields
+  instagramConnected?: boolean;
+  instagramAccessToken?: string;
+  instagramUserId?: string;
+  instagramTokenExpiry?: Date;
+  instagramLastSync?: Date;
   // Brand specific fields
   brandName?: string;
   website?: string;
