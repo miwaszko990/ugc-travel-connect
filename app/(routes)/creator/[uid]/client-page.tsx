@@ -13,7 +13,7 @@ import Navigation from '@/app/components/ui/navigation';
 import { MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon, CalendarIcon } from '@heroicons/react/24/outline';
 // import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import InstagramFeedAuto from '@/app/components/creator/InstagramFeedAuto';
+import InstagramFeedManual from '@/app/components/creator/InstagramFeedManual';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface TravelPlan {
@@ -530,7 +530,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
           </div>
           
             {/* Instagram Feed Section */}
-            <InstagramFeedAuto 
+            <InstagramFeedManual 
               creatorId={creator.uid}
               instagramHandle={creator.instagramHandle}
             />

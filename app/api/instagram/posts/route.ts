@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { creatorId, postUrl, postId } = await request.json();
+    const { creatorId, postUrl, postId, type } = await request.json();
 
     if (!creatorId || !postUrl || !postId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
       creatorId,
       postUrl,
       postId,
+      type: type || 'post', // Default to 'post' if not specified
       createdAt: new Date(),
       updatedAt: new Date()
     };
