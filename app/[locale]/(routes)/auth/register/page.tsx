@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { registerSchema, RegisterFormValues } from '@/app/lib/validators';
 import { FormField } from '@/app/components/ui/form-field';
 import { AUTH_CONSTANTS } from '@/app/lib/constants/auth';

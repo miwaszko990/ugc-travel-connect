@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { db } from '@/app/lib/firebase';
 import { doc, getDoc, collection, query, /* where, */ getDocs, orderBy, limit } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import NewMessageModal from '@/app/components/messages/new-message-modal';
 import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
 import Navigation from '@/app/components/ui/navigation';

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '@/app/lib/firebase';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import CreatorCard from '@/app/components/creator/creator-card';
 import HeroSection from '@/app/components/ui/hero-section';
 import Navigation from '@/app/components/ui/navigation';

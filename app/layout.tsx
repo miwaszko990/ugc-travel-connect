@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/app/hooks/useAuth";
+import { AuthProvider } from "@/app/components/auth/AuthProvider";
 import { ToastProvider } from "@/app/providers/toast-provider";
 
 const inter = Inter({
@@ -37,4 +37,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}// review trigger
+}

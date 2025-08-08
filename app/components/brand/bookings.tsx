@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { 
   getBrandOrders, 
   calculateOrderStats, 

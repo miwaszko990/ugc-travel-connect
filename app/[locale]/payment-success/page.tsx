@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();

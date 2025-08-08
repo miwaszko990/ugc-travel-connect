@@ -4,7 +4,7 @@ import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Dialog, Transition } from '@headlessui/react';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import UserMenu from '@/app/components/ui/user-menu';
 import { Button } from '@/app/components/ui/button';
 import { LanguageSwitcher } from '@/app/components/ui/language-switcher';

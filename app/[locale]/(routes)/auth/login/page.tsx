@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { loginSchema, LoginFormValues } from '@/app/lib/validators';
 import { FormField } from '@/app/components/ui/form-field';
 import { AUTH_CONSTANTS } from '@/app/lib/constants/auth';
@@ -207,7 +207,7 @@ export default function LoginPage() {
 
   // Memoize alert classes with enhanced error states
   const alertClasses = useMemo(() => {
-    let baseClasses = 'alert mb-4 rounded-[12px] py-3 px-4 text-sm';
+    const baseClasses = 'alert mb-4 rounded-[12px] py-3 px-4 text-sm';
     
     if (!isOnline) {
       return `${baseClasses} alert-warning border-l-4 border-orange-400`;

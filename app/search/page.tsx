@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { collection, getDocs, query, where, orderBy, limit as limitQuery } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import Navigation from '@/app/components/ui/navigation';
 import CreatorCard from '@/app/components/creator/creator-card';
 import AuthRequiredModal from '@/app/components/ui/auth-required-modal';

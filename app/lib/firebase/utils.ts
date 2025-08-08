@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
-import { UserData, UserRole } from '@/app/hooks/useAuth';
+import { UserData, UserRole } from '@/app/hooks/auth';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 /**

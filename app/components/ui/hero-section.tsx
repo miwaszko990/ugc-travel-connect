@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { collection, getDocs, query, where, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
 import CreatorCard from '@/app/components/creator/creator-card';

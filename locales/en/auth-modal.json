@@ -1,0 +1,8 @@
+{
+  "loginRequired": "Login Required",
+  "loginRequiredMessage": "You must be logged in to view {creatorName} profile. Create an account or log in to connect with creators.",
+  "loginRequiredGeneric": "You must be logged in to view this profile. Create an account or log in to connect with creators.",
+  "logIn": "Log in",
+  "signUp": "Sign up",
+  "cancel": "Cancel"
+} 

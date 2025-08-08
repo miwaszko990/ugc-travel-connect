@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import { Transition } from '@headlessui/react';

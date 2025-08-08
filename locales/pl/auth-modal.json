@@ -1,0 +1,8 @@
+{
+  "loginRequired": "Wymagane logowanie",
+  "loginRequiredMessage": "Musisz być zalogowany, aby wyświetlić profil {creatorName}. Utwórz konto lub zaloguj się, aby połączyć się z twórcami.",
+  "loginRequiredGeneric": "Musisz być zalogowany, aby wyświetlić ten profil. Utwórz konto lub zaloguj się, aby połączyć się z twórcami.",
+  "logIn": "Zaloguj się",
+  "signUp": "Zarejestruj się",
+  "cancel": "Anuluj"
+} 
