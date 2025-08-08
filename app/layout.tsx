@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" className={`${inter.variable} ${playfairDisplay.variable}`}>
+    <html className={`${inter.variable} ${playfairDisplay.variable}`}>
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
           {children}

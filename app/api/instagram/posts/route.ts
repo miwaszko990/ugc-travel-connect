@@ -15,8 +15,7 @@ export async function GET(request: NextRequest) {
     const postsRef = collection(db, 'instagramPosts');
     const q = query(
       postsRef, 
-      where('creatorId', '==', creatorId),
-      orderBy('createdAt', 'desc')
+      where('creatorId', '==', creatorId)
     );
     
     const querySnapshot = await getDocs(q);
@@ -25,9 +24,16 @@ export async function GET(request: NextRequest) {
       ...doc.data()
     }));
 
+    // Sort by createdAt in JavaScript instead of Firebase query
+    const sortedPosts = posts.sort((a, b) => {
+      const aTime = a.createdAt?.toDate?.() || new Date(a.createdAt);
+      const bTime = b.createdAt?.toDate?.() || new Date(b.createdAt);
+      return bTime.getTime() - aTime.getTime(); // Newest first
+    });
+
     return NextResponse.json({
       success: true,
-      posts: posts
+      posts: sortedPosts
     });
 
   } catch (error) {

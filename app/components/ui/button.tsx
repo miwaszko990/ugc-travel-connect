@@ -1,6 +1,4 @@
-'use client';
-
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '@/app/lib/utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -65,4 +63,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = "Button";
 
-export { Button }; // review trigger
+const MemoizedButton = memo(Button);
+
+export { MemoizedButton as Button };

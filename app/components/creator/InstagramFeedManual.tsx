@@ -9,6 +9,7 @@ interface InstagramPost {
   postId: string;
   type: 'post' | 'reel';
   createdAt: string;
+  imageUrl?: string;
 }
 
 interface InstagramFeedManualProps {
@@ -25,11 +26,61 @@ const InstagramFeedManual: React.FC<InstagramFeedManualProps> = ({
   const [addingPost, setAddingPost] = useState(false);
   const [newPostUrl, setNewPostUrl] = useState('');
   const { user } = useAuth();
-  const isOwner = user?.uid === creatorId;
+  const isCreator = user?.uid === creatorId;
 
   useEffect(() => {
     loadInstagramPosts();
   }, [creatorId]);
+
+  const fetchInstagramImageUrl = async (postUrl: string): Promise<string | null> => {
+    try {
+      // Check if postUrl exists
+      if (!postUrl) {
+        console.log('No post URL provided');
+        return null;
+      }
+
+      console.log('Fetching image for URL:', postUrl);
+      
+      // Try Instagram's oembed API to get the image
+      const response = await fetch(`https://graph.instagram.com/instagram_oembed?url=${encodeURIComponent(postUrl)}&omitscript=true`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Extract image URL from thumbnail_url
+        if (data.thumbnail_url) {
+          console.log('Found thumbnail URL:', data.thumbnail_url);
+          return data.thumbnail_url;
+        }
+        
+        // Extract from HTML if available
+        if (data.html) {
+          const imgMatch = data.html.match(/src="([^"]*\.jpg[^"]*)"/);
+          if (imgMatch) {
+            console.log('Found image in HTML:', imgMatch[1]);
+            return imgMatch[1];
+          }
+        }
+      }
+      
+      console.log('oembed failed, trying direct URL');
+      // Fallback: Try direct Instagram CDN URL pattern
+      const postId = postUrl.match(/\/p\/([A-Za-z0-9_-]+)/)?.[1] || postUrl.match(/\/reel\/([A-Za-z0-9_-]+)/)?.[1];
+      if (postId) {
+        // Instagram's media URL pattern
+        const directUrl = `https://www.instagram.com/p/${postId}/media/?size=l`;
+        console.log('Trying direct URL:', directUrl);
+        return directUrl;
+      }
+      
+      console.log('No valid URL patterns found');
+      return null;
+    } catch (error) {
+      console.error('Error fetching Instagram image:', error);
+      return null;
+    }
+  };
 
   const loadInstagramPosts = async () => {
     try {
@@ -38,8 +89,20 @@ const InstagramFeedManual: React.FC<InstagramFeedManualProps> = ({
       
       if (response.ok) {
         const data = await response.json();
-        setPosts(data.posts || []);
+        const posts = data.posts || [];
+        
+        // Fetch image URLs for each post
+        const postsWithImages = await Promise.all(
+          posts.map(async (post: InstagramPost) => {
+            const imageUrl = await fetchInstagramImageUrl(post.url);
+            return { ...post, imageUrl };
+          })
+        );
+        
+        console.log('Loaded posts with images:', postsWithImages);
+        setPosts(postsWithImages);
       } else {
+        console.log('No posts found in API response');
         setPosts([]);
       }
     } catch (err) {
@@ -179,8 +242,8 @@ const InstagramFeedManual: React.FC<InstagramFeedManualProps> = ({
         </div>
       </div>
 
-      {/* Add Post Form (Owner Only) */}
-      {isOwner && (
+      {/* Add Post Form (Creator Only) */}
+      {isCreator && (
         <div className="mb-8 mx-auto max-w-2xl">
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
             <div className="flex items-center gap-3 mb-4">
@@ -237,46 +300,69 @@ const InstagramFeedManual: React.FC<InstagramFeedManualProps> = ({
         </div>
       )}
 
-      {/* Instagram Posts Grid */}
+      {/* Pure Image Grid - Like La Roue */}
       {posts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {posts.map((post) => (
-            <div key={post.id} className="relative group">
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <iframe
-                  src={`https://www.instagram.com/p/${post.postId}/embed/captioned`}
-                  width="100%"
-                  height="500"
-                  frameBorder="0"
-                  scrolling="no"
-                  allowTransparency
-                  className="w-full"
-                  loading="lazy"
-                />
-              </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-w-7xl mx-auto bg-white p-4 rounded-lg">
+          {posts.map((post) => {
+            console.log('Rendering post:', post.id, 'imageUrl:', post.imageUrl, 'url:', post.url);
+            return (
+            <div key={post.id} className="aspect-square bg-white border-2 border-gray-300 group hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+              <a
+                href={post.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full h-full bg-white p-4"
+              >
+                {/* Instagram Embed */}
+                <div className="w-full h-full bg-white relative overflow-hidden">
+                  <iframe
+                    src={`https://www.instagram.com/p/${post.postId}/embed/captioned/`}
+                    className="w-full h-full border-0"
+                    style={{
+                      minHeight: '320px',
+                      transform: 'scale(1.2)',
+                      transformOrigin: 'center center'
+                    }}
+                    loading="lazy"
+                    allowtransparency="true"
+                  />
+                  
+                  {/* Hide Instagram UI elements */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    {/* Hide header */}
+                    <div className="absolute top-0 left-0 right-0 h-14 bg-white"></div>
+                    {/* Hide footer actions */}
+                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white via-white to-transparent"></div>
+                  </div>
+                  
+                  {/* Reel indicator overlay */}
+                  {post.type === 'reel' && (
+                    <div className="absolute top-4 left-4 bg-purple-500 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1 z-10">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                      Reel
+                    </div>
+                  )}
+                </div>
+              </a>
               
-              {/* Remove button for owner */}
-              {isOwner && (
+              {isCreator && (
                 <button
-                  onClick={() => removePost(post.id)}
-                  className="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    removePost(post.id);
+                  }}
+                  className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20"
                   title="Remove post"
                 >
                   ×
                 </button>
               )}
-              
-              {/* Post type indicator */}
-              {post.type === 'reel' && (
-                <div className="absolute top-3 left-3 bg-black/70 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                  Reel
-                </div>
-              )}
             </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         /* Empty State */
@@ -295,7 +381,7 @@ const InstagramFeedManual: React.FC<InstagramFeedManualProps> = ({
                     : 'This creator hasn\'t added any Instagram content yet'
                   }
                 </p>
-                {isOwner && (
+                {isCreator && (
                   <div className="text-sm text-gray-500">
                     <div className="mb-2">✨ <strong>Easy to add:</strong></div>
                     <div className="text-xs">

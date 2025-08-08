@@ -1,0 +1,66 @@
+{
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard", 
+    "messages": "Messages",
+    "bookings": "Bookings",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "rememberMe": "Remember me"
+  },
+  "travel": {
+    "destinations": "Destinations",
+    "travelDates": "Travel Dates",
+    "budget": "Budget",
+    "duration": "Duration",
+    "activities": "Activities",
+    "accommodation": "Accommodation"
+  },
+  "creator": {
+    "followers": "followers",
+    "following": "following",
+    "posts": "posts",
+    "bio": "Bio",
+    "location": "Location",
+    "rate": "Rate",
+    "availability": "Availability",
+    "specialties": "Specialties"
+  },
+  "booking": {
+    "bookNow": "Book Now",
+    "selectDates": "Select Dates",
+    "totalPrice": "Total Price",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "cancelled": "Cancelled"
+  }
+} 

@@ -1,0 +1,23 @@
+{
+  "welcome": "Witamy!",
+  "joinMarketplace": "Dołącz do platformy UGC, aby połączyć się z najlepszymi markami",
+  "email": "Email",
+  "enterEmail": "Wprowadź swój email",
+  "password": "Hasło",
+  "createPassword": "Utwórz hasło",
+  "confirmPassword": "Potwierdź hasło",
+  "confirmPasswordPlaceholder": "Potwierdź swoje hasło",
+  "role": "Jestem",
+  "selectRole": "Wybierz rolę",
+  "creator": "Twórcą",
+  "brand": "Marką",
+  "terms": "Rejestrując się, akceptujesz nasze",
+  "termsOfService": "Warunki świadczenia usług",
+  "and": "i",
+  "privacyPolicy": "Politykę prywatności",
+  "creatingAccount": "Tworzenie konta...",
+  "signUp": "Zarejestruj się",
+  "alreadyHaveAccount": "Masz już konto?",
+  "login": "Zaloguj",
+  "clickToLogin": "Kliknij tutaj, aby się zalogować"
+} 

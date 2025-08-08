@@ -1,0 +1,66 @@
+{
+  "navigation": {
+    "home": "Strona główna",
+    "dashboard": "Panel",
+    "messages": "Wiadomości",
+    "bookings": "Rezerwacje",
+    "profile": "Profil",
+    "settings": "Ustawienia",
+    "logout": "Wyloguj",
+    "login": "Zaloguj",
+    "register": "Zarejestruj"
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "view": "Zobacz",
+    "search": "Szukaj",
+    "filter": "Filtruj",
+    "sort": "Sortuj",
+    "next": "Następny",
+    "previous": "Poprzedni",
+    "submit": "Wyślij",
+    "close": "Zamknij"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "signIn": "Zaloguj się",
+    "signUp": "Zarejestruj się",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "resetPassword": "Resetuj hasło",
+    "rememberMe": "Zapamiętaj mnie"
+  },
+  "travel": {
+    "destinations": "Destynacje",
+    "travelDates": "Daty podróży",
+    "budget": "Budżet",
+    "duration": "Czas trwania",
+    "activities": "Aktywności",
+    "accommodation": "Zakwaterowanie"
+  },
+  "creator": {
+    "followers": "obserwujących",
+    "following": "obserwuje",
+    "posts": "posty",
+    "bio": "Opis",
+    "location": "Lokalizacja",
+    "rate": "Stawka",
+    "availability": "Dostępność",
+    "specialties": "Specjalności"
+  },
+  "booking": {
+    "bookNow": "Zarezerwuj teraz",
+    "selectDates": "Wybierz daty",
+    "totalPrice": "Cena całkowita",
+    "confirmed": "Potwierdzone",
+    "pending": "Oczekujące",
+    "cancelled": "Anulowane"
+  }
+} 

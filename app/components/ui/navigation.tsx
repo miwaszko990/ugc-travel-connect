@@ -7,6 +7,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useAuth } from '@/app/hooks/useAuth';
 import UserMenu from '@/app/components/ui/user-menu';
 import { Button } from '@/app/components/ui/button';
+import { LanguageSwitcher } from '@/app/components/ui/language-switcher';
 import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface NavigationProps {
@@ -109,6 +110,11 @@ export default function Navigation({
                 </Link>
               </nav>
             )}
+            
+            {/* Language Switcher */}
+            <div className="hidden md:block">
+              <LanguageSwitcher />
+            </div>
             
             {/* Auth Controls */}
             <div className="flex items-center gap-4">
@@ -225,6 +231,11 @@ export default function Navigation({
                             <MagnifyingGlassIcon className="h-5 w-5" />
                             Search
                           </Link>
+                          
+                          {/* Mobile Language Switcher */}
+                          <div className="py-2">
+                            <LanguageSwitcher />
+                          </div>
                           
                           {!user && (
                             <div className="pt-6 border-t border-border/20 space-y-4">
