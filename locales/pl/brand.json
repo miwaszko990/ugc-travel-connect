@@ -94,23 +94,35 @@
     "form": {
       "brandName": {
         "label": "Nazwa marki",
-        "placeholder": "Wprowadź nazwę swojej marki",
+        "placeholder": "Acme Travel Co.",
         "required": "Nazwa marki jest wymagana"
       },
       "instagramHandle": {
         "label": "Uchwyt Instagram",
-        "placeholder": "@nazwatvojejmarki",
+        "placeholder": "twoja_marka",
         "required": "Uchwyt Instagram jest wymagany"
       },
       "website": {
         "label": "Strona internetowa",
-        "placeholder": "https://www.twojastrona.com",
+        "placeholder": "https://www.twojamarki.com",
         "error": "Wprowadź prawidłowy adres URL strony internetowej"
       },
       "industry": {
         "label": "Branża",
-        "placeholder": "np. Moda, Podróże, Lifestyle",
-        "required": "Branża jest wymagana"
+        "placeholder": "Wybierz swoją branżę",
+        "required": "Branża jest wymagana",
+        "options": {
+          "travel": "Podróże i Turystyka",
+          "hospitality": "Hotelarstwo",
+          "fashion": "Moda",
+          "beauty": "Uroda",
+          "foodBeverage": "Żywność i Napoje",
+          "technology": "Technologia",
+          "lifestyle": "Lifestyle",
+          "fitnessWellness": "Fitness i Wellness",
+          "entertainment": "Rozrywka",
+          "other": "Inne"
+        }
       },
       "location": {
         "label": "Lokalizacja",
@@ -129,23 +141,24 @@
         "selectImage": "Wybierz obraz"
       },
       "submit": {
-        "create": "Utwórz profil marki",
+        "create": "Zapisz i kontynuuj",
         "update": "Zaktualizuj profil",
-        "creating": "Tworzenie profilu...",
-        "updating": "Aktualizowanie profilu..."
+        "creating": "Zapisywanie...",
+        "updating": "Zapisywanie..."
       }
     },
     "messages": {
       "profileCreated": "Profil marki został utworzony pomyślnie!",
       "profileUpdated": "Profil marki został zaktualizowany pomyślnie!",
       "updateFailed": "Nie udało się zaktualizować profilu marki. Spróbuj ponownie.",
-      "imageUploadFailed": "Nie udało się przesłać obrazu. Spróbuj ponownie.",
-      "invalidImageType": "Nieprawidłowy typ pliku. Użyj formatu JPG, PNG lub WebP.",
-      "imageTooLarge": "Obraz jest zbyt duży. Maksymalny rozmiar to 5MB."
+      "imageUploadFailed": "Nie udało się przesłać logo marki.",
+      "invalidImageType": "Proszę wybrać plik obrazu",
+      "imageTooLarge": "Obraz musi być mniejszy niż 5MB",
+      "loginRequired": "Musisz być zalogowany, aby utworzyć profil marki"
     },
     "validation": {
       "brandNameRequired": "Nazwa marki jest wymagana",
-      "instagramRequired": "Uchwyt Instagram jest wymagany",
+      "instagramRequired": " Instagram jest wymagany",
       "websiteInvalid": "Wprowadź prawidłowy adres URL strony internetowej",
       "descriptionTooShort": "Opis musi mieć co najmniej 10 znaków",
       "industryRequired": "Branża jest wymagana",

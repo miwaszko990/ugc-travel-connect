@@ -1,51 +1,79 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+
+// Edge Runtime compatibility for better performance
+export const runtime = 'edge';
+export const preferredRegion = 'auto';
+
+// Metadata for SEO and performance
+export const metadata = {
+  title: 'Brand Profile Setup | UGC Travel Connect',
+  description: 'Set up your brand profile to start collaborating with travel creators',
+  robots: 'noindex, nofollow', // Private page, don't index
+};
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
-import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 import { Spinner } from '@/app/components/ui/spinner';
 import { toast } from 'react-hot-toast';
-import Image from 'next/image';
+import dynamic from 'next/dynamic';
 
-// Form validation schema for brand
-const brandProfileSchema = z.object({
-  brandName: z.string().min(1, { message: 'Brand name is required' }),
-  instagramHandle: z.string().min(1, { message: 'Instagram handle is required' }),
-  website: z.string().url({ message: 'Please enter a valid website URL' }).optional().or(z.literal('')),
-  description: z.string().min(10, { message: 'Description must be at least 10 characters' }),
-  industry: z.string().min(1, { message: 'Industry is required' }),
-  location: z.string().min(1, { message: 'Location is required' }),
+// Preload critical resources for better performance
+import { getStorage } from 'firebase/storage';
+import { doc } from 'firebase/firestore';
+
+// Lazy load non-critical components for better performance
+const LazyImageUploader = dynamic(() => import('./components/ImageUploader'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-32 h-32 rounded-xl border-2 border-dashed border-red-burgundy/30 bg-red-burgundy/5 animate-pulse" />
+  )
 });
 
-type BrandProfileFormValues = z.infer<typeof brandProfileSchema>;
+const LazyIndustrySelect = dynamic(() => import('./components/IndustrySelect'), {
+  ssr: false,
+  loading: () => (
+    <select className="w-full p-3 border border-gray-300 rounded-xl animate-pulse" disabled>
+      <option>Loading...</option>
+    </select>
+  )
+});
 
-interface BrandProfileFormData {
-  brandName: string;
-  instagramHandle: string;
-  website?: string;
-  description: string;
-  industry: string;
-  location: string;
-  profileImageUrl?: string;
-}
+// Form validation schema for brand - memoized for performance
+const createBrandProfileSchema = (t: (key: string) => string) => z.object({
+  brandName: z.string().min(1, { message: t('validation.brandNameRequired') }),
+  instagramHandle: z.string().min(1, { message: t('validation.instagramRequired') }),
+  website: z.string().url({ message: t('validation.websiteInvalid') }).optional().or(z.literal('')),
+  description: z.string().min(10, { message: t('validation.descriptionTooShort') }),
+  industry: z.string().min(1, { message: t('validation.industryRequired') }),
+  location: z.string().min(1, { message: t('validation.locationRequired') }),
+});
+
+type BrandProfileFormValues = z.infer<ReturnType<typeof createBrandProfileSchema>>;
 
 export default function BrandProfileSetup() {
   const router = useRouter();
   const { user } = useAuth();
+  const t = useTranslations('brand.profileSetup');
+  
+  // State management
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [uploading, setUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  
+  // Memoized schema creation to prevent recreation on every render
+  const brandProfileSchema = useMemo(() => createBrandProfileSchema(t), [t]);
   
   const {
     register,
@@ -57,6 +85,21 @@ export default function BrandProfileSetup() {
     resolver: zodResolver(brandProfileSchema),
     mode: 'onChange',
   });
+
+  // Memoized form field styles to prevent recalculation
+  const getFieldClassName = useCallback((hasError: boolean) => 
+    `w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
+      hasError ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-red-burgundy/20 focus:border-red-burgundy'
+    }`, []
+  );
+
+  // Performance monitoring for data loading
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      // Mark the start of profile loading for performance tracking
+      performance.mark('profile-load-start');
+    }
+  }, []);
 
   // Load existing profile data if in edit mode
   useEffect(() => {
@@ -91,9 +134,20 @@ export default function BrandProfileSetup() {
         }
         
         setLoading(false);
+        
+        // Performance monitoring
+        if (typeof window !== 'undefined' && 'performance' in window) {
+          performance.mark('profile-load-end');
+          performance.measure('profile-load-duration', 'profile-load-start', 'profile-load-end');
+        }
       } catch (error) {
         console.error('Error loading brand profile data:', error);
         setLoading(false);
+        
+        // Performance monitoring for errors
+        if (typeof window !== 'undefined' && 'performance' in window) {
+          performance.mark('profile-load-error');
+        }
       }
     };
     
@@ -108,35 +162,34 @@ export default function BrandProfileSetup() {
     }
   }, [errors, setFocus]);
 
-  // Handle image selection
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Memoized handlers for better performance
+  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
       
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
+      toast.error(t('messages.invalidImageType'));
       return;
     }
       
     // Validate file size (5MB max)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be less than 5MB');
+      toast.error(t('messages.imageTooLarge'));
       return;
     }
       
     console.log('Valid brand logo selected:', file.name, file.size, file.type);
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
-  };
+  }, [t]);
 
-  // Open file browser
-  const handleImageClick = () => {
+  const handleImageClick = useCallback(() => {
     fileInputRef.current?.click();
-  };
+  }, []);
 
   // Upload image to Firebase Storage
-  const handleImageUpload = async (file: File): Promise<string> => {
+  const handleImageUpload = useCallback(async (file: File): Promise<string> => {
     if (!file || !user) throw new Error("Missing file or user");
     
     setIsUploading(true);
@@ -174,12 +227,12 @@ export default function BrandProfileSetup() {
         }
       );
     });
-  };
+  }, [user]);
 
   // Handle form submission
-  const onSubmit = async (data: BrandProfileFormValues) => {
+  const onSubmit = useCallback(async (data: BrandProfileFormValues) => {
     if (!user) {
-      toast.error('You must be logged in to create a brand profile');
+      toast.error(t('messages.loginRequired'));
       return;
     }
     
@@ -195,7 +248,7 @@ export default function BrandProfileSetup() {
           console.log('Brand logo upload successful, URL:', imageUrl);
         } catch (error) {
           console.error('Error uploading brand logo:', error);
-          toast.error('Failed to upload brand logo.');
+          toast.error(t('messages.imageUploadFailed'));
         }
       } else if (imagePreview && !imageFile) {
         // User didn't upload a new image, but had an existing one
@@ -221,16 +274,25 @@ export default function BrandProfileSetup() {
       // Update Firestore
       await updateDoc(doc(db, 'users', user.uid), brandProfileData);
       console.log('Brand profile updated successfully!');
-      toast.success(isEditMode ? 'Brand profile updated successfully!' : 'Brand profile created successfully!');
+      toast.success(isEditMode ? t('messages.profileUpdated') : t('messages.profileCreated'));
       
       // Navigate to brand dashboard
       sessionStorage.setItem('profileComplete', 'true');
       router.push('/dashboard/brand');
     } catch (error) {
       console.error('Error updating brand profile:', error);
-      toast.error('Failed to update brand profile. Please try again.');
+      toast.error(t('messages.updateFailed'));
     }
-  };
+  }, [user, t, imageFile, imagePreview, handleImageUpload, isEditMode, router]);
+
+  // Memoized titles to prevent unnecessary re-renders
+  const pageTitle = useMemo(() => 
+    isEditMode ? t('editTitle') : t('title'), [isEditMode, t]
+  );
+  
+  const pageSubtitle = useMemo(() => 
+    isEditMode ? t('editSubtitle') : t('subtitle'), [isEditMode, t]
+  );
 
   if (loading) {
     return (
@@ -246,66 +308,31 @@ export default function BrandProfileSetup() {
     <div className="min-h-screen py-12 px-4" style={{backgroundColor: '#FDFCF9'}}>
       <div className="max-w-[600px] mx-auto bg-white rounded-[24px] shadow-lg p-8">
         <h1 className="text-3xl font-serif font-bold text-center mb-2 text-red-burgundy">
-          {isEditMode ? 'Edit Brand Profile' : 'Create Brand Profile'}
+          {pageTitle}
         </h1>
         <p className="text-gray-500 text-center mb-8">
-          {isEditMode ? 'Update your brand profile details' : 'Set up your brand profile to start collaborating with creators'}
+          {pageSubtitle}
         </p>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Brand Logo Upload */}
-          <div className="flex flex-col items-center mb-8">
-            <div 
-              onClick={handleImageClick}
-              className="relative w-32 h-32 rounded-xl overflow-hidden cursor-pointer border-2 border-dashed border-red-burgundy/30 flex items-center justify-center bg-red-burgundy/5 hover:bg-red-burgundy/10 transition-colors"
-            >
-              {imagePreview ? (
-                <Image
-                  src={imagePreview}
-                  alt="Brand logo preview"
-                  fill
-                  style={{ objectFit: 'cover' }}
-                />
-              ) : (
-                <div className="text-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-red-burgundy/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                  <p className="text-xs mt-2 text-red-burgundy">Add logo</p>
-                </div>
-              )}
-              
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageChange}
-                accept="image/*"
-                className="hidden"
-              />
-            </div>
-            
-            {isUploading && (
-              <div className="text-center mt-2">
-                <p className="text-red-burgundy text-sm">Uploading: {uploadProgress}%</p>
-                <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
-                  <div 
-                    className="bg-red-burgundy h-2 rounded-full transition-all duration-300" 
-                    style={{ width: `${uploadProgress}%` }}
-                  ></div>
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Brand Logo Upload - Lazy loaded component */}
+          <LazyImageUploader
+            imagePreview={imagePreview}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
+            onImageClick={handleImageClick}
+            onImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            t={t}
+          />
           
           {/* Brand Name */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Brand Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('form.brandName.label')} *</label>
             <input
               type="text"
-              className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
-                errors.brandName ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-red-burgundy/20 focus:border-red-burgundy'
-              }`}
-              placeholder="Acme Travel Co."
+              className={getFieldClassName(!!errors.brandName)}
+              placeholder={t('form.brandName.placeholder')}
               {...register('brandName')}
             />
             {errors.brandName && (
@@ -315,7 +342,7 @@ export default function BrandProfileSetup() {
           
           {/* Instagram Handle */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Instagram Handle *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('form.instagramHandle.label')} *</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-gray-500 sm:text-sm">@</span>
@@ -325,7 +352,7 @@ export default function BrandProfileSetup() {
                 className={`w-full p-3 pl-8 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
                   errors.instagramHandle ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-red-burgundy/20 focus:border-red-burgundy'
                 }`}
-                placeholder="your_brand"
+                placeholder={t('form.instagramHandle.placeholder')}
                 {...register('instagramHandle')}
               />
             </div>
@@ -336,13 +363,11 @@ export default function BrandProfileSetup() {
           
           {/* Website */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('form.website.label')}</label>
             <input
               type="url"
-              className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
-                errors.website ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-red-burgundy/20 focus:border-red-burgundy'
-              }`}
-              placeholder="https://www.yourbrand.com"
+              className={getFieldClassName(!!errors.website)}
+              placeholder={t('form.website.placeholder')}
               {...register('website')}
             />
             {errors.website && (
@@ -350,41 +375,23 @@ export default function BrandProfileSetup() {
             )}
           </div>
           
-          {/* Industry */}
+          {/* Industry - Lazy loaded component */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Industry *</label>
-            <select
-              className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
-                errors.industry ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-red-burgundy/20 focus:border-red-burgundy'
-              }`}
-              {...register('industry')}
-            >
-              <option value="">Select your industry</option>
-              <option value="Travel & Tourism">Travel & Tourism</option>
-              <option value="Hospitality">Hospitality</option>
-              <option value="Fashion">Fashion</option>
-              <option value="Beauty">Beauty</option>
-              <option value="Food & Beverage">Food & Beverage</option>
-              <option value="Technology">Technology</option>
-              <option value="Lifestyle">Lifestyle</option>
-              <option value="Fitness & Wellness">Fitness & Wellness</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Other">Other</option>
-            </select>
-            {errors.industry && (
-              <p className="mt-1 text-red-500 text-xs">{errors.industry.message}</p>
-            )}
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('form.industry.label')} *</label>
+            <LazyIndustrySelect
+              register={register}
+              error={errors.industry}
+              t={t}
+            />
           </div>
           
           {/* Location */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('form.location.label')} *</label>
             <input
               type="text"
-              className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
-                errors.location ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-red-burgundy/20 focus:border-red-burgundy'
-              }`}
-              placeholder="New York, NY"
+              className={getFieldClassName(!!errors.location)}
+              placeholder={t('form.location.placeholder')}
               {...register('location')}
             />
             {errors.location && (
@@ -394,13 +401,13 @@ export default function BrandProfileSetup() {
           
           {/* Description */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Brand Description *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('form.description.label')} *</label>
             <textarea
               rows={4}
               className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-colors resize-none ${
                 errors.description ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-red-burgundy/20 focus:border-red-burgundy'
               }`}
-              placeholder="Tell creators about your brand, what you do, and what kind of content you're looking for..."
+              placeholder={t('form.description.placeholder')}
               {...register('description')}
             />
             {errors.description && (
@@ -417,14 +424,14 @@ export default function BrandProfileSetup() {
             {isSubmitting ? (
               <>
                 <Spinner size="sm" color="secondary" className="mr-2" />
-                <span>Saving...</span>
+                <span>{isEditMode ? t('form.submit.updating') : t('form.submit.creating')}</span>
               </>
             ) : (
-              isEditMode ? 'Update Profile' : 'Save and Continue'
+              isEditMode ? t('form.submit.update') : t('form.submit.create')
             )}
           </button>
         </form>
       </div>
     </div>
   );
-}// review trigger
+}

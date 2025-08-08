@@ -92,23 +92,35 @@
     "form": {
       "brandName": {
         "label": "Brand Name",
-        "placeholder": "Enter your brand name",
+        "placeholder": "Acme Travel Co.",
         "required": "Brand name is required"
       },
       "instagramHandle": {
         "label": "Instagram Handle",
-        "placeholder": "@yourbrand",
+        "placeholder": "your_brand",
         "required": "Instagram handle is required"
       },
       "website": {
         "label": "Website",
-        "placeholder": "https://www.yourwebsite.com",
+        "placeholder": "https://www.yourbrand.com",
         "error": "Please enter a valid website URL"
       },
       "industry": {
         "label": "Industry",
-        "placeholder": "e.g. Fashion, Travel, Lifestyle",
-        "required": "Industry is required"
+        "placeholder": "Select your industry",
+        "required": "Industry is required",
+        "options": {
+          "travel": "Travel & Tourism",
+          "hospitality": "Hospitality",
+          "fashion": "Fashion",
+          "beauty": "Beauty",
+          "foodBeverage": "Food & Beverage",
+          "technology": "Technology",
+          "lifestyle": "Lifestyle",
+          "fitnessWellness": "Fitness & Wellness",
+          "entertainment": "Entertainment",
+          "other": "Other"
+        }
       },
       "location": {
         "label": "Location",
@@ -127,19 +139,20 @@
         "selectImage": "Select Image"
       },
       "submit": {
-        "create": "Create Brand Profile",
+        "create": "Save and Continue",
         "update": "Update Profile",
-        "creating": "Creating profile...",
-        "updating": "Updating profile..."
+        "creating": "Saving...",
+        "updating": "Saving..."
       }
     },
     "messages": {
       "profileCreated": "Brand profile created successfully!",
       "profileUpdated": "Brand profile updated successfully!",
       "updateFailed": "Failed to update brand profile. Please try again.",
-      "imageUploadFailed": "Failed to upload image. Please try again.",
-      "invalidImageType": "Invalid file type. Please use JPG, PNG, or WebP.",
-      "imageTooLarge": "Image is too large. Maximum size is 5MB."
+      "imageUploadFailed": "Failed to upload brand logo.",
+      "invalidImageType": "Please select an image file",
+      "imageTooLarge": "Image must be less than 5MB",
+      "loginRequired": "You must be logged in to create a brand profile"
     },
     "validation": {
       "brandNameRequired": "Brand name is required",
