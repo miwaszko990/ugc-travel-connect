@@ -10,7 +10,19 @@ export function getAuthErrorType(error: string | null): AuthErrorType {
     errorType => error.includes(errorType)
   );
   
-  return isExistingAccount ? 'existing' : 'generic';
+  const isCredentialError = AUTH_ERROR_TYPES.CREDENTIAL_ERROR.some(
+    errorType => error.includes(errorType)
+  );
+  
+  const needsRegistration = AUTH_ERROR_TYPES.NEEDS_REGISTRATION.some(
+    errorType => error.includes(errorType)
+  );
+  
+  if (isExistingAccount) return 'existing';
+  if (isCredentialError) return 'credential';
+  if (needsRegistration) return 'registration';
+  
+  return 'generic';
 }
 
 /**
@@ -20,4 +32,23 @@ export function getDashboardPath(role: 'creator' | 'brand'): string {
   return role === 'creator' 
     ? '/dashboard/creator/profile-setup' 
     : '/dashboard/brand/profile-setup';
+}
+
+/**
+ * Login-specific error analysis
+ */
+export interface LoginErrorState {
+  needsRegistration: boolean;
+  isCredentialError: boolean;
+  errorType: AuthErrorType;
+}
+
+export function getLoginErrorState(error: string | null): LoginErrorState {
+  const errorType = getAuthErrorType(error);
+  
+  return {
+    needsRegistration: errorType === 'registration',
+    isCredentialError: errorType === 'credential',
+    errorType
+  };
 } 

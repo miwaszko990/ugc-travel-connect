@@ -1,0 +1,15 @@
+{
+  "welcomeBack": "Welcome back!",
+  "loginToAccount": "Log in to access your UGC marketplace account",
+  "email": "Email",
+  "enterYourEmail": "Enter your email",
+  "password": "Password",
+  "enterPassword": "Enter your password",
+  "signingIn": "Signing in...",
+  "login": "Login",
+  "dontHaveAccount": "Don't have an account?",
+  "signUp": "Sign up",
+  "clickToRegister": "Click here to register now",
+  "forgotPassword": "Forgot password?",
+  "forgotYourPassword": "Forgot your password?"
+} 
