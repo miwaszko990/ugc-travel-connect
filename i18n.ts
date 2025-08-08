@@ -8,7 +8,11 @@ export default getRequestConfig(async ({locale}) => {
     locale: validLocale,
     messages: {
       common: (await import(`./locales/${validLocale}/common.json`)).default,
-      auth: (await import(`./locales/${validLocale}/auth.json`)).default
+      auth: (await import(`./locales/${validLocale}/auth.json`)).default,
+      'auth-register': (await import(`./locales/${validLocale}/auth-register.json`)).default,
+      'auth-login': (await import(`./locales/${validLocale}/auth-login.json`)).default,
+      'auth-modal': (await import(`./locales/${validLocale}/auth-modal.json`)).default,
+      brand: (await import(`./locales/${validLocale}/brand.json`)).default
     }
   };
 }); 

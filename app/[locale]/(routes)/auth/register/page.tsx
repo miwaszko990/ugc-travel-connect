@@ -17,8 +17,9 @@ import { getAuthErrorType, getDashboardPath } from '@/app/lib/utils/auth-utils';
 export const runtime = 'edge'
 export const preferredRegion = 'auto'
 
-// Lazy load heavy components
-const RoleSelector = dynamic(() => import('@/app/components/ui/role-selector').then(mod => ({ default: mod.RoleSelector })), {
+// Lazy load heavy components with optimized loading states
+const RoleSelector = dynamic(() => 
+  import('@/app/components/ui/role-selector').then(mod => ({ default: mod.RoleSelector })), {
   ssr: false,
   loading: () => (
     <div className="form-control">
@@ -30,7 +31,8 @@ const RoleSelector = dynamic(() => import('@/app/components/ui/role-selector').t
   )
 });
 
-const LanguageSwitcher = dynamic(() => import('@/app/components/ui/language-switcher').then(mod => ({ default: mod.LanguageSwitcher })), {
+const LanguageSwitcher = dynamic(() => 
+  import('@/app/components/ui/language-switcher').then(mod => ({ default: mod.LanguageSwitcher })), {
   ssr: false,
   loading: () => <div className="flex gap-2 w-16 h-8 bg-gray-200 rounded animate-pulse"></div>
 });
@@ -42,7 +44,8 @@ interface RoleOption {
 }
 
 export default function RegisterPage() {
-  const t = useTranslations('auth');
+  // Use granular translations for better bundle splitting
+  const t = useTranslations('auth-register');
   const router = useRouter();
   const { signUp, loading, error } = useAuth();
   const [selectedRole, setSelectedRole] = useState<RoleOption | null>(null);
@@ -82,14 +85,30 @@ export default function RegisterPage() {
     }
   }, [signUp, router]);
 
-  // Memoize error processing
-  const { errorType, isExistingAccount } = useMemo(() => {
+  // Memoize error processing for better performance
+  const errorState = useMemo(() => {
+    if (!error) return null;
+    
     const errorType = getAuthErrorType(error);
     return {
+      error,
       errorType,
       isExistingAccount: errorType === 'existing'
     };
   }, [error]);
+
+  // Memoize button classes to prevent recalculation
+  const buttonClasses = useMemo(() => 
+    `btn px-6 py-3 h-auto ${AUTH_CONSTANTS.FORM.BUTTON_WIDTH} font-bold normal-case ${AUTH_CONSTANTS.FORM.BUTTON_RADIUS} border-none shadow-sm transition-all ${
+      loading 
+        ? 'bg-red-burgundy/90 cursor-not-allowed' 
+        : 'bg-red-burgundy hover:bg-red-burgundy/90'
+    }`, [loading]);
+
+  // Memoize alert classes to prevent recalculation
+  const alertClasses = useMemo(() => 
+    `alert mb-4 rounded-[12px] py-2 text-sm ${errorState?.isExistingAccount ? 'alert-info' : 'alert-error'}`,
+    [errorState?.isExistingAccount]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-ivory p-4">
@@ -104,11 +123,11 @@ export default function RegisterPage() {
         
         <div className="mb-5"></div>
         
-        {error && (
-          <div className={`alert mb-4 rounded-[12px] py-2 text-sm ${isExistingAccount ? 'alert-info' : 'alert-error'}`}>
+        {errorState && (
+          <div className={alertClasses}>
             <div className="flex flex-col items-start">
-            <span>{error}</span>
-              {isExistingAccount && (
+              <span>{errorState.error}</span>
+              {errorState.isExistingAccount && (
                 <Link href={AUTH_CONSTANTS.ROUTES.LOGIN} className="mt-2 text-red-burgundy underline font-semibold">
                   {t('clickToLogin')}
                 </Link>
@@ -159,11 +178,7 @@ export default function RegisterPage() {
           <div className="form-control mt-5 flex items-center justify-center">
             <button 
               type="submit" 
-              className={`btn px-6 py-3 h-auto ${AUTH_CONSTANTS.FORM.BUTTON_WIDTH} font-bold normal-case ${AUTH_CONSTANTS.FORM.BUTTON_RADIUS} border-none shadow-sm transition-all ${
-                loading 
-                  ? 'bg-red-burgundy/90 cursor-not-allowed' 
-                  : 'bg-red-burgundy hover:bg-red-burgundy/90'
-              }`}
+              className={buttonClasses}
               disabled={loading}
             >
               {loading ? (

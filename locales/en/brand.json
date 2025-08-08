@@ -1,0 +1,177 @@
+{
+  "dashboard": {
+    "title": "Brand Dashboard",
+    "loading": "Loading your dashboard...",
+    "error": {
+      "title": "Unable to Load Dashboard",
+      "message": "There was an error loading your brand dashboard. Please try again.",
+      "retry": "Retry"
+    }
+  },
+  "navigation": {
+    "browseCreators": "Browse Creators",
+    "messages": "Messages",
+    "bookings": "Bookings",
+    "editProfile": "Edit Profile",
+    "browse": "Browse",
+    "profile": "Profile"
+  },
+  "browseCreators": {
+    "title": "Browse Creators",
+    "subtitle": "Find the perfect luxury travel creator for your brand. Filter by destination, travel dates, home city, audience size, and more.",
+    "searchPlaceholder": "Search creators by name, location, or planned destinations...",
+    "filters": {
+      "anySize": "Any Size",
+      "1k5k": "1K - 5K",
+      "5k25k": "5K - 25K",
+      "25k100k": "25K - 100K",
+      "100kPlus": "100K+",
+      "anyStatus": "Any Status",
+      "plannedTrips": "Planned Trips",
+      "activeTrips": "Active Trips",
+      "completedTrips": "Completed Trips",
+      "recentlyJoined": "Recently Joined",
+      "mostFollowers": "Most Followers",
+      "alphabetical": "Alphabetical",
+      "nextTripDate": "Next Trip Date"
+    },
+    "loading": "Loading creators...",
+    "noResults": "No creators found",
+    "tryAdjusting": "Try adjusting your filters",
+    "showFilters": "Show filters",
+    "hideFilters": "Hide filters"
+  },
+  "messages": {
+    "loading": "Loading conversations...",
+    "noConversations": "No conversations",
+    "startConversation": "Start conversation with a creator"
+  },
+  "bookings": {
+    "title": "Bookings & Payments",
+    "subtitle": "Manage your creator collaborations and payments",
+    "stats": {
+      "totalBookings": "Total Bookings",
+      "active": "Active",
+      "completed": "Completed",
+      "totalSpent": "Total Spent"
+    },
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "paid": "Paid",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "loading": "Loading bookings...",
+    "noBookings": "No bookings",
+    "startCollaborating": "Start collaborating with creators",
+    "actions": {
+      "releasePayment": "Release Payment",
+      "markComplete": "Mark Complete",
+      "viewDetails": "View Details"
+    },
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    }
+  },
+  "stats": {
+    "title": "Brand Stats",
+    "activeCreators": "Active Creators",
+    "pendingBookings": "Pending Bookings",
+    "completedCampaigns": "Completed Campaigns",
+    "totalSpend": "Total Spend"
+  },
+  "profileSetup": {
+    "title": "Create Brand Profile",
+    "editTitle": "Edit Brand Profile",
+    "subtitle": "Set up your brand profile to start collaborating with creators",
+    "editSubtitle": "Update your brand profile details",
+    "form": {
+      "brandName": {
+        "label": "Brand Name",
+        "placeholder": "Enter your brand name",
+        "required": "Brand name is required"
+      },
+      "instagramHandle": {
+        "label": "Instagram Handle",
+        "placeholder": "@yourbrand",
+        "required": "Instagram handle is required"
+      },
+      "website": {
+        "label": "Website",
+        "placeholder": "https://www.yourwebsite.com",
+        "error": "Please enter a valid website URL"
+      },
+      "industry": {
+        "label": "Industry",
+        "placeholder": "e.g. Fashion, Travel, Lifestyle",
+        "required": "Industry is required"
+      },
+      "location": {
+        "label": "Location",
+        "placeholder": "New York, NY",
+        "required": "Location is required"
+      },
+      "description": {
+        "label": "Brand Description",
+        "placeholder": "Tell creators about your brand, what you do, and what kind of content you're looking for...",
+        "required": "Description must be at least 10 characters"
+      },
+      "logoUpload": {
+        "addLogo": "Add logo",
+        "changeLogo": "Change logo",
+        "uploadProgress": "Uploading: {progress}%",
+        "selectImage": "Select Image"
+      },
+      "submit": {
+        "create": "Create Brand Profile",
+        "update": "Update Profile",
+        "creating": "Creating profile...",
+        "updating": "Updating profile..."
+      }
+    },
+    "messages": {
+      "profileCreated": "Brand profile created successfully!",
+      "profileUpdated": "Brand profile updated successfully!",
+      "updateFailed": "Failed to update brand profile. Please try again.",
+      "imageUploadFailed": "Failed to upload image. Please try again.",
+      "invalidImageType": "Invalid file type. Please use JPG, PNG, or WebP.",
+      "imageTooLarge": "Image is too large. Maximum size is 5MB."
+    },
+    "validation": {
+      "brandNameRequired": "Brand name is required",
+      "instagramRequired": "Instagram handle is required",
+      "websiteInvalid": "Please enter a valid website URL",
+      "descriptionTooShort": "Description must be at least 10 characters",
+      "industryRequired": "Industry is required",
+      "locationRequired": "Location is required"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "apply": "Apply",
+    "reset": "Reset",
+    "close": "Close",
+    "open": "Open",
+    "show": "Show",
+    "hide": "Hide",
+    "required": "Required",
+    "optional": "Optional"
+  }
+}

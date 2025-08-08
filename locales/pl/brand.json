@@ -1,0 +1,179 @@
+{
+  "dashboard": {
+    "title": "Panel Marki",
+    "subtitle": "Ta strona zostanie przebudowana od podstaw",
+    "loading": "Ładowanie panelu...",
+    "redirecting": "Przekierowywanie...",
+    "error": {
+      "title": "Nie można załadować panelu",
+      "message": "Wystąpił błąd podczas ładowania panelu marki. Spróbuj ponownie.",
+      "retry": "Ponów próbę"
+    }
+  },
+  "navigation": {
+    "browseCreators": "Przeglądaj Twórców",
+    "messages": "Wiadomości",
+    "bookings": "Rezerwacje",
+    "editProfile": "Edytuj Profil",
+    "browse": "Przeglądaj",
+    "profile": "Profil"
+  },
+  "browseCreators": {
+    "title": "Przeglądaj Twórców",
+    "subtitle": "Znajdź idealnego twórcę treści o luksusowych podróżach dla swojej marki. Filtruj według destynacji, dat podróży, miasta pochodzenia, wielkości audytorium i innych kryteriów.",
+    "searchPlaceholder": "Szukaj twórców według nazwy, lokalizacji lub planowanych destynacji...",
+    "filters": {
+      "anySize": "Dowolny rozmiar",
+      "1k5k": "1K - 5K",
+      "5k25k": "5K - 25K",
+      "25k100k": "25K - 100K",
+      "100kPlus": "100K+",
+      "anyStatus": "Dowolny status",
+      "plannedTrips": "Planowane podróże",
+      "activeTrips": "Aktywne podróże",
+      "completedTrips": "Ukończone podróże",
+      "recentlyJoined": "Ostatnio dołączyli",
+      "mostFollowers": "Najwięcej obserwujących",
+      "alphabetical": "Alfabetycznie",
+      "nextTripDate": "Data następnej podróży"
+    },
+    "loading": "Ładowanie twórców...",
+    "noResults": "Nie znaleziono twórców",
+    "tryAdjusting": "Spróbuj dostosować filtry",
+    "showFilters": "Pokaż filtry",
+    "hideFilters": "Ukryj filtry"
+  },
+  "messages": {
+    "loading": "Ładowanie rozmów...",
+    "noConversations": "Brak rozmów",
+    "startConversation": "Rozpocznij rozmowę z twórcą"
+  },
+  "bookings": {
+    "title": "Rezerwacje i Płatności",
+    "subtitle": "Zarządzaj współpracą z twórcami i płatnościami",
+    "stats": {
+      "totalBookings": "Łączne rezerwacje",
+      "active": "Aktywne",
+      "completed": "Ukończone",
+      "totalSpent": "Łączne wydatki"
+    },
+    "tabs": {
+      "all": "Wszystkie",
+      "pending": "Oczekujące",
+      "paid": "Opłacone",
+      "active": "Aktywne",
+      "completed": "Ukończone"
+    },
+    "loading": "Ładowanie rezerwacji...",
+    "noBookings": "Brak rezerwacji",
+    "startCollaborating": "Zacznij współpracować z twórcami",
+    "actions": {
+      "releasePayment": "Zwolnij płatność",
+      "markComplete": "Oznacz jako ukończone",
+      "viewDetails": "Zobacz szczegóły"
+    },
+    "status": {
+      "pending": "Oczekujące",
+      "paid": "Opłacone",
+      "inProgress": "W trakcie",
+      "completed": "Ukończone"
+    }
+  },
+  "stats": {
+    "title": "Statystyki Marki",
+    "activeCreators": "Aktywni twórcy",
+    "pendingBookings": "Oczekujące rezerwacje",
+    "completedCampaigns": "Ukończone kampanie",
+    "totalSpend": "Łączne wydatki"
+  },
+  "profileSetup": {
+    "title": "Utwórz Profil Marki",
+    "editTitle": "Edytuj Profil Marki",
+    "subtitle": "Skonfiguruj profil swojej marki, aby rozpocząć współpracę z twórcami",
+    "editSubtitle": "Zaktualizuj szczegóły profilu swojej marki",
+    "form": {
+      "brandName": {
+        "label": "Nazwa marki",
+        "placeholder": "Wprowadź nazwę swojej marki",
+        "required": "Nazwa marki jest wymagana"
+      },
+      "instagramHandle": {
+        "label": "Uchwyt Instagram",
+        "placeholder": "@nazwatvojejmarki",
+        "required": "Uchwyt Instagram jest wymagany"
+      },
+      "website": {
+        "label": "Strona internetowa",
+        "placeholder": "https://www.twojastrona.com",
+        "error": "Wprowadź prawidłowy adres URL strony internetowej"
+      },
+      "industry": {
+        "label": "Branża",
+        "placeholder": "np. Moda, Podróże, Lifestyle",
+        "required": "Branża jest wymagana"
+      },
+      "location": {
+        "label": "Lokalizacja",
+        "placeholder": "Warszawa, Polska",
+        "required": "Lokalizacja jest wymagana"
+      },
+      "description": {
+        "label": "Opis marki",
+        "placeholder": "Opowiedz twórcom o swojej marce, czym się zajmujesz i jakiego rodzaju treści szukasz...",
+        "required": "Opis musi mieć co najmniej 10 znaków"
+      },
+      "logoUpload": {
+        "addLogo": "Dodaj logo",
+        "changeLogo": "Zmień logo",
+        "uploadProgress": "Przesyłanie: {progress}%",
+        "selectImage": "Wybierz obraz"
+      },
+      "submit": {
+        "create": "Utwórz profil marki",
+        "update": "Zaktualizuj profil",
+        "creating": "Tworzenie profilu...",
+        "updating": "Aktualizowanie profilu..."
+      }
+    },
+    "messages": {
+      "profileCreated": "Profil marki został utworzony pomyślnie!",
+      "profileUpdated": "Profil marki został zaktualizowany pomyślnie!",
+      "updateFailed": "Nie udało się zaktualizować profilu marki. Spróbuj ponownie.",
+      "imageUploadFailed": "Nie udało się przesłać obrazu. Spróbuj ponownie.",
+      "invalidImageType": "Nieprawidłowy typ pliku. Użyj formatu JPG, PNG lub WebP.",
+      "imageTooLarge": "Obraz jest zbyt duży. Maksymalny rozmiar to 5MB."
+    },
+    "validation": {
+      "brandNameRequired": "Nazwa marki jest wymagana",
+      "instagramRequired": "Uchwyt Instagram jest wymagany",
+      "websiteInvalid": "Wprowadź prawidłowy adres URL strony internetowej",
+      "descriptionTooShort": "Opis musi mieć co najmniej 10 znaków",
+      "industryRequired": "Branża jest wymagana",
+      "locationRequired": "Lokalizacja jest wymagana"
+    }
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Błąd",
+    "success": "Sukces",
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "confirm": "Potwierdź",
+    "back": "Wróć",
+    "next": "Dalej",
+    "previous": "Poprzedni",
+    "search": "Szukaj",
+    "filter": "Filtruj",
+    "clear": "Wyczyść",
+    "apply": "Zastosuj",
+    "reset": "Resetuj",
+    "close": "Zamknij",
+    "open": "Otwórz",
+    "show": "Pokaż",
+    "hide": "Ukryj",
+    "required": "Wymagane",
+    "optional": "Opcjonalne"
+  }
+}
