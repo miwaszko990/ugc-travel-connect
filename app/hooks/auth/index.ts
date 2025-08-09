@@ -1,6 +1,6 @@
 // Main auth exports
 export { useAuth } from './useAuthContext';
-export { AuthProvider } from '../components/auth/AuthProvider';
+export { AuthProvider } from '../../components/auth/AuthProvider';
 
 // Types
 export type { 

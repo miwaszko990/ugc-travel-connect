@@ -9,7 +9,7 @@ import { Spinner } from '@/app/components/ui/spinner';
 
 // Import our components
 import ProfileSidebar from '@/app/components/creator/profile-sidebar';
-import TravelPlans from '@/app/components/creator/travel-plans 2';
+import TravelPlans from '@/app/components/creator/travel-plans';
 import Messages from '@/app/components/creator/messages';
 import Earnings from '@/app/components/creator/earnings';
 
