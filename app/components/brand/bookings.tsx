@@ -113,7 +113,9 @@ export default function BrandBookings() {
   };
 
   const handleMessageCreator = (creatorHandle: string) => {
-    window.location.href = `/dashboard/brand?tab=messages&creator=${creatorHandle}`;
+    if (typeof window !== 'undefined') {
+      window.location.href = `/dashboard/brand?tab=messages&creator=${creatorHandle}`;
+    }
   };
 
   if (loading) {
@@ -310,7 +312,11 @@ export default function BrandBookings() {
           </p>
           {selectedTab === 'all' && (
             <button
-              onClick={() => window.location.href = '/dashboard/brand?tab=browse-creators'}
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.location.href = '/dashboard/brand?tab=browse-creators';
+                }
+              }}
               className="bg-red-burgundy text-white px-6 py-2 rounded-lg font-medium hover:bg-red-burgundy/90 transition-colors"
             >
               Browse Creators
