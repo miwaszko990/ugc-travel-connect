@@ -9,9 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from '@/app/components/ui/spinner';
 import dynamic from 'next/dynamic';
 
-// Optimize for Vercel Edge Runtime
-export const runtime = 'edge'
-export const preferredRegion = 'auto'
+// Client component optimized for performance
 
 // Lazy load heavy components with optimized loading states
 const BrandProfileSidebar = dynamic(() => 

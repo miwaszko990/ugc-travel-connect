@@ -13,9 +13,7 @@ import { useMemo, useCallback, useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
-// Optimize for Vercel Edge Runtime
-export const runtime = 'edge'
-export const preferredRegion = 'auto'
+// Client component optimized for performance
 
 // Lazy load LanguageSwitcher - it's not critical for login functionality
 const LanguageSwitcher = dynamic(

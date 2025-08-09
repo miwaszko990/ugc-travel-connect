@@ -13,9 +13,7 @@ import { FormField } from '@/app/components/ui/form-field';
 import { AUTH_CONSTANTS } from '@/app/lib/constants/auth';
 import { getAuthErrorType, getDashboardPath } from '@/app/lib/utils/auth-utils';
 
-// Optimize for Vercel Edge Runtime
-export const runtime = 'edge'
-export const preferredRegion = 'auto'
+// Client component optimized for performance
 
 // Lazy load heavy components with optimized loading states
 const RoleSelector = dynamic(() => 

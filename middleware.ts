@@ -16,16 +16,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // In production, redirect everything to /lumo except /lumo itself
-  if (process.env.NODE_ENV === 'production') {
-    if (request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/en' || request.nextUrl.pathname === '/pl') {
-      return NextResponse.redirect(new URL('/lumo', request.url))
-    }
-    if (!request.nextUrl.pathname.startsWith('/lumo') && 
-        !request.nextUrl.pathname.startsWith('/en/lumo') && 
-        !request.nextUrl.pathname.startsWith('/pl/lumo')) {
-      return NextResponse.redirect(new URL('/lumo', request.url))
-    }
+  // Redirect root paths to landing page
+  if (request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/en' || request.nextUrl.pathname === '/pl') {
+    return NextResponse.redirect(new URL('/lumo', request.url))
   }
 
   // Handle internationalization

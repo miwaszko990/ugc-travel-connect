@@ -6,9 +6,7 @@ import { useMemo, useCallback, memo } from 'react';
 import dynamic from 'next/dynamic';
 import { MODAL_CONSTANTS, BUTTON_VARIANTS } from '@/app/lib/constants/ui';
 
-// Edge Runtime compatibility
-export const runtime = 'edge';
-export const preferredRegion = 'auto';
+// Client component optimized for performance
 
 // Lazy load heavy components with SSR disabled for better performance
 const ModalIcon = dynamic(() => 
