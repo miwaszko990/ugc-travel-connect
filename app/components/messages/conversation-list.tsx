@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { Conversation, subscribeToUserConversations } from '@/app/lib/firebase/messages';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { Spinner } from '@/app/components/ui/spinner';
 import { db } from '@/app/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';

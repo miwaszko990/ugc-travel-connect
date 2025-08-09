@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { sendMessage, getConversationId } from '@/app/lib/firebase/messages';
 import { toast } from 'react-hot-toast';
 import { Dialog } from '@headlessui/react';

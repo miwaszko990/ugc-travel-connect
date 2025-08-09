@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { Message, subscribeToConversationMessages, sendMessage, markConversationAsRead } from '@/app/lib/firebase/messages';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { Spinner } from '@/app/components/ui/spinner';
 
 interface ChatViewProps {

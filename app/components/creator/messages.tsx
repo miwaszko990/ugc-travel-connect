@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/app/hooks/auth';
 import { subscribeToUserConversations, Conversation } from '@/app/lib/firebase/messages';
 import Link from 'next/link';
 import Image from 'next/image';
