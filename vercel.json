@@ -1,5 +1,4 @@
 {
-  "buildCommand": "npm install && npm rebuild lightningcss --force && npm run build",
   "rewrites": [
     {
       "source": "/register",
