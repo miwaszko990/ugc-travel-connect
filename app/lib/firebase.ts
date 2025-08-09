@@ -60,13 +60,22 @@ if (process.env.NODE_ENV === 'development') {
     const handleOnline = () => console.log('Network restored');
     const handleOffline = () => console.log('Network lost - using cache');
     
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // Safely add event listeners
+    try {
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+    } catch (e) {
+      console.warn('Could not add network event listeners:', e);
+    }
     
     // Cleanup function (should be called when component unmounts)
     const cleanup = () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      try {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      } catch (e) {
+        console.warn('Could not remove network event listeners:', e);
+      }
     };
     
     // Store cleanup function for potential use
@@ -76,12 +85,20 @@ if (process.env.NODE_ENV === 'development') {
   // Only log serious errors in production
   if (typeof window !== 'undefined') {
     const handleOffline = () => console.warn('Network connection lost');
-    window.addEventListener('offline', handleOffline);
-    
-    // Store cleanup for production too
-    (window as any).__firebaseCleanup = () => {
-      window.removeEventListener('offline', handleOffline);
-    };
+    try {
+      window.addEventListener('offline', handleOffline);
+      
+      // Store cleanup for production too
+      (window as any).__firebaseCleanup = () => {
+        try {
+          window.removeEventListener('offline', handleOffline);
+        } catch (e) {
+          console.warn('Could not remove offline listener:', e);
+        }
+      };
+    } catch (e) {
+      console.warn('Could not add offline listener:', e);
+    }
   }
 }
 

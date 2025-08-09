@@ -59,6 +59,8 @@ export function handleAuthenticatedNavigation(
   userData: UserData,
   router: ReturnType<typeof useRouter>
 ) {
+  if (typeof window === 'undefined') return;
+  
   const path = window.location.pathname;
   console.log('Current path during auth check:', path);
   
