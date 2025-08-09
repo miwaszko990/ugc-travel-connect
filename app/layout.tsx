@@ -4,6 +4,9 @@ import "./globals.css";
 import { AuthProvider } from "@/app/components/auth/AuthProvider";
 import { ToastProvider } from "@/app/providers/toast-provider";
 
+// Force dynamic rendering to prevent SSR issues
+export const dynamic = 'force-dynamic';
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
