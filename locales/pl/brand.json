@@ -16,7 +16,11 @@
     "bookings": "Rezerwacje",
     "editProfile": "Edytuj Profil",
     "browse": "Przeglądaj",
-    "profile": "Profil"
+    "profile": "Profil",
+    "settings": "Ustawienia",
+    "expandSidebar": "Rozwiń panel boczny",
+    "collapseSidebar": "Zwiń panel boczny",
+    "brandAltText": "Marka"
   },
   "browseCreators": {
     "title": "Przeglądaj Twórców",

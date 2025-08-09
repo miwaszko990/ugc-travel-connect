@@ -1,0 +1,14 @@
+{
+  "navigation": {
+    "travelPlans": "Plany Podróży",
+    "messages": "Wiadomości",
+    "earnings": "Zarobki",
+    "editProfile": "Edytuj Profil",
+    "travel": "Podróże",
+    "profile": "Profil",
+    "settings": "Ustawienia",
+    "expandSidebar": "Rozwiń panel boczny",
+    "collapseSidebar": "Zwiń panel boczny",
+    "brandAltText": "Twórca"
+  }
+}

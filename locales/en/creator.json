@@ -1,0 +1,14 @@
+{
+  "navigation": {
+    "travelPlans": "Travel Plans",
+    "messages": "Messages", 
+    "earnings": "Earnings",
+    "editProfile": "Edit Profile",
+    "travel": "Travel",
+    "profile": "Profile",
+    "settings": "Settings",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "brandAltText": "Creator"
+  }
+}

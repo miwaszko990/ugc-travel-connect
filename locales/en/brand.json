@@ -14,7 +14,11 @@
     "bookings": "Bookings",
     "editProfile": "Edit Profile",
     "browse": "Browse",
-    "profile": "Profile"
+    "profile": "Profile",
+    "settings": "Settings",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "brandAltText": "Brand"
   },
   "browseCreators": {
     "title": "Browse Creators",
