@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Force Tailwind to include these classes */
 .bg-red-burgundy { background-color: #8B0000 !important; }
