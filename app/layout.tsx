@@ -19,7 +19,11 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
   description: "Połącz się z najlepszymi twórcami treści podróżniczych, którzy przekształcają destynacje w fascynujące historie. Wzmocnij swoją markę autentycznymi, luksusowymi treściami.",
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
