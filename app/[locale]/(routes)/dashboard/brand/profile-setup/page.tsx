@@ -1,17 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-
-// Edge Runtime compatibility for better performance
-export const runtime = 'edge';
-export const preferredRegion = 'auto';
-
-// Metadata for SEO and performance
-export const metadata = {
-  title: 'Brand Profile Setup | UGC Travel Connect',
-  description: 'Set up your brand profile to start collaborating with travel creators',
-  robots: 'noindex, nofollow', // Private page, don't index
-};
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
