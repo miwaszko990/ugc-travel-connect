@@ -102,14 +102,6 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
-// Add only if you need the emulator
-if (process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === 'true') {
-  const { connectFirestoreEmulator } = require('firebase/firestore');
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  
-  // Add Database emulator if needed
-  const { connectDatabaseEmulator } = require('firebase/database');
-  connectDatabaseEmulator(database, 'localhost', 9000);
-}
+// Emulator connection disabled for production deployment
 
 export { app, auth, db, storage, database, functions }; // review trigger
