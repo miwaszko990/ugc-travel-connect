@@ -1,19 +1,16 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { useTranslations } from 'next-intl';
 import type { AuthErrorBoundaryState } from '@/app/hooks/auth/types';
 
 /**
- * Error fallback component with i18n support
+ * Error fallback component - simple version without translations to avoid context issues
  */
 function AuthErrorFallback() {
-  const t = useTranslations('auth.messages');
-  
   return (
     <div className="p-4 bg-red-50 text-red-700 rounded-lg">
-      <h2 className="text-lg font-semibold">{t('authenticationError')}</h2>
-      <p className="text-sm">{t('authErrorRefresh')}</p>
+      <h2 className="text-lg font-semibold">Authentication Error</h2>
+      <p className="text-sm">Please refresh the page and try again.</p>
     </div>
   );
 }
