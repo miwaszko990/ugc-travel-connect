@@ -46,6 +46,7 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
   const [isOtherUserTyping, setIsOtherUserTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [otherUserInfo, setOtherUserInfo] = useState<{name: string; profilePic?: string; role?: string; instagram?: string} | null>(null);
+  const [otherUserLoading, setOtherUserLoading] = useState(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [showBrandProfile, setShowBrandProfile] = useState(false);
@@ -164,23 +165,56 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
   useEffect(() => {
     if (!selectedConversation || !user?.uid) {
       setOtherUserInfo(null);
+      setOtherUserLoading(false);
       return;
     }
     
     const otherUserId = selectedConversation.participants.find(id => id !== user.uid);
     if (otherUserId) {
+      // First, immediately use cached participant info to avoid flickering
+      const cachedInfo = selectedConversation.participantInfo?.[otherUserId];
+      if (cachedInfo) {
+        setOtherUserInfo({
+          name: cachedInfo.name || 'User',
+          profilePic: cachedInfo.profilePic,
+          role: cachedInfo.role,
+          instagram: cachedInfo.instagram
+        });
+        setOtherUserLoading(false);
+      } else {
+        // No cached data, show loading state
+        setOtherUserLoading(true);
+      }
+      
+      // Then fetch fresh data from Firebase to update if needed
       getUserDocument(otherUserId).then(userData => {
         if (userData) {
-          setOtherUserInfo({
+          const freshInfo = {
             name: userData.brandName || (userData.firstName && userData.lastName 
               ? `${userData.firstName} ${userData.lastName}`
               : userData.email || 'User'),
             profilePic: userData.profileImageUrl,
             role: userData.role,
             instagram: userData.instagramHandle
+          };
+          
+          // Only update if the data is different to avoid unnecessary re-renders
+          setOtherUserInfo(prev => {
+            if (!prev || 
+                prev.name !== freshInfo.name || 
+                prev.profilePic !== freshInfo.profilePic ||
+                prev.role !== freshInfo.role ||
+                prev.instagram !== freshInfo.instagram) {
+              return freshInfo;
+            }
+            return prev;
           });
         }
-      }).catch(console.error);
+        setOtherUserLoading(false);
+      }).catch(error => {
+        console.error('Error fetching user info:', error);
+        setOtherUserLoading(false);
+      });
     }
   }, [selectedConversation, user?.uid]);
 
@@ -498,17 +532,22 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                   )}
                 </div>
                 <div>
-                  <button
-                    onClick={() => otherUserInfo?.role === 'brand' && setShowBrandProfile(true)}
-                    className={`text-lg font-semibold text-gray-900 text-left ${
-                      otherUserInfo?.role === 'brand' 
-                        ? 'hover:text-red-burgundy cursor-pointer transition-colors' 
-                        : ''
-                    }`}
-                  >
-                    {otherUserInfo?.name || 'User'}
-                  </button>
-                  {otherUserInfo?.instagram && (
+                  {otherUserLoading ? (
+                    // Skeleton loader for name
+                    <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-1"></div>
+                  ) : (
+                    <button
+                      onClick={() => otherUserInfo?.role === 'brand' && setShowBrandProfile(true)}
+                      className={`text-lg font-semibold text-gray-900 text-left ${
+                        otherUserInfo?.role === 'brand' 
+                          ? 'hover:text-red-burgundy cursor-pointer transition-colors' 
+                          : ''
+                      }`}
+                    >
+                      {otherUserInfo?.name || 'User'}
+                    </button>
+                  )}
+                  {!otherUserLoading && otherUserInfo?.instagram && (
                     <a
                       href={`https://instagram.com/${otherUserInfo.instagram}`}
                       target="_blank"
@@ -518,13 +557,18 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                       @{otherUserInfo.instagram}
                     </a>
                   )}
-                  <p className="text-sm text-gray-500">
-                    {isOtherUserTyping ? (
-                      <span className="text-red-burgundy font-medium">typing...</span>
+                  {otherUserLoading ? (
+                    // Skeleton loader for status
+                    <div className="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      {isOtherUserTyping ? (
+                        <span className="text-red-burgundy font-medium">typing...</span>
                     ) : (
                       selectedConversation.participants.length > 1 ? 'Active now' : 'User'
                     )}
-                  </p>
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
