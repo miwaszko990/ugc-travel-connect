@@ -68,12 +68,31 @@
         "noTrips": "No trips available",
         "placeholder": "Choose which trip you're interested in..."
       },
+      "package": {
+        "label": "Choose Package",
+        "custom": "Custom Offer",
+        "customDescription": "Write your own collaboration details and pricing"
+      },
+      "packages": {
+        "mini": {
+          "title": "Mini Social Boost – PLN 200",
+          "description": "3 x Instagram Stories, Brand tagging + 1 swipe-up link, Delivery within 24 hours"
+        },
+        "content": {
+          "title": "Content Impact – PLN 450", 
+          "description": "1 x Instagram Reel or TikTok video (30s), 1 x Instagram Story, Content editing + platform adaptation"
+        },
+        "full": {
+          "title": "Full Campaign Package – PLN 900",
+          "description": "1 x Instagram Reel + 1 x TikTok (adapted), 3 x Instagram Stories, Vertical/horizontal versions, 3-day delivery"
+        }
+      },
       "description": {
         "label": "Description",
         "placeholder": "e.g. 3 Instagram posts, 2 TikTok videos, 1 YouTube short showcasing local attractions..."
       },
       "amount": {
-        "label": "Amount (USD)",
+        "label": "Amount (PLN)",
         "placeholder": "500"
       },
       "buttons": {

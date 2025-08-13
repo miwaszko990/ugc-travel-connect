@@ -70,12 +70,31 @@
         "noTrips": "Brak dostępnych podróży",
         "placeholder": "Wybierz podróż, którą jesteś zainteresowany..."
       },
+      "package": {
+        "label": "Wybierz Pakiet",
+        "custom": "Oferta Niestandardowa",
+        "customDescription": "Napisz własne szczegóły współpracy i cenę"
+      },
+      "packages": {
+        "mini": {
+          "title": "Mini Social Boost – PLN 200",
+          "description": "3 x Relacje na Instagramie, Oznaczenie marki + 1 link swipe-up, Dostawa w ciągu 24 godzin"
+        },
+        "content": {
+          "title": "Content Impact – PLN 450",
+          "description": "1 x Reels na Instagramie lub video na TikTok (30s), 1 x Relacja na Instagramie, Montaż treści + dostosowanie do platformy"
+        },
+        "full": {
+          "title": "Full Campaign Package – PLN 900",
+          "description": "1 x Reels na Instagramie + 1 x TikTok (dostosowane), 3 x Relacje na Instagramie, Wersje pionowa/pozioma, Dostawa w 3 dni"
+        }
+      },
       "description": {
         "label": "Opis",
         "placeholder": "np. 3 posty na Instagram, 2 filmy TikTok, 1 short YouTube prezentujący lokalne atrakcje..."
       },
       "amount": {
-        "label": "Kwota (USD)",
+        "label": "Kwota (PLN)",
         "placeholder": "500"
       },
       "buttons": {
