@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/app/hooks/auth';
@@ -18,6 +19,7 @@ import { toast } from 'react-hot-toast';
 
 export default function BrandBookings() {
   const { user } = useAuth();
+  const t = useTranslations('brand.bookings');
   const [selectedTab, setSelectedTab] = useState('all');
   const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState<OrderStats>({
@@ -48,7 +50,7 @@ export default function BrandBookings() {
       setStats(calculateOrderStats(fetchedOrders));
     } catch (error) {
       console.error('Error fetching orders:', error);
-      toast.error('Failed to load orders');
+      toast.error(t('toasts.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -74,13 +76,13 @@ export default function BrandBookings() {
     try {
       setProcessingOrders(prev => new Set(prev).add(orderId));
       await completeOrder(orderId);
-      toast.success('Payment released successfully!');
+      toast.success(t('toasts.paymentReleased'));
       
       // Refresh orders to show updated status
       await fetchOrders();
     } catch (error) {
       console.error('Error releasing payment:', error);
-      toast.error('Failed to release payment');
+      toast.error(t('toasts.releaseFailed'));
     } finally {
       setProcessingOrders(prev => {
         const newSet = new Set(prev);
@@ -96,13 +98,13 @@ export default function BrandBookings() {
     try {
       setProcessingOrders(prev => new Set(prev).add(orderId));
       await updateOrderStatus(orderId, newStatus);
-      toast.success('Order status updated!');
+      toast.success(t('toasts.statusUpdated'));
       
       // Refresh orders to show updated status
       await fetchOrders();
     } catch (error) {
       console.error('Error updating order status:', error);
-      toast.error('Failed to update order status');
+      toast.error(t('toasts.updateFailed'));
     } finally {
       setProcessingOrders(prev => {
         const newSet = new Set(prev);
@@ -114,7 +116,8 @@ export default function BrandBookings() {
 
   const handleMessageCreator = (creatorHandle: string) => {
     if (typeof window !== 'undefined') {
-      window.location.href = `/dashboard/brand?tab=messages&creator=${creatorHandle}`;
+      const localePrefix = window.location.pathname.split('/')[1] || 'en';
+      window.location.href = `/${localePrefix}/dashboard/brand?tab=messages&creator=${creatorHandle}`;
     }
   };
 
@@ -133,10 +136,10 @@ export default function BrandBookings() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">
-          Bookings & Payments
+          {t('title')}
         </h1>
         <p className="text-gray-600">
-          Manage your creator collaborations and payments
+          {t('subtitle')}
         </p>
       </div>
 
@@ -146,25 +149,25 @@ export default function BrandBookings() {
           <div className="text-2xl font-bold text-gray-900 mb-1">
             {stats.totalOrders}
           </div>
-          <div className="text-sm text-gray-500">Total Bookings</div>
+          <div className="text-sm text-gray-500">{t('stats.totalBookings')}</div>
         </div>
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="text-2xl font-bold text-blue-600 mb-1">
             {stats.paid + stats.inProgress}
           </div>
-          <div className="text-sm text-gray-500">Active</div>
+          <div className="text-sm text-gray-500">{t('stats.active')}</div>
         </div>
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="text-2xl font-bold text-green-600 mb-1">
             {stats.completed}
           </div>
-          <div className="text-sm text-gray-500">Completed</div>
+          <div className="text-sm text-gray-500">{t('stats.completed')}</div>
         </div>
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="text-2xl font-bold text-red-burgundy mb-1">
             ${stats.totalSpent.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-500">Total Spent</div>
+          <div className="text-sm text-gray-500">{t('stats.totalSpent')}</div>
         </div>
       </div>
 
@@ -173,11 +176,11 @@ export default function BrandBookings() {
         <div className="border-b border-gray-100">
           <nav className="flex space-x-8 px-6">
             {[
-              { key: 'all', label: 'All Bookings', count: stats.totalOrders },
-              { key: 'pending', label: 'Pending Payment', count: stats.pendingPayment },
-              { key: 'paid', label: 'Paid', count: stats.paid },
-              { key: 'active', label: 'In Progress', count: stats.inProgress },
-              { key: 'completed', label: 'Completed', count: stats.completed }
+              { key: 'all', label: t('tabs.allBookings'), count: stats.totalOrders },
+              { key: 'pending', label: t('tabs.pendingPayment'), count: stats.pendingPayment },
+              { key: 'paid', label: t('tabs.paid'), count: stats.paid },
+              { key: 'active', label: t('tabs.inProgress'), count: stats.inProgress },
+              { key: 'completed', label: t('tabs.completed'), count: stats.completed }
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -248,7 +251,7 @@ export default function BrandBookings() {
                         Created: {formatOrderDate(order.createdAt)}
                         {order.paidAt && (
                           <span className="ml-3">
-                            Paid: {formatOrderDate(order.paidAt)}
+                            {t('orders.paid')}: {formatOrderDate(order.paidAt)}
                           </span>
                         )}
                       </div>
@@ -260,7 +263,7 @@ export default function BrandBookings() {
                         onClick={() => handleMessageCreator(order.creator?.instagramHandle || '')}
                         className="px-3 py-1 text-sm border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                       >
-                        Message
+                        {t('orders.message')}
                       </button>
                       
                       {order.status === 'paid' && (
@@ -269,7 +272,7 @@ export default function BrandBookings() {
                           disabled={processingOrders.has(order.id)}
                           className="px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                         >
-                          {processingOrders.has(order.id) ? 'Updating...' : 'Start Work'}
+                          {processingOrders.has(order.id) ? t('orders.updating') : t('orders.startWork')}
                         </button>
                       )}
                       
@@ -279,12 +282,12 @@ export default function BrandBookings() {
                           disabled={processingOrders.has(order.id)}
                           className="px-3 py-1 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
                         >
-                          {processingOrders.has(order.id) ? 'Processing...' : 'Complete & Release Payment'}
+                          {processingOrders.has(order.id) ? t('orders.processing') : t('orders.completePayment')}
                         </button>
                       )}
                       
                       <button className="px-3 py-1 text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                        View Details
+                        {t('orders.viewDetails')}
                       </button>
                     </div>
                   </div>
@@ -303,10 +306,10 @@ export default function BrandBookings() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No bookings found</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('empty.noBookings')}</h3>
           <p className="text-gray-600 mb-4">
             {selectedTab === 'all' 
-              ? "You haven't made any bookings yet. Browse creators to start collaborating!"
+              ? t('empty.noBookingsSubtitle')
               : `No ${selectedTab} bookings at the moment.`
             }
           </p>
@@ -314,12 +317,13 @@ export default function BrandBookings() {
             <button
               onClick={() => {
                 if (typeof window !== 'undefined') {
-                  window.location.href = '/dashboard/brand?tab=browse-creators';
+                  const localePrefix = window.location.pathname.split('/')[1] || 'en';
+                  window.location.href = `/${localePrefix}/dashboard/brand?tab=browse-creators`;
                 }
               }}
               className="bg-red-burgundy text-white px-6 py-2 rounded-lg font-medium hover:bg-red-burgundy/90 transition-colors"
             >
-              Browse Creators
+              {t('empty.browseCreators')}
             </button>
           )}
         </div>

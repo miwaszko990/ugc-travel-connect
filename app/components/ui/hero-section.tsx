@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { collection, getDocs, query, where, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
@@ -23,6 +24,7 @@ export default function HeroSection() {
   const { user } = useAuth();
   const [creators, setCreators] = useState<Creator[]>([]);
   const [loading, setLoading] = useState(true);
+  const t = useTranslations('root.hero');
 
   useEffect(() => {
     const fetchCreators = async () => {
@@ -55,22 +57,27 @@ export default function HeroSection() {
     fetchCreators();
   }, []);
 
+  // Mock creators for the hero cards with local images
   const featured = {
     uid: "featured-charlie",
-    firstName: "Charlie",
+    firstName: "Charlie", 
     lastName: "Iwaszko",
     homeCity: "London, England",
-    profileImageUrl: "/images/auth-background.jpeg",
-    upcomingTrip: { destination: "Cannes", country: "France", dateRange: "" }
+    profileImageUrl: "/charlie-test.jpeg",
+    upcomingTrip: { destination: "Cannes", country: "France", dateRange: "Jun 15-20" },
+    followers: 54700
   };
+
+  console.log('Using local image for Charlie:', featured.profileImageUrl);
 
   const mini1 = {
     uid: "mini1",
     firstName: "Alex",
     lastName: "Kim",
-    homeCity: "Seoul, Korea",
-    profileImageUrl: "/placeholder-profile.jpg",
-    upcomingTrip: { destination: "Paris", country: "France", dateRange: "June 1 - 10, 2023" }
+    homeCity: "Seoul, Korea", 
+    profileImageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    upcomingTrip: { destination: "Paris", country: "France", dateRange: "Jul 5-15" },
+    followers: 32100
   };
 
   const scrollToCreators = () => {
@@ -109,24 +116,23 @@ export default function HeroSection() {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm border border-red-burgundy/20 rounded-full">
                 <div className="w-2 h-2 bg-red-burgundy rounded-full animate-pulse"></div>
                 <span className="text-sm font-medium text-red-burgundy tracking-wide">
-                  LUXURY TRAVEL CREATOR MARKETPLACE
+                  {t('badge')}
                 </span>
               </div>
               
               {/* Main Heading */}
               <div className="space-y-6">
                 <h1 className="text-6xl lg:text-7xl xl:text-8xl font-serif font-bold text-red-burgundy leading-[0.9] tracking-tight hover:text-red-wine transition-colors duration-500">
-                  Lumo
+                  {t('title')}
                 </h1>
                 <h2 className="text-2xl lg:text-3xl xl:text-4xl font-serif text-text leading-tight max-w-lg">
-                  Where luxury meets authentic storytelling
+                  {t('subtitle')}
                 </h2>
               </div>
               
               {/* Description */}
               <p className="text-lg lg:text-xl text-subtext leading-relaxed max-w-xl">
-                Connect with premium travel creators who transform destinations into captivating stories. 
-                Elevate your brand with authentic, luxury content.
+                {t('description')}
               </p>
               
               {/* CTA Button */}
@@ -136,7 +142,7 @@ export default function HeroSection() {
                   className="group relative inline-flex items-center gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 overflow-hidden border border-red-burgundy"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-burgundy/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                  <span className="relative">Discover Creators</span>
+                  <span className="relative">{t('ctaButton')}</span>
                   <svg className="relative w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
@@ -146,16 +152,16 @@ export default function HeroSection() {
               {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-6 pt-8">
                 <div className="text-center lg:text-left">
-                  <div className="text-2xl lg:text-3xl font-bold text-red-burgundy">2.3K+</div>
-                  <div className="text-sm text-subtext font-medium">Luxury Campaigns</div>
+                  <div className="text-2xl lg:text-3xl font-bold text-red-burgundy">{t('stats.campaigns.number')}</div>
+                  <div className="text-sm text-subtext font-medium">{t('stats.campaigns.label')}</div>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-2xl lg:text-3xl font-bold text-red-burgundy">500+</div>
-                  <div className="text-sm text-subtext font-medium">Premium Creators</div>
+                  <div className="text-2xl lg:text-3xl font-bold text-red-burgundy">{t('stats.creators.number')}</div>
+                  <div className="text-sm text-subtext font-medium">{t('stats.creators.label')}</div>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-2xl lg:text-3xl font-bold text-red-burgundy">4.9/5</div>
-                  <div className="text-sm text-subtext font-medium">Client Satisfaction</div>
+                  <div className="text-2xl lg:text-3xl font-bold text-red-burgundy">{t('stats.satisfaction.number')}</div>
+                  <div className="text-sm text-subtext font-medium">{t('stats.satisfaction.label')}</div>
                 </div>
               </div>
             </div>

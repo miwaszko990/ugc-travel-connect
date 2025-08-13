@@ -3,6 +3,7 @@
 import { useAuth } from '@/app/hooks/auth';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 
 export default function DashboardLayout({
   children,
@@ -12,78 +13,63 @@ export default function DashboardLayout({
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const locale = useLocale();
+  const t = useTranslations('dashboard.loading');
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/auth/login');
+      router.push(`/${locale}/auth/login`);
       return;
     }
 
     if (!loading && user) {
       // Role-based route protection
-      if (pathname.startsWith('/dashboard/creator') && user.role !== 'creator') {
+      if (pathname.includes('/dashboard/creator') && user.role !== 'creator') {
         // Brand trying to access creator dashboard
         if (user.role === 'brand') {
-          router.push('/dashboard/brand');
+          router.push(`/${locale}/dashboard/brand`);
         } else {
-          router.push('/dashboard');
+          router.push(`/${locale}/dashboard`);
         }
         return;
       }
 
-      if (pathname.startsWith('/dashboard/brand') && user.role !== 'brand') {
+      if (pathname.includes('/dashboard/brand') && user.role !== 'brand') {
         // Creator trying to access brand dashboard
         if (user.role === 'creator') {
-          router.push('/dashboard/creator');
+          router.push(`/${locale}/dashboard/creator`);
         } else {
-          router.push('/dashboard');
+          router.push(`/${locale}/dashboard`);
         }
         return;
       }
 
       // Redirect from generic /dashboard to role-specific dashboard
-      if (pathname === '/dashboard') {
+      if (pathname.endsWith('/dashboard')) {
         if (user.role === 'creator') {
-          router.push('/dashboard/creator');
+          router.push(`/${locale}/dashboard/creator`);
         } else if (user.role === 'brand') {
-          router.push('/dashboard/brand');
+          router.push(`/${locale}/dashboard/brand`);
         }
         return;
       }
     }
-  }, [loading, user, router, pathname]);
+  }, [loading, user, router, pathname, locale]);
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ivory">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-burgundy border-r-transparent mx-auto"></div>
-          <div className="mt-6">
-            <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-2">Lumo</h3>
-            <p className="text-lg text-subtext">Loading your dashboard...</p>
-          </div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-burgundy mx-auto mb-4"></div>
+          <p className="text-gray-600">{t('message')}</p>
         </div>
       </div>
     );
   }
 
   if (!user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-ivory">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-burgundy border-r-transparent mx-auto"></div>
-          <div className="mt-6">
-            <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-2">Lumo</h3>
-            <p className="text-lg text-subtext">Checking authentication...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
-  return (
-    <div className="min-h-screen">
-      {children}
-    </div>
-  );
-} // review trigger
+  return <>{children}</>;
+}

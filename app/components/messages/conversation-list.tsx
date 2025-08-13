@@ -78,7 +78,7 @@ export default function ConversationList({
         if (snap.exists()) {
           const data = snap.data();
           const userInfo = {
-            name: `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Unknown',
+            name: data.brandName || `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Unknown',
             profilePic: data.profileImageUrl || '',
             instagram: data.instagramHandle || '',
             role: data.role || 'creator',

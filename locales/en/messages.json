@@ -1,0 +1,75 @@
+{
+  "newMessageModal": {
+    "title": "Send Message to Creator",
+    "tripSelection": {
+      "label": "Select a Trip (Optional)",
+      "placeholder": "Choose a trip destination",
+      "none": "No trip selected"
+    },
+    "form": {
+      "placeholder": "Write your message here...",
+      "button": "Send Message"
+    },
+    "success": {
+      "title": "Message Sent Successfully!",
+      "description": "Your message has been sent to the creator. They will be notified and can respond to you.",
+      "redirect": "Redirecting to conversations...",
+      "redirecting": "Redirecting to messages..."
+    },
+    "errors": {
+      "messageRequired": "Please write a message",
+      "messageTooLong": "Message is too long (max 500 characters)",
+      "sendFailed": "Failed to send message. Please try again.",
+      "signInRequired": {
+        "title": "Sign in required",
+        "message": "Please sign in to send a message.",
+        "close": "Close"
+      },
+      "messagingRestricted": {
+        "title": "Messaging is restricted",
+        "message": "Only brand accounts can send messages to creators.",
+        "close": "Close"
+      }
+    },
+    "toasts": {
+      "sending": "Sending message...",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message"
+    },
+    "tripContext": {
+      "messagingAbout": "Messaging about {destination} ({dateRange})"
+    }
+  },
+  "brandProfile": {
+    "title": "Brand Profile",
+    "loading": "Loading brand profile...",
+    "notFound": "Brand profile not found",
+    "close": "Close",
+    "memberSince": "Member since",
+    "stats": {
+      "followers": "Followers",
+      "industry": "Industry"
+    },
+    "sections": {
+      "about": "About",
+      "links": "Links & Social Media"
+    },
+    "links": {
+      "instagram": "Instagram",
+      "website": "Website",
+      "visitProfile": "Visit Profile",
+      "visitWebsite": "Visit Website"
+    },
+    "placeholders": {
+      "noFollowers": "No data",
+      "noIndustry": "Not specified",
+      "noDescription": "No description available",
+      "noWebsite": "No website provided"
+    },
+    "actions": {
+      "viewInstagram": "View on Instagram",
+      "openWebsite": "Open Website",
+      "closeModal": "Close Profile"
+    }
+  }
+}

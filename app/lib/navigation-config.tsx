@@ -2,6 +2,11 @@ import React from 'react';
 
 // Icon components
 export const NavigationIcons = {
+  home: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    </svg>
+  ),
   search: (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -43,127 +48,155 @@ export const NavigationIcons = {
 // Brand navigation configuration
 export const BRAND_NAV_ITEMS = [
   {
+    key: 'home',
+    href: '/',
+    icon: NavigationIcons.home,
+    translationNamespace: 'brand.navigation',
+    index: 0
+  },
+  {
     key: 'browseCreators',
     href: '/dashboard/brand?tab=browse-creators',
     icon: NavigationIcons.search,
     translationNamespace: 'brand.navigation',
-    index: 0
+    index: 1
   },
   {
     key: 'messages',
     href: '/dashboard/brand?tab=messages',
     icon: NavigationIcons.messages,
     translationNamespace: 'brand.navigation',
-    index: 1
+    index: 2
   },
   {
     key: 'bookings',
     href: '/dashboard/brand?tab=bookings',
     icon: NavigationIcons.bookings,
     translationNamespace: 'brand.navigation',
-    index: 2
+    index: 3
   },
   {
     key: 'editProfile',
     href: '/dashboard/brand/profile-setup',
     icon: NavigationIcons.edit,
     translationNamespace: 'brand.navigation',
-    index: 3
+    index: 4
   }
 ] as const;
 
 // Creator navigation configuration
 export const CREATOR_NAV_ITEMS = [
   {
+    key: 'home',
+    href: '/',
+    icon: NavigationIcons.home,
+    translationNamespace: 'creator.navigation',
+    index: 0
+  },
+  {
     key: 'travelPlans',
     href: '/dashboard/creator?tab=travel-plans',
     icon: NavigationIcons.travel,
     translationNamespace: 'creator.navigation',
-    index: 0
+    index: 1
   },
   {
     key: 'messages',
     href: '/dashboard/creator?tab=messages',
     icon: NavigationIcons.messages,
     translationNamespace: 'creator.navigation',
-    index: 1
+    index: 2
   },
   {
     key: 'earnings',
     href: '/dashboard/creator?tab=earnings',
     icon: NavigationIcons.earnings,
     translationNamespace: 'creator.navigation',
-    index: 2
+    index: 3
   },
   {
     key: 'editProfile',
     href: '/dashboard/creator/profile-setup',
     icon: NavigationIcons.edit,
     translationNamespace: 'creator.navigation',
-    index: 3
+    index: 4
   }
 ] as const;
 
 // Mobile navigation items (shortened labels)
 export const BRAND_MOBILE_NAV_ITEMS = [
   {
+    key: 'home',
+    href: '/',
+    icon: NavigationIcons.home,
+    translationNamespace: 'brand.navigation',
+    index: 0
+  },
+  {
     key: 'browse',
     href: '/dashboard/brand?tab=browse-creators',
     icon: NavigationIcons.search,
     translationNamespace: 'brand.navigation',
-    index: 0
+    index: 1
   },
   {
     key: 'messages',
     href: '/dashboard/brand?tab=messages',
     icon: NavigationIcons.messages,
     translationNamespace: 'brand.navigation',
-    index: 1
+    index: 2
   },
   {
     key: 'bookings',
     href: '/dashboard/brand?tab=bookings',
     icon: NavigationIcons.bookings,
     translationNamespace: 'brand.navigation',
-    index: 2
+    index: 3
   },
   {
     key: 'profile',
     href: '/dashboard/brand/profile-setup',
     icon: NavigationIcons.edit,
     translationNamespace: 'brand.navigation',
-    index: 3
+    index: 4
   }
 ] as const;
 
 export const CREATOR_MOBILE_NAV_ITEMS = [
   {
+    key: 'home',
+    href: '/',
+    icon: NavigationIcons.home,
+    translationNamespace: 'creator.navigation',
+    index: 0
+  },
+  {
     key: 'travel',
     href: '/dashboard/creator?tab=travel-plans',
     icon: NavigationIcons.travel,
     translationNamespace: 'creator.navigation',
-    index: 0
+    index: 1
   },
   {
     key: 'messages',
     href: '/dashboard/creator?tab=messages',
     icon: NavigationIcons.messages,
     translationNamespace: 'creator.navigation',
-    index: 1
+    index: 2
   },
   {
     key: 'earnings',
     href: '/dashboard/creator?tab=earnings',
     icon: NavigationIcons.earnings,
     translationNamespace: 'creator.navigation',
-    index: 2
+    index: 3
   },
   {
     key: 'profile',
     href: '/dashboard/creator/profile-setup',
     icon: NavigationIcons.edit,
     translationNamespace: 'creator.navigation',
-    index: 3
+    index: 4
   }
 ] as const;
 

@@ -20,6 +20,7 @@ export interface Order {
   currency: string;
   tripDestination: string;
   tripCountry: string;
+  description?: string;
   status: 'pending' | 'paid' | 'in_progress' | 'completed';
   stripeSessionId?: string;
   createdAt: Timestamp;
@@ -33,6 +34,11 @@ export interface Order {
     instagramHandle: string;
     profileImageUrl: string;
   };
+  // Brand details (populated when fetched)
+  brand?: {
+    brandName: string;
+    profileImageUrl: string;
+  };
   // Derived fields
   formattedAmount?: string;
   statusColor?: string;
@@ -41,6 +47,7 @@ export interface Order {
 
 export interface OrderStats {
   totalOrders: number;
+  pending: number;
   pendingPayment: number;
   paid: number;
   inProgress: number;
@@ -51,6 +58,7 @@ export interface OrderStats {
 export interface CreatorEarningsStats {
   totalOrders: number;
   totalEarned: number;
+  pending: number;
   pendingPayment: number;
   inProgress: number;
   completed: number;
@@ -125,6 +133,9 @@ export function calculateOrderStats(orders: Order[]): OrderStats {
       
       switch (order.status) {
         case 'pending':
+          acc.pending++;
+          break;
+        case 'pendingPayment':
           acc.pendingPayment++;
           break;
         case 'paid':
@@ -142,6 +153,7 @@ export function calculateOrderStats(orders: Order[]): OrderStats {
     },
     {
       totalOrders: 0,
+      pending: 0,
       pendingPayment: 0,
       paid: 0,
       inProgress: 0,
@@ -199,6 +211,8 @@ function getStatusColor(status: string): string {
   switch (status) {
     case 'pending':
       return 'text-yellow-600 bg-yellow-50';
+    case 'pendingPayment':
+      return 'text-yellow-600 bg-yellow-50';
     case 'paid':
       return 'text-blue-600 bg-blue-50';
     case 'in_progress':
@@ -216,6 +230,8 @@ function getStatusColor(status: string): string {
 function getPaymentStatusColor(status: string): string {
   switch (status) {
     case 'pending':
+      return 'text-yellow-600 bg-yellow-50';
+    case 'pendingPayment':
       return 'text-yellow-600 bg-yellow-50';
     case 'paid':
       return 'text-blue-600 bg-blue-50';
@@ -249,6 +265,8 @@ export function getStatusDisplayText(status: string): string {
   switch (status) {
     case 'pending':
       return 'Pending Payment';
+    case 'pendingPayment':
+      return 'Pending Payment';
     case 'paid':
       return 'Paid';
     case 'in_progress':
@@ -270,8 +288,9 @@ export async function getCreatorOrders(creatorId: string): Promise<Order[]> {
     const ordersRef = collection(db, 'orders');
     const q = query(
       ordersRef,
-      where('creatorId', '==', creatorId),
-      orderBy('createdAt', 'desc')
+      where('creatorId', '==', creatorId)
+      // Temporarily removed orderBy to bypass index requirement
+      // orderBy('createdAt', 'desc')
     );
     
     const snapshot = await getDocs(q);
@@ -325,13 +344,18 @@ export function calculateCreatorEarningsStats(orders: Order[]): CreatorEarningsS
     (acc, order) => {
       acc.totalOrders++;
       
+      // Count pending orders (accepted but not yet paid)
+      if (order.status === 'pending') {
+        acc.pending++;
+      }
+      
       // Only count paid and completed orders in total earned
       if (order.status === 'paid' || order.status === 'in_progress' || order.status === 'completed') {
         acc.totalEarned += order.amount;
       }
       
-      // Pending payment includes in_progress orders (payment held in escrow)
-      if (order.status === 'in_progress') {
+      // Pending payment includes paid orders waiting to start work
+      if (order.status === 'paid') {
         acc.pendingPayment += order.amount;
       }
       
@@ -349,6 +373,7 @@ export function calculateCreatorEarningsStats(orders: Order[]): CreatorEarningsS
     {
       totalOrders: 0,
       totalEarned: 0,
+      pending: 0,
       pendingPayment: 0,
       inProgress: 0,
       completed: 0,

@@ -3,12 +3,24 @@
 import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+// import { useTranslations } from 'next-intl';
 import { Dialog, Transition } from '@headlessui/react';
 import { useAuth } from '@/app/hooks/auth';
 import UserMenu from '@/app/components/ui/user-menu';
 import { Button } from '@/app/components/ui/button';
 import { LanguageSwitcher } from '@/app/components/ui/language-switcher';
 import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+
+// Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
+function useSafeT(namespace: string) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const {useTranslations} = require('next-intl');
+    return useTranslations(namespace);
+  } catch {
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
 
 interface NavigationProps {
   hideNavLinks?: boolean;
@@ -21,6 +33,7 @@ export default function Navigation({
 }: NavigationProps) {
   const { user } = useAuth();
   const router = useRouter();
+  const t = useSafeT('root.navigation');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
@@ -78,7 +91,7 @@ export default function Navigation({
                   <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
                 </div>
                 <span className="ml-3 text-sm font-medium text-subtext/80 hidden sm:block tracking-wide uppercase">
-                  Travel Connect
+                  {t('travelConnect')}
                 </span>
               </Link>
             </div>
@@ -90,14 +103,14 @@ export default function Navigation({
                   href="#how-it-works" 
                   className="relative text-sm font-medium text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
                 >
-                  How It Works
+                  {t('howItWorks')}
                   <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
                 </Link>
                 <Link 
                   href="#about" 
                   className="relative text-sm font-medium text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
                 >
-                  About
+                  {t('about')}
                   <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
                 </Link>
                 <Link 
@@ -105,7 +118,7 @@ export default function Navigation({
                   className="relative text-sm font-medium text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group flex items-center gap-2"
                 >
                   <MagnifyingGlassIcon className="h-4 w-4 group-hover:text-red-burgundy transition-colors duration-300" />
-                  Search
+                  {t('search')}
                   <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
                 </Link>
               </nav>
@@ -130,7 +143,7 @@ export default function Navigation({
                     }`}
                   >
                     {loginLoading && <span className="loading loading-spinner loading-xs text-red-burgundy"></span>}
-                    <span>Log in</span>
+                    <span>{t('login')}</span>
                   </button>
                   
                   <button
@@ -143,7 +156,7 @@ export default function Navigation({
                     }`}
                   >
                     {signupLoading && <span className="loading loading-spinner loading-xs text-white"></span>}
-                    <span>Sign up</span>
+                    <span>{t('signup')}</span>
                   </button>
                 </>
               ) : (
@@ -214,14 +227,14 @@ export default function Navigation({
                             className="block text-lg font-medium text-subtext hover:text-red-burgundy transition-all duration-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                           >
-                            How It Works
+                            {t('howItWorks')}
                           </Link>
                           <Link 
                             href="#about" 
                             className="block text-lg font-medium text-subtext hover:text-red-burgundy transition-all duration-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                           >
-                            About
+                            {t('about')}
                           </Link>
                           <Link 
                             href="/search" 
@@ -229,7 +242,7 @@ export default function Navigation({
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             <MagnifyingGlassIcon className="h-5 w-5" />
-                            Search
+                            {t('search')}
                           </Link>
                           
                           {/* Mobile Language Switcher */}

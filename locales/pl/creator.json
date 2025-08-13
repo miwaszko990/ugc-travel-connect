@@ -1,14 +1,423 @@
 {
   "navigation": {
+    "home": "Strona główna",
     "travelPlans": "Plany Podróży",
     "messages": "Wiadomości",
     "earnings": "Zarobki",
-    "editProfile": "Edytuj Profil",
     "travel": "Podróże",
     "profile": "Profil",
     "settings": "Ustawienia",
-    "expandSidebar": "Rozwiń panel boczny",
-    "collapseSidebar": "Zwiń panel boczny",
-    "brandAltText": "Twórca"
+    "expandSidebar": "Rozwiń pasek boczny",
+    "editProfile": "Edytuj profil"
+  },
+  "profileSetup": {
+    "title": {
+      "create": "Uzupełnij Swój Profil Twórcy",
+      "edit": "Edytuj Swój Profil Twórcy"
+    },
+    "subtitle": {
+      "create": "Opowiedz nam o sobie i zacznij przyciągać marki",
+      "edit": "Zaktualizuj swoje informacje profilowe"
+    },
+    "form": {
+      "firstName": {
+        "label": "Imię *",
+        "placeholder": "np. Maria",
+        "required": "Imię jest wymagane"
+      },
+      "lastName": {
+        "label": "Nazwisko *",
+        "placeholder": "np. Kowalski",
+        "required": "Nazwisko jest wymagane"
+      },
+      "homeCity": {
+        "label": "Miasto zamieszkania *",
+        "placeholder": "np. Warszawa",
+        "required": "Miasto zamieszkania jest wymagane"
+      },
+      "instagramHandle": {
+        "label": "Instagram",
+        "placeholder": "np. mariakowalski"
+      },
+      "followerCount": {
+        "label": "Liczba Obserwujących",
+        "placeholder": "np. 10000"
+      },
+      "bio": {
+        "label": "O Mnie",
+        "placeholder": "Opowiedz nam o sobie i swoich treściach podróżniczych..."
+      }
+    },
+    "profileImage": {
+      "title": "Zdjęcie Profilowe",
+      "subtitle": "Prześlij profesjonalne zdjęcie, które Cię reprezentuje",
+      "uploadText": "Kliknij aby przesłać",
+      "dragText": "lub przeciągnij i upuść",
+      "formatText": "PNG, JPG, GIF do 10MB"
+    },
+    "buttons": {
+      "save": "Zapisz Profil",
+      "saving": "Zapisywanie..."
+    },
+    "messages": {
+      "loginRequired": "Musisz być zalogowany, aby utworzyć profil",
+      "imageUploadFailed": "Nie udało się przesłać zdjęcia profilowego.",
+      "invalidImageType": "Proszę wybrać plik obrazu",
+      "imageTooLarge": "Obraz musi być mniejszy niż 5MB",
+      "profileCreateSuccess": "Profil został utworzony pomyślnie!",
+      "profileUpdateSuccess": "Profil został zaktualizowany pomyślnie!",
+      "profileSaveFailed": "Nie udało się zaktualizować profilu. Spróbuj ponownie."
+    },
+    "loading": {
+      "title": "Ładowanie Profilu...",
+      "subtitle": "Poczekaj, ładujemy informacje o Twoim profilu"
+    },
+    "fields": {
+      "firstName": {
+        "label": "Imię *",
+        "placeholder": "np. Maria",
+        "required": "Imię jest wymagane"
+      },
+      "lastName": {
+        "label": "Nazwisko *",
+        "placeholder": "np. Kowalski",
+        "required": "Nazwisko jest wymagane"
+      },
+      "instagramHandle": {
+        "label": "Instagram",
+        "placeholder": "np. mariakowalski",
+        "required": "Uchwyt Instagram jest wymagany"
+      },
+      "followerCount": {
+        "label": "Liczba Obserwujących",
+        "placeholder": "np. 10000",
+        "required": "Liczba obserwujących jest wymagana"
+      },
+      "homeCity": {
+        "label": "Miasto zamieszkania *",
+        "placeholder": "np. Warszawa",
+        "required": "Miasto zamieszkania jest wymagane"
+      },
+      "profileImage": {
+        "addPhoto": "Dodaj zdjęcie",
+        "uploadProgress": "Przesyłanie: {progress}%"
+      }
+    }
+  },
+  "profilePage": {
+    "loading": {
+      "profile": "Ładowanie profilu twórcy...",
+      "authentication": "Sprawdzanie uwierzytelnienia..."
+    },
+    "errors": {
+      "notFound": "Twórca nie został znaleziony",
+      "notFoundDescription": "Twórca, którego szukasz, nie istnieje lub nie jest dostępny.",
+      "invalidProfile": "Nieprawidłowy profil twórcy",
+      "loadFailed": "Nie udało się załadować profilu twórcy"
+    },
+    "navigation": {
+      "backToCreators": "Powrót do Twórców"
+    },
+    "hero": {
+      "luxuryTravelCreator": "Twórca contentu z {city}",
+      "followers": "{count} obserwujących"
+    },
+    "actions": {
+      "messageCreator": "Napisz do Twórcy"
+    },
+    "calendar": {
+      "title": "Kalendarz Podróży",
+      "showFullCalendar": "Pokaż Pełny Kalendarz",
+      "hideCalendar": "Ukryj Kalendarz",
+      "travelDays": "Dni Podróży",
+      "today": "Dzisiaj",
+      "months": {
+        "january": "Styczeń",
+        "february": "Luty",
+        "march": "Marzec",
+        "april": "Kwiecień",
+        "may": "Maj",
+        "june": "Czerwiec",
+        "july": "Lipiec",
+        "august": "Sierpień",
+        "september": "Wrzesień",
+        "october": "Październik",
+        "november": "Listopad",
+        "december": "Grudzień"
+      },
+      "weekdays": {
+        "monday": "Pon",
+        "tuesday": "Wt",
+        "wednesday": "Śr",
+        "thursday": "Czw",
+        "friday": "Pt",
+        "saturday": "Sob",
+        "sunday": "Nie"
+      }
+          },
+      "trips": {
+        "otherUpcomingTrips": "Inne nadchodzące podróże",
+        "statuses": {
+          "planned": "Zaplanowana",
+          "active": "Aktywna",
+          "completed": "Zakończona"
+        }
+      },
+      "packages": {
+        "title": "Pakiety Twórcy",
+        "mini": {
+          "title": "Mini Social Boost – PLN 200",
+          "bullets": {
+            "stories": "3 x Relacje na Instagramie",
+            "tagging": "Oznaczenie marki + 1 link swipe-up",
+            "delivery": "Dostawa w ciągu 24 godzin od nagrania"
+          }
+        },
+        "content": {
+          "title": "Content Impact – PLN 450",
+          "bullets": {
+            "video": "1 x Reels na Instagramie lub wideo na TikTok (do 30 sekund)",
+            "story": "1 x Relacja na Instagramie promująca treść",
+            "editing": "Montaż treści + dostosowanie do platformy"
+          }
+        },
+        "full": {
+          "title": "Full Campaign Package – PLN 900",
+          "bullets": {
+            "reelsTikTok": "1 x Reels na Instagramie i 1 x TikTok (dostosowane do obu platform)",
+            "stories": "3 x Relacje na Instagramie (promujące treść)",
+            "versions": "Wersje pionowa i pozioma",
+            "delivery": "Dostawa w ciągu 3 dni roboczych"
+          }
+        },
+        "photosComingSoon": "Sekcja zdjęć z Instagrama już wkrótce. W przyszłości będzie można dodawać posty tutaj."
+      },
+      "instagramConnectSoon": "Wkrótce będziesz mógł/mogła połączyć swój Instagram."
+    },
+  "messaging": {
+    "loading": {
+      "conversations": "Ładowanie rozmów...",
+      "conversations_generic": "Ładowanie rozmów..."
+    },
+    "sidebar": {
+      "conversationCount": "{count, plural, =1 {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmów}}",
+      "noConversations": {
+        "title": "Brak rozmów",
+        "subtitle": "Marki będą Ci tutaj pisać, gdy będą zainteresowane współpracą"
+      },
+      "noMessages": "Brak wiadomości"
+    },
+    "chat": {
+      "selectConversation": {
+        "title": "Wybierz rozmowę",
+        "subtitle": "Wybierz rozmowę z panelu bocznego, aby rozpocząć pisanie"
+      },
+      "noMessages": {
+        "title": "Brak wiadomości",
+        "subtitle": "Rozpocznij rozmowę poniżej"
+      },
+      "messageInput": {
+        "placeholder": "Napisz wiadomość...",
+        "sendButton": "Wyślij wiadomość"
+      },
+      "status": {
+        "processing": "Przetwarzanie...",
+        "sending": "Wysyłanie..."
+      }
+    },
+    "offerMessage": {
+      "title": "Oferta Współpracy",
+      "taskDescription": "Opis Zadania:",
+      "status": {
+        "pending": "Oczekuje",
+        "accepted": "Zaakceptowana",
+        "rejected": "Odrzucona",
+        "paid": "Opłacona"
+      },
+      "buttons": {
+        "accept": "Akceptuj",
+        "reject": "Odrzuć",
+        "processing": "Przetwarzanie..."
+      },
+      "payment": {
+        "paid": "✅ Opłacono: ${amount}",
+        "date": "📅 {date}"
+      },
+      "systemMessages": {
+        "offerAccepted": {
+          "sidebar": "Oferta zaakceptowana. Oczekiwanie na płatność...",
+          "brand": "Twórca zaakceptował ofertę. Oczekiwanie na płatność...",
+          "creator": "Zaakceptowałeś ofertę. Oczekiwanie na płatność od marki..."
+        },
+        "offerRejected": {
+          "sidebar": "Twórca odrzucił ofertę współpracy.",
+          "general": "Twórca odrzucił ofertę współpracy."
+        }
+      }
+    }
+  },
+  "earnings": {
+    "title": "Panel Zarobków",
+    "subtitle": "Śledź swoje zarobki, zarządzaj aktywnymi projektami i przeglądaj historię płatności",
+    "stats": {
+      "totalEarned": "Łączne Zarobki",
+      "pendingPayment": "Oczekujące Płatności",
+      "jobsCompleted": "Ukończone Prace",
+      "avgPerJob": "Średnio na Pracę"
+    },
+    "tabs": {
+      "allOrders": "Wszystkie Zamówienia",
+      "newOrders": "Nowe Zamówienia",
+      "activeWork": "Aktywne Prace",
+      "completed": "Ukończone"
+    },
+    "orders": {
+      "noOrders": "Brak zamówień",
+      "noOrdersSubtitle": "Kiedy marki zarezerwują Cię do tworzenia treści, zamówienia pojawią się tutaj",
+      "messageBrand": "Wiadomość do Marki",
+      "startWork": "Rozpocznij Pracę",
+      "completeWork": "Oznacz jako Ukończone",
+      "uploadMaterials": "Prześlij Materiały"
+    },
+    "paymentSettings": {
+      "title": "Ustawienia Płatności",
+      "subtitle": "Zarządzaj metodami wypłat i informacjami podatkowymi",
+      "setupPayouts": "Ustaw Wypłaty"
+    },
+    "toasts": {
+      "startingWork": "Rozpoczynanie pracy nad zamówieniem...",
+      "workStarted": "Praca rozpoczęta! Status zamówienia zaktualizowany",
+      "workStartFailed": "Nie udało się rozpocząć pracy",
+      "materialsDelivered": "Materiały dostarczone. Marka została powiadomiona."
+    }
+  },
+  "fileDelivery": {
+    "title": "Prześlij Materiały",
+    "subtitle": "Dostarcz swoje finalne treści do {brandName}",
+    "sections": {
+      "files": "Prześlij Pliki",
+      "noteToBrand": "Notatka dla Marki (Opcjonalne)",
+      "externalLinks": "Link do Dużych Plików (Opcjonalne)"
+    },
+    "dropzone": {
+      "title": "Przeciągnij i upuść pliki tutaj",
+      "subtitle": "lub kliknij, aby wybrać pliki z komputera",
+      "selectFiles": "Wybierz Pliki",
+      "supportedTypes": "Obrazy, filmy, PDF, prezentacje do 100MB"
+    },
+    "fileList": {
+      "title": "Pliki do Przesłania",
+      "uploaded": "Przesłano",
+      "ready": "Gotowe do przesłania"
+    },
+    "placeholders": {
+      "noteToBrand": "Dodaj wiadomość dla marki o swoich materiałach...",
+      "externalLinks": "Dodaj linki do WeTransfer, Google Drive, Dropbox, itp..."
+    },
+    "hints": {
+      "externalLinks": "Dla plików większych niż 100MB, użyj zewnętrznych serwisów udostępniania plików"
+    },
+    "actions": {
+      "cancel": "Anuluj",
+      "sendForApproval": "Wyślij do Zatwierdzenia",
+      "uploading": "Przesyłanie..."
+    },
+    "validation": {
+      "fileTooLarge": "Plik jest za duży (max 100MB)",
+      "fileTypeNotAllowed": "Typ pliku nie jest obsługiwany",
+      "noFiles": "Proszę wybrać co najmniej jeden plik"
+    },
+    "success": {
+      "materialsDelivered": "Materiały dostarczone pomyślnie!"
+    },
+    "errors": {
+      "deliveryFailed": "Nie udało się dostarczyć materiałów. Spróbuj ponownie."
+    },
+    "info": {
+      "title": "Informacje o Dostawie",
+      "maxFileSize": "Maksymalny rozmiar pliku: 100MB na plik",
+      "supportedFormats": "Obsługiwane: Obrazy, Filmy, PDF, ZIP, PowerPoint",
+      "deliveryProcess": "Marka zostanie powiadomiona i będzie mogła przejrzeć Twoje materiały"
+    }
+  },
+  "dashboard": {
+    "loading": "Ładowanie panelu użytkownika..."
+  },
+  "travelCalendar": {
+    "title": "Nadchodzące podróże",
+    "subtitle": "Dodaj miejsca, w których będziesz i pozwól markom Cię znaleźć",
+    "planFirstTrip": "Zaplanuj swoją podróż",
+    "loading": "Ładowanie podróży...",
+    "fields": {
+      "destination": { "label": "Cel", "placeholder": "np. Paryż" },
+      "country": { "label": "Kraj", "placeholder": "np. Francja" },
+      "startDate": { "label": "Data Rozpoczęcia" },
+      "endDate": { "label": "Data Zakończenia" },
+      "status": { "label": "Status" }
+    },
+    "buttons": {
+      "cancel": "Anuluj",
+      "saveTrip": "Zapisz Podróż",
+      "saving": "Zapisywanie..."
+    },
+    "noTrips": {
+      "title": "Gotowa na zwiedzanie świata?",
+      "subtitle": "Dodaj swoją pierwszą podróż i zacznij budować swój profil content creatora dla marek",
+      "buttonText": "Zaplanuj swoją podróż"
+    },
+    "statuses": { "planned": "Zaplanowana", "active": "Aktywna", "completed": "Zakończona" },
+    "daysUntil": "za {days} dni",
+    "actions": { "edit": "Edytuj podróż", "delete": "Usuń podróż" }
+  },
+  "addTripModal": {
+    "title": "Dodaj Nową Podróż",
+    "fields": {
+      "destination": { "label": "Cel", "placeholder": "np. Paryż" },
+      "country": { "label": "Kraj", "placeholder": "np. Francja" },
+      "startDate": { "label": "Data Rozpoczęcia" },
+      "endDate": { "label": "Data Zakończenia" },
+      "status": { "label": "Status" }
+    },
+    "statuses": { "planned": "Zaplanowana", "active": "Aktywna", "completed": "Zakończona" },
+    "buttons": { "cancel": "Anuluj", "saveTrip": "Zapisz Podróż", "saving": "Zapisywanie..." }
+  },
+  "instagramPosts": {
+    "title": "Posty Instagram",
+    "subtitle": "Dodaj linki do swoich najlepszych postów"
+  },
+  "latestFromInstagram": "Ostatnie z Instagrama",
+  "instagram": {
+    "add": "Dodaj post z Instagrama",
+    "urlPlaceholder": "Wklej URL posta lub reela z Instagrama…",
+    "submit": "Dodaj",
+    "adding": "Dodawanie…",
+    "empty": "Brak postów",
+    "errors": {
+      "invalidUrl": "Wklej prawidłowy URL posta lub reela z Instagrama.",
+      "fetch": "Nie można pobrać podglądu. Spróbuj inny URL.",
+      "rate": "Zbyt wiele żądań. Poczekaj i spróbuj ponownie."
+    },
+    "viewOnInstagram": "Zobacz na Instagramie",
+    "addPost": {
+      "title": "Dodaj post z Instagrama",
+      "urlLabel": "URL Instagrama",
+      "typeLabel": "Typ",
+      "typePost": "Post",
+      "typeReel": "Reel",
+      "coverLabel": "Obraz okładki (JPG/PNG, max 5MB)",
+      "submit": "Dodaj post",
+      "uploading": "Przesyłanie...",
+      "success": "Post dodany",
+      "errors": {
+        "invalidUrl": "Wklej prawidłowy URL posta lub reela z Instagrama.",
+        "fileTooLarge": "Plik jest za duży. Maksymalnie 5MB.",
+        "fileType": "Nieobsługiwany typ pliku. Użyj JPG lub PNG.",
+        "unknown": "Coś poszło nie tak. Spróbuj ponownie."
+      }
+    },
+    "grid": {
+      "empty": "Brak postów",
+      "viewOnInstagram": "Zobacz na Instagramie"
+    }
   }
 }

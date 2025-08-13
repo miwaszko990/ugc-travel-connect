@@ -7,12 +7,13 @@ import { motion } from 'framer-motion';
 export default function PaymentCancelPage() {
   const router = useRouter();
   const [countdown, setCountdown] = useState(5);
+  const localePrefix = typeof window !== 'undefined' ? `/${window.location.pathname.split('/')[1]}` : '';
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev === 1) {
-          router.push('/dashboard/brand?tab=messages');
+          router.push(`${localePrefix}/dashboard/brand?tab=messages`);
           return 0;
         }
         return prev - 1;
@@ -84,7 +85,7 @@ export default function PaymentCancelPage() {
           </p>
           
           <button
-            onClick={() => router.push('/dashboard/brand?tab=messages')}
+            onClick={() => router.push(`${localePrefix}/dashboard/brand?tab=messages`)}
             className="w-full bg-red-burgundy text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
           >
             Return to Dashboard

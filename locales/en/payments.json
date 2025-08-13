@@ -1,0 +1,23 @@
+{
+  "success": {
+    "title": "Payment successful",
+    "subtitle": "<strong>Thank you!</strong> Your payment has been processed successfully.",
+    "whatHappensNext": "What happens next",
+    "redirecting": "Redirecting in {seconds}s...",
+    "goToDashboard": "Go to dashboard",
+    "brand": {
+      "steps": [
+        "Your order has been created and is awaiting the creator's confirmation.",
+        "You can view your booking details in the Bookings tab.",
+        "You'll receive updates here as the creator progresses."
+      ]
+    },
+    "creator": {
+      "steps": [
+        "A new paid order has been added to your Earnings dashboard.",
+        "Start work when you're ready and send materials for approval.",
+        "You'll get notified of any changes in order status."
+      ]
+    }
+  }
+}

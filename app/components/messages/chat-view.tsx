@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { Message, subscribeToConversationMessages, sendMessage, markConversationAsRead } from '@/app/lib/firebase/messages';
 import { useAuth } from '@/app/hooks/auth';
 import { Spinner } from '@/app/components/ui/spinner';
+import BrandProfileModal from './brand-profile-modal';
 
 interface ChatViewProps {
   conversationId: string;
@@ -25,6 +26,7 @@ export default function ChatView({ conversationId, otherUser, userRole }: ChatVi
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState('');
   const [sending, setSending] = useState(false);
+  const [showBrandProfile, setShowBrandProfile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -123,7 +125,16 @@ export default function ChatView({ conversationId, otherUser, userRole }: ChatVi
           />
         </div>
         <div className="flex flex-col">
-          <span className="font-bold text-lg text-gray-900">{otherUser.name}</span>
+          <button
+            onClick={() => otherUser.role === 'brand' && setShowBrandProfile(true)}
+            className={`font-bold text-lg text-gray-900 text-left ${
+              otherUser.role === 'brand' 
+                ? 'hover:text-red-burgundy cursor-pointer transition-colors' 
+                : ''
+            }`}
+          >
+            {otherUser.name}
+          </button>
           {otherUser.instagram && (
             <a
               href={`https://instagram.com/${otherUser.instagram}`}
@@ -222,6 +233,15 @@ export default function ChatView({ conversationId, otherUser, userRole }: ChatVi
           </button>
         </form>
       </div>
+      
+      {/* Brand Profile Modal */}
+      <BrandProfileModal
+        isOpen={showBrandProfile}
+        onClose={() => setShowBrandProfile(false)}
+        brandId={otherUser.id}
+        brandName={otherUser.name}
+        brandProfilePic={otherUser.profilePic}
+      />
     </div>
   );
 } // review trigger

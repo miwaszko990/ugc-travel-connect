@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { db } from '@/app/lib/firebase';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { useAuth } from '@/app/hooks/auth';
@@ -39,6 +40,7 @@ export default function Home() {
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
   const { user } = useAuth();
   const router = useRouter();
+  const t = useTranslations('root');
   
   useEffect(() => {
     if (user) {
@@ -138,8 +140,8 @@ export default function Home() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-burgundy border-r-transparent mx-auto"></div>
           <div className="mt-6">
-            <h3 className="text-2xl font-display font-semibold text-red-burgundy mb-2">Lumo</h3>
-            <p className="text-lg text-subtext">Discovering amazing creators...</p>
+            <h3 className="text-2xl font-display font-semibold text-red-burgundy mb-2">{t('loading.title')}</h3>
+            <p className="text-lg text-subtext">{t('loading.subtitle')}</p>
           </div>
         </div>
       </div>
@@ -155,10 +157,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-serif font-bold text-red-burgundy mb-6">
-              Featured Creators
+              {t('featuredCreators.title')}
             </h2>
             <p className="text-xl text-subtext max-w-3xl mx-auto">
-              Discover our handpicked selection of luxury travel creators who bring destinations to life through authentic storytelling and premium content.
+              {t('featuredCreators.subtitle')}
             </p>
           </div>
           
@@ -173,7 +175,7 @@ export default function Home() {
               ))
             ) : (
               <div className="col-span-full text-center py-12">
-                <p className="text-subtext text-lg">No creators found. Please try again later.</p>
+                <p className="text-subtext text-lg">{t('featuredCreators.noCreatorsFound')}</p>
               </div>
             )}
           </div>
@@ -182,7 +184,7 @@ export default function Home() {
             <Link href="/search">
               <button className="group relative inline-flex items-center gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 overflow-hidden border border-red-burgundy">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-burgundy/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                <span className="relative">View All Creators</span>
+                <span className="relative">{t('featuredCreators.viewAllButton')}</span>
                 <svg className="relative w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

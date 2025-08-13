@@ -1,9 +1,24 @@
+import { 
+  subscribeToUserConversations, 
+  subscribeToConversationMessages, 
+  sendMessage,
+  sendOfferMessage,
+  updateTypingStatus,
+  subscribeToTypingStatus,
+  markMessagesAsRead,
+  acceptOffer,
+  rejectOffer,
+  Conversation,
+  Message 
+} from '@/app/lib/firebase/messages';
+import { getUserDocument } from '@/app/lib/firebase/utils';
 import { db } from '@/app/lib/firebase';
 import { 
   collection, 
   doc, 
   addDoc, 
   updateDoc, 
+  deleteDoc, 
   getDocs, 
   getDoc, 
   query, 
@@ -11,11 +26,9 @@ import {
   orderBy, 
   limit, 
   onSnapshot, 
-  serverTimestamp,
+  serverTimestamp, 
   Timestamp,
-  writeBatch,
-  setDoc,
-  deleteDoc
+  setDoc
 } from 'firebase/firestore';
 
 export interface Message {
@@ -195,13 +208,17 @@ export async function sendMessage(
       const senderData = senderDoc.exists() ? senderDoc.data() : null;
       const receiverData = receiverDoc.exists() ? receiverDoc.data() : null;
       
-      const senderDisplayName = senderData?.firstName && senderData?.lastName 
-        ? `${senderData.firstName} ${senderData.lastName}`
-        : senderData?.email || 'User';
+      const senderDisplayName = senderData?.brandName 
+        ? senderData.brandName
+        : (senderData?.firstName && senderData?.lastName 
+          ? `${senderData.firstName} ${senderData.lastName}`
+          : senderData?.email || 'User');
       
-      const receiverDisplayName = receiverData?.firstName && receiverData?.lastName 
-        ? `${receiverData.firstName} ${receiverData.lastName}`
-        : receiverData?.email || 'User';
+      const receiverDisplayName = receiverData?.brandName 
+        ? receiverData.brandName
+        : (receiverData?.firstName && receiverData?.lastName 
+          ? `${receiverData.firstName} ${receiverData.lastName}`
+          : receiverData?.email || 'User');
       
       console.log('👤 Display names - Sender:', senderDisplayName, 'Receiver:', receiverDisplayName);
       
@@ -884,6 +901,33 @@ export async function acceptOffer(
       messages: updatedMessages,
       updatedAt: serverTimestamp()
     });
+
+    // Create a pending order that will show in earnings
+    // Find the accepted offer message to get the details
+    const acceptedOffer = updatedMessages.find(msg => msg.offerId === offerId && msg.type === 'offer');
+    if (acceptedOffer) {
+      const orderData = {
+        id: offerId,
+        brandId: acceptedOffer.senderId, // The sender of the offer is the brand
+        creatorId: userId, // The user accepting is the creator  
+        amount: acceptedOffer.price,
+        currency: 'usd',
+        tripDestination: acceptedOffer.trip?.destination || '',
+        tripCountry: acceptedOffer.trip?.country || '',
+        status: 'pending' as const, // pending -> paid -> in_progress -> completed
+        description: acceptedOffer.description || '',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+
+      try {
+        await setDoc(doc(db, 'orders', offerId), orderData);
+        console.log('✅ Created pending order for accepted offer:', offerId);
+      } catch (error) {
+        console.error('❌ Error creating pending order:', error);
+        // Don't throw here, as the main offer acceptance should still succeed
+      }
+    }
     
     console.log('✅ Offer accepted successfully');
   } catch (error) {

@@ -1,0 +1,23 @@
+{
+  "success": {
+    "title": "Płatność zakończona sukcesem",
+    "subtitle": "<strong>Dziękujemy!</strong> Twoja płatność została pomyślnie przetworzona.",
+    "whatHappensNext": "Co dalej",
+    "redirecting": "Przekierowanie za {seconds}s...",
+    "goToDashboard": "Przejdź do panelu",
+    "brand": {
+      "steps": [
+        "Twoje zamówienie zostało utworzone i oczekuje na potwierdzenie twórcy.",
+        "Szczegóły rezerwacji znajdziesz w zakładce Rezerwacje.",
+        "Otrzymasz tutaj aktualizacje postępów prac twórcy."
+      ]
+    },
+    "creator": {
+      "steps": [
+        "Nowe opłacone zlecenie zostało dodane do zakładki Zarobki.",
+        "Rozpocznij pracę gdy będziesz gotowy i wyślij materiały do akceptacji.",
+        "Otrzymasz powiadomienia o każdej zmianie statusu zlecenia."
+      ]
+    }
+  }
+}

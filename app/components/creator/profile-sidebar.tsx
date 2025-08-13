@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface NavItem {
-  name: string;
+  nameKey: string;
   href: string;
   icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element;
 }
@@ -26,69 +27,86 @@ interface ProfileSidebarProps {
   activeTabIndex?: number;
 }
 
-const navigation: NavItem[] = [
-  {
-    name: 'Travel Plans',
-    href: '/dashboard/creator?tab=travel-plans',
-    icon: (props) => (
-      <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Messages',
-    href: '/dashboard/creator?tab=messages',
-    icon: (props) => (
-      <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Earnings',
-    href: '/dashboard/creator?tab=earnings',
-    icon: (props) => (
-      <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Edit Profile',
-    href: '/dashboard/creator/profile-setup',
-    icon: (props) => (
-      <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-      </svg>
-    ),
-  },
-];
-
 export default function ProfileSidebar({ profile, isMobile = false, onTabChange, activeTabIndex }: ProfileSidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const t = useTranslations('creator.navigation');
+  const locale = useLocale();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  
+  const navigation: NavItem[] = [
+    {
+      nameKey: 'home',
+      href: '/',
+      icon: (props) => (
+        <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+      ),
+    },
+    {
+      nameKey: 'travelPlans',
+      href: '/dashboard/creator?tab=travel-plans',
+      icon: (props) => (
+        <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+    },
+    {
+      nameKey: 'messages',
+      href: '/dashboard/creator?tab=messages',
+      icon: (props) => (
+        <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+      ),
+    },
+    {
+      nameKey: 'earnings',
+      href: '/dashboard/creator?tab=earnings',
+      icon: (props) => (
+        <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+    },
+    {
+      nameKey: 'editProfile',
+      href: '/dashboard/creator/profile-setup',
+      icon: (props) => (
+        <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      ),
+    },
+  ];
   
   // Use a fallback profile image if none exists
   const defaultImage = "/images/default-avatar.jpg";
   const profileImageUrl = profile?.profileImageUrl || defaultImage;
   
   const handleEditProfile = () => {
-    router.push('/dashboard/creator/profile-setup');
+    router.push(`/${locale}/dashboard/creator/profile-setup`);
   };
 
   // Helper function to check if a nav item is active
   const isNavItemActive = (item: NavItem, index: number) => {
+    // Handle home navigation
+    if (item.href === '/') {
+      return pathname === '/' || (pathname.match(/^\/[a-z]{2}$/) && !pathname.includes('/dashboard'));
+    }
+    
     if (item.href === '/dashboard/creator/profile-setup') {
       return pathname === '/dashboard/creator/profile-setup';
     }
     
     // Use activeTabIndex if provided (callback mode), otherwise fall back to URL params
     if (onTabChange && activeTabIndex !== undefined) {
-      return index === activeTabIndex;
+      // Adjust for the new home icon at index 0
+      return index === activeTabIndex + 1;
     }
     
     if (pathname === '/dashboard/creator') {
@@ -110,14 +128,21 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
   };
 
   const handleNavClick = (item: NavItem, index: number) => {
+    // Handle home navigation
+    if (item.href === '/') {
+      router.push('/');
+      return;
+    }
+    
     if (item.href === '/dashboard/creator/profile-setup') {
-      router.push('/dashboard/creator/profile-setup');
+      router.push(`/${locale}/dashboard/creator/profile-setup`);
       return;
     }
     
     // Use callback for tab switching if provided (faster)
     if (onTabChange) {
-      onTabChange(index);
+      // Adjust index for home icon at position 0
+      onTabChange(index - 1);
     } else {
       // Fallback to router navigation
       router.push(item.href);
@@ -125,10 +150,10 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
   };
 
   const mobileMenuItems = [
-    { name: 'Travel', href: '/dashboard/creator?tab=travel-plans', icon: navigation[0].icon, index: 0 },
-    { name: 'Messages', href: '/dashboard/creator?tab=messages', icon: navigation[1].icon, index: 1 },
-    { name: 'Earnings', href: '/dashboard/creator?tab=earnings', icon: navigation[2].icon, index: 2 },
-    { name: 'Profile', href: '/dashboard/creator/profile-setup', icon: navigation[3].icon, index: 3 },
+    { nameKey: 'travel', href: '/dashboard/creator?tab=travel-plans', icon: navigation[1].icon, index: 1 },
+    { nameKey: 'messages', href: '/dashboard/creator?tab=messages', icon: navigation[2].icon, index: 2 },
+    { nameKey: 'earnings', href: '/dashboard/creator?tab=earnings', icon: navigation[3].icon, index: 3 },
+    { nameKey: 'profile', href: '/dashboard/creator/profile-setup', icon: navigation[4].icon, index: 4 },
   ];
 
   // Mobile version
@@ -159,7 +184,7 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
             const isActive = isNavItemActive(item, item.index);
             return (
               <button
-                key={item.name}
+                key={item.nameKey}
                 onClick={() => handleNavClick(item, item.index)}
                 className={`flex flex-col items-center justify-center flex-1 h-full text-xs font-medium focus:outline-none transition-all duration-300 ${
                   isActive 
@@ -173,7 +198,7 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
                     isActive ? 'text-white' : 'text-gray-400 group-hover:text-red-burgundy'
                   }`}
                 />
-                <span className="font-serif">{item.name}</span>
+                <span className="font-serif">{t(item.nameKey)}</span>
               </button>
             );
           })}
@@ -201,7 +226,7 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
                 ? 'bg-red-burgundy/10 hover:bg-red-burgundy/20' 
                 : 'bg-red-burgundy/5 hover:bg-red-burgundy/15'
             }`}
-            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={isCollapsed ? t('expandSidebar') : t('collapseSidebar')}
           >
             <ChevronRightIcon 
               className={`${isCollapsed ? 'w-4 h-4' : 'w-5 h-5'} text-red-burgundy transition-transform duration-300 ${
@@ -239,11 +264,12 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
           <div className="space-y-1">
           {navigation.map((item, index) => {
             const isActive = isNavItemActive(item, index);
+            const translatedName = t(item.nameKey);
               
             const NavButton = () => (
               <button
                 onClick={() => handleNavClick(item, index)}
-                onMouseEnter={() => isCollapsed && setActiveTooltip(item.name)}
+                onMouseEnter={() => isCollapsed && setActiveTooltip(translatedName)}
                 onMouseLeave={() => setActiveTooltip(null)}
                   className={`w-full transition-all duration-300 ease-in-out relative group ${
                     isCollapsed 
@@ -264,7 +290,7 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
                 />
                 {!isCollapsed && (
                       <span className="font-serif font-medium text-sm">
-                    {item.name}
+                    {translatedName}
                       </span>
                     )}
                   </div>
@@ -278,13 +304,13 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
 
               if (isCollapsed) {
                 return (
-                  <div key={item.name} className="relative">
+                  <div key={item.nameKey} className="relative">
                     <NavButton />
                     {/* Tooltip for collapsed mode */}
-                    {activeTooltip === item.name && (
+                    {activeTooltip === translatedName && (
                       <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 z-50">
                         <div className="bg-red-burgundy text-white px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap shadow-lg">
-                          {item.name}
+                          {translatedName}
                           <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-red-burgundy rotate-45"></div>
                         </div>
                       </div>
@@ -293,7 +319,7 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
                 );
               }
             
-            return <NavButton key={item.name} />;
+            return <NavButton key={item.nameKey} />;
           })}
           </div>
         </nav>
@@ -314,11 +340,11 @@ export default function ProfileSidebar({ profile, isMobile = false, onTabChange,
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             ) : (
-              'Settings'
+              t('settings')
             )}
           </button>
           </div>
       </div>
     </div>
   );
-} // review trigger
+}

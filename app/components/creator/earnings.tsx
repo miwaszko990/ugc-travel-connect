@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -15,13 +16,18 @@ import {
   CreatorEarningsStats 
 } from '@/app/lib/firebase/orders';
 import { toast } from 'react-hot-toast';
+import { doc, collection, getDocs, query, where, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/app/lib/firebase';
+import FileDeliveryModal from './file-delivery-modal';
 
 export default React.memo(function Earnings() {
   const { user } = useAuth();
+  const t = useTranslations('creator.earnings');
   const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState<CreatorEarningsStats>({
     totalOrders: 0,
     totalEarned: 0,
+    pending: 0,
     pendingPayment: 0,
     inProgress: 0,
     completed: 0,
@@ -30,6 +36,15 @@ export default React.memo(function Earnings() {
   const [loading, setLoading] = useState(true);
   const [processingOrders, setProcessingOrders] = useState<Set<string>>(new Set());
   const [selectedTab, setSelectedTab] = useState('all');
+  const [fileDeliveryModal, setFileDeliveryModal] = useState<{
+    isOpen: boolean;
+    orderId: string;
+    brandName: string;
+  }>({
+    isOpen: false,
+    orderId: '',
+    brandName: ''
+  });
 
   // Fetch orders when component mounts or user changes
   useEffect(() => {
@@ -43,12 +58,14 @@ export default React.memo(function Earnings() {
     
     try {
       setLoading(true);
+      console.log('🔍 Debug: Fetching orders for creator:', user.uid);
       const fetchedOrders = await getCreatorOrders(user.uid);
+      console.log('📊 Debug: Fetched orders:', fetchedOrders);
       setOrders(fetchedOrders);
       setStats(calculateCreatorEarningsStats(fetchedOrders));
     } catch (error) {
       console.error('Error fetching orders:', error);
-      toast.error('Failed to load earnings data');
+      toast.error(t('toasts.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -73,13 +90,13 @@ export default React.memo(function Earnings() {
     try {
       setProcessingOrders(prev => new Set(prev).add(orderId));
       await startWorkOnOrder(orderId);
-      toast.success('Work started! Good luck with the content creation!');
+      toast.success(t('toasts.workStarted'));
       
       // Refresh orders to show updated status
       await fetchOrders();
     } catch (error) {
       console.error('Error starting work:', error);
-      toast.error('Failed to start work');
+      toast.error(t('toasts.startWorkFailed'));
     } finally {
       setProcessingOrders(prev => {
         const newSet = new Set(prev);
@@ -89,8 +106,137 @@ export default React.memo(function Earnings() {
     }
   };
 
-  const handleMessageBrand = (brandHandle: string) => {
-    window.location.href = `/dashboard/creator?tab=messages&brand=${brandHandle}`;
+  const handleMessageBrand = async (instagramHandle: string) => {
+    window.open(`https://instagram.com/${instagramHandle}`, '_blank');
+  };
+  
+  const handleUploadMaterials = (orderId: string, brandName: string) => {
+    setFileDeliveryModal({
+      isOpen: true,
+      orderId,
+      brandName
+    });
+  };
+
+  const handleFileDeliverySuccess = async () => {
+    // Refresh orders to update status
+    await fetchOrders();
+    toast.success(t('toasts.materialsDelivered'));
+  };
+
+  // Debug function to check orders
+  const debugOrders = async () => {
+    if (!user?.uid) return;
+    
+    try {
+      console.log('🔍 Current user ID:', user.uid);
+      
+      // Check all orders in the database
+      const allOrdersSnapshot = await getDocs(collection(db, 'orders'));
+      console.log('📊 Total orders in database:', allOrdersSnapshot.docs.length);
+      
+      allOrdersSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        console.log('📋 Order:', doc.id, data);
+      });
+      
+      // Check orders for this specific creator
+      const creatorOrdersQuery = query(
+        collection(db, 'orders'),
+        where('creatorId', '==', user.uid)
+      );
+      const creatorOrdersSnapshot = await getDocs(creatorOrdersQuery);
+      console.log('👤 Orders for this creator:', creatorOrdersSnapshot.docs.length);
+      
+      // Check message threads for accepted offers
+      const threadsSnapshot = await getDocs(collection(db, 'messageThreads'));
+      console.log('💬 Total message threads:', threadsSnapshot.docs.length);
+      
+      threadsSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        if (data.participants && data.participants.includes(user.uid)) {
+          console.log('📨 Thread with user:', doc.id, data);
+          if (data.messages) {
+            data.messages.forEach((msg: any, index: number) => {
+              if (msg.type === 'offer') {
+                console.log(`🎯 Offer message ${index}:`, msg);
+                console.log(`📋 Offer details:`, {
+                  offerId: msg.offerId,
+                  offerStatus: msg.offerStatus,
+                  price: msg.price,
+                  senderId: msg.senderId,
+                  trip: msg.trip,
+                  description: msg.description
+                });
+                
+                // If this is an accepted offer, let's manually create the missing order
+                if (msg.offerStatus === 'accepted' && msg.offerId) {
+                  console.log('🚨 Found accepted offer without order! This should have created an order.');
+                  console.log('🔧 Consider manually fixing this offer:', msg.offerId);
+                }
+              }
+            });
+          }
+        }
+      });
+      
+      toast.success(`Debug: Found ${allOrdersSnapshot.docs.length} total orders, ${creatorOrdersSnapshot.docs.length} for you. Check console for details.`);
+    } catch (error) {
+      console.error('Debug error:', error);
+      toast.error('Debug failed - check console');
+    }
+  };
+
+  // Debug function to manually fix missing order
+  const fixMissingOrder = async () => {
+    if (!user?.uid) return;
+    
+    try {
+      // Find the accepted offer
+      const threadsSnapshot = await getDocs(collection(db, 'messageThreads'));
+      
+      for (const threadDoc of threadsSnapshot.docs) {
+        const data = threadDoc.data();
+        if (data.participants && data.participants.includes(user.uid)) {
+          if (data.messages) {
+            for (const msg of data.messages) {
+              if (msg.type === 'offer' && msg.offerStatus === 'accepted') {
+                console.log('🔧 Creating missing order for accepted offer:', msg.offerId);
+                
+                // Create the missing order
+                const orderData = {
+                  id: msg.offerId,
+                  brandId: msg.senderId,
+                  creatorId: user.uid,
+                  amount: msg.price || 500,
+                  currency: 'usd',
+                  tripDestination: msg.trip?.destination || 'Unknown',
+                  tripCountry: msg.trip?.country || '',
+                  status: 'paid' as const, // Set as paid since payment was completed
+                  description: msg.description || '',
+                  createdAt: serverTimestamp(),
+                  updatedAt: serverTimestamp(),
+                  paidAt: serverTimestamp()
+                };
+                
+                await setDoc(doc(db, 'orders', msg.offerId), orderData);
+                console.log('✅ Created missing order:', msg.offerId);
+                toast.success('Missing order created! Refreshing...');
+                
+                // Refresh the orders
+                await fetchOrders();
+                return;
+              }
+            }
+          }
+        }
+      }
+      
+      toast.error('No accepted offers found to fix');
+    } catch (error) {
+      console.error('Error fixing order:', error);
+      toast.error('Failed to fix order - check console');
+    }
   };
 
   if (loading) {
@@ -108,10 +254,10 @@ export default React.memo(function Earnings() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">
-          Earnings Overview
+          {t('title')}
         </h1>
         <p className="text-gray-600">
-          Track your collaboration income and payment status
+          {t('subtitle')}
         </p>
       </div>
 
@@ -121,25 +267,25 @@ export default React.memo(function Earnings() {
           <div className="text-2xl font-bold text-emerald-600 mb-1">
             ${stats.totalEarned.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-500">Total Earned</div>
+          <div className="text-sm text-gray-500">{t('stats.totalEarned')}</div>
         </div>
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="text-2xl font-bold text-amber-600 mb-1">
             ${stats.pendingPayment.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-500">Pending Payment</div>
+          <div className="text-sm text-gray-500">{t('stats.pendingPayment')}</div>
               </div>
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="text-2xl font-bold text-red-burgundy mb-1">
             {stats.completed}
           </div>
-          <div className="text-sm text-gray-500">Jobs Completed</div>
+          <div className="text-sm text-gray-500">{t('stats.jobsCompleted')}</div>
               </div>
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="text-2xl font-bold text-gray-900 mb-1">
             ${stats.averagePerOrder.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-500">Avg per Job</div>
+          <div className="text-sm text-gray-500">{t('stats.avgPerJob')}</div>
         </div>
       </div>
       
@@ -148,10 +294,10 @@ export default React.memo(function Earnings() {
         <div className="border-b border-gray-100">
           <nav className="flex space-x-8 px-6">
             {[
-              { key: 'all', label: 'All Orders', count: stats.totalOrders },
-              { key: 'paid', label: 'New Orders', count: orders.filter(o => o.status === 'paid').length },
-              { key: 'active', label: 'Active Work', count: stats.inProgress },
-              { key: 'completed', label: 'Completed', count: stats.completed }
+              { key: 'all', label: t('tabs.allOrders'), count: stats.totalOrders },
+              { key: 'paid', label: t('tabs.newOrders'), count: orders.filter(o => o.status === 'paid').length },
+              { key: 'active', label: t('tabs.activeWork'), count: stats.inProgress },
+              { key: 'completed', label: t('tabs.completed'), count: stats.completed }
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -178,11 +324,11 @@ export default React.memo(function Earnings() {
                   </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {selectedTab === 'all' ? 'No orders yet' : `No ${selectedTab} orders`}
+                {selectedTab === 'all' ? t('orders.noOrders') : `No ${selectedTab} orders`}
               </h3>
               <p className="text-gray-600">
                 {selectedTab === 'all' 
-                  ? 'Your earnings will appear here once you receive your first collaboration order'
+                  ? t('orders.noOrdersSubtitle')
                   : `No ${selectedTab} orders at the moment`
                 }
               </p>
@@ -252,7 +398,7 @@ export default React.memo(function Earnings() {
                           onClick={() => handleMessageBrand(order.creator?.instagramHandle || '')}
                           className="px-3 py-1 text-sm border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                         >
-                          Message Brand
+                          {t('orders.messageBrand')}
                         </button>
                         
                         {order.status === 'paid' && (
@@ -261,14 +407,22 @@ export default React.memo(function Earnings() {
                             disabled={processingOrders.has(order.id)}
                             className="px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                           >
-                            {processingOrders.has(order.id) ? 'Starting...' : 'Start Work'}
+                            {processingOrders.has(order.id) ? 'Starting...' : t('orders.startWork')}
                           </button>
                         )}
                         
                         {order.status === 'in_progress' && (
+                          <>
+                            <button 
+                              onClick={() => handleUploadMaterials(order.id, order.brand?.brandName || 'Brand')}
+                              className="px-3 py-1 text-sm bg-red-burgundy text-white rounded-lg hover:bg-red-burgundy/90 transition-colors"
+                            >
+                              {t('orders.uploadMaterials')}
+                            </button>
                           <button className="px-3 py-1 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                            Submit Content
+                              {t('orders.completeWork')}
                           </button>
+                          </>
                         )}
                       </div>
                     </div>
@@ -284,14 +438,25 @@ export default React.memo(function Earnings() {
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-            <h3 className="font-serif text-gray-900 font-semibold mb-1">Payment Settings</h3>
-            <p className="text-sm text-gray-600">Manage your payout preferences and banking details</p>
+            <h3 className="font-serif text-gray-900 font-semibold mb-1">{t('paymentSettings.title')}</h3>
+            <p className="text-sm text-gray-600">{t('paymentSettings.subtitle')}</p>
           </div>
+          <div className="flex gap-2">
           <button className="group relative inline-flex items-center gap-2 text-red-burgundy hover:text-white bg-white hover:bg-red-burgundy px-4 py-2 rounded-lg font-medium border border-red-burgundy transition-all duration-300 shadow-sm hover:shadow-md">
-            <span className="relative">Setup Payouts</span>
+              <span className="relative">{t('paymentSettings.setupPayouts')}</span>
           </button>
+          </div>
         </div>
       </div>
+      
+      {/* File Delivery Modal */}
+      <FileDeliveryModal
+        isOpen={fileDeliveryModal.isOpen}
+        onClose={() => setFileDeliveryModal(prev => ({ ...prev, isOpen: false }))}
+        orderId={fileDeliveryModal.orderId}
+        brandName={fileDeliveryModal.brandName}
+        onSuccess={handleFileDeliverySuccess}
+      />
     </div>
   );
-}); // review trigger
+});

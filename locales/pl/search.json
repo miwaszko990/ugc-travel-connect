@@ -1,0 +1,48 @@
+{
+  "title": "Znajdź Twórców",
+  "subtitle": "Znajdź idealnego twórcę dla swojej marki. Filtruj według miejsca podrózy, dat podróży, miejsca zamieszkania, liczby obserwujących i nie tylko.",
+  "loading": {
+    "title": "Lumo",
+    "subtitle": "Ładowanie twórców..."
+  },
+  "search": {
+    "placeholder": "Szukaj twórców według nazwy, lokalizacji lub planowanych podróży..."
+  },
+  "filters": {
+    "title": "Filtry",
+    "clearAll": "Wyczyść wszystkie",
+    "homeCity": "Miejsce zamieszkania.",
+    "destination": "Cel...",
+    "dateStart": "Data od...",
+    "dateEnd": "Data do...",
+    "tripStatus": {
+      "any": "Dowolny status",
+      "planned": "Zaplanowane podróże",
+      "active": "Aktywne podróże", 
+      "completed": "Zakończone podróże"
+    },
+    "followers": {
+      "any": "Dowolna wielkość",
+      "1k-5k": "1K - 5K",
+      "5k-25k": "5K - 25K",
+      "25k-100k": "25K - 100K", 
+      "100k+": "100K+"
+    },
+    "sort": {
+      "recent": "Ostatnio dołączyli",
+      "followers": "Najwięcej obserwujących",
+      "alphabetical": "Alfabetycznie",
+      "tripDate": "Data następnej podróży"
+    }
+  },
+  "results": {
+    "creatorsFound": "Znaleziono {count} Twórców",
+    "filtered": "Wyniki po filtrowaniu",
+    "all": "Wszyscy dostępni twórcy",
+    "noCreators": {
+      "title": "Nie znaleziono twórców",
+      "subtitle": "Spróbuj dostosować wyszukiwane terminy lub filtry, aby znaleźć idealnych twórców dla swojej marki.",
+      "clearFilters": "Wyczyść wszystkie filtry"
+    }
+  }
+}

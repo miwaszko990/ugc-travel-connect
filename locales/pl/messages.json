@@ -1,0 +1,79 @@
+{
+  "newMessageModal": {
+    "title": "Wyślij Wiadomość do Twórcy",
+    "tripSelection": {
+      "label": "Wybierz Podróż (Opcjonalne)",
+      "placeholder": "Wybierz destynację podróży",
+      "none": "Nie wybrano podróży",
+      "generalInquiry": "Ogólne zapytanie"
+    },
+    "form": {
+      "placeholder": "Napisz swoją wiadomość tutaj...",
+      "button": "Wyślij Wiadomość",
+      "cancel": "Anuluj",
+      "sendMessage": "Wyślij wiadomość",
+      "sending": "Wysyłanie..."
+    },
+    "success": {
+      "title": "Wiadomość wysłana pomyślnie!",
+      "description": "Twoja wiadomość została wysłana do twórcy. Zostanie powiadomiony i może Ci odpowiedzieć.",
+      "redirect": "Przekierowywanie do rozmów...",
+      "redirecting": "Przekierowywanie do wiadomości..."
+    },
+    "errors": {
+      "messageRequired": "Proszę napisać wiadomość",
+      "messageTooLong": "Wiadomość jest za długa (maksymalnie 500 znaków)",
+      "sendFailed": "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
+      "signInRequired": {
+        "title": "Wymagane logowanie",
+        "message": "Proszę się zalogować, aby wysłać wiadomość.",
+        "close": "Zamknij"
+      },
+      "messagingRestricted": {
+        "title": "Wysyłanie wiadomości jest ograniczone",
+        "message": "Tylko konta marek mogą wysyłać wiadomości do twórców.",
+        "close": "Zamknij"
+      }
+    },
+    "toasts": {
+      "sending": "Wysyłanie wiadomości...",
+      "success": "Wiadomość wysłana pomyślnie!",
+      "error": "Nie udało się wysłać wiadomości"
+    },
+    "tripContext": {
+      "messagingAbout": "Wiadomość o {destination} ({dateRange})"
+    }
+  },
+  "brandProfile": {
+    "title": "Profil Marki",
+    "loading": "Ładowanie profilu marki...",
+    "notFound": "Nie znaleziono profilu marki",
+    "close": "Zamknij",
+    "memberSince": "Członek od",
+    "stats": {
+      "followers": "Obserwujący",
+      "industry": "Branża"
+    },
+    "sections": {
+      "about": "O nas",
+      "links": "Linki i Media Społecznościowe"
+    },
+    "links": {
+      "instagram": "Instagram",
+      "website": "Strona internetowa",
+      "visitProfile": "Zobacz Profil",
+      "visitWebsite": "Odwiedź Stronę"
+    },
+    "placeholders": {
+      "noFollowers": "Brak danych",
+      "noIndustry": "Nie określono",
+      "noDescription": "Brak dostępnego opisu",
+      "noWebsite": "Nie podano strony internetowej"
+    },
+    "actions": {
+      "viewInstagram": "Zobacz na Instagramie",
+      "openWebsite": "Otwórz Stronę Internetową",
+      "closeModal": "Zamknij Profil"
+    }
+  }
+}

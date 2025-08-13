@@ -1,0 +1,48 @@
+{
+  "title": "Search All Creators",
+  "subtitle": "Find the perfect luxury travel creator for your brand. Filter by destination, travel dates, home city, audience size, and more.",
+  "loading": {
+    "title": "Lumo",
+    "subtitle": "Loading creators..."
+  },
+  "search": {
+    "placeholder": "Search creators by name, location, or planned destinations..."
+  },
+  "filters": {
+    "title": "Filters",
+    "clearAll": "Clear All",
+    "homeCity": "Home city...",
+    "destination": "Destination...",
+    "dateStart": "From date...",
+    "dateEnd": "To date...",
+    "tripStatus": {
+      "any": "Any Status",
+      "planned": "Planned Trips", 
+      "active": "Active Trips",
+      "completed": "Completed Trips"
+    },
+    "followers": {
+      "any": "Any Size",
+      "1k-5k": "1K - 5K",
+      "5k-25k": "5K - 25K", 
+      "25k-100k": "25K - 100K",
+      "100k+": "100K+"
+    },
+    "sort": {
+      "recent": "Recently Joined",
+      "followers": "Most Followers",
+      "alphabetical": "Alphabetical",
+      "tripDate": "Next Trip Date"
+    }
+  },
+  "results": {
+    "creatorsFound": "{count, plural, =1 {# Creator Found} other {# Creators Found}}",
+    "filtered": "Filtered results",
+    "all": "All available creators",
+    "noCreators": {
+      "title": "No creators found",
+      "subtitle": "Try adjusting your search terms or filters to find the perfect creators for your brand.",
+      "clearFilters": "Clear All Filters"
+    }
+  }
+}

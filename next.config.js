@@ -15,14 +15,46 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Production optimizations
+  productionBrowserSourceMaps: false,
+  compress: true,
+  poweredByHeader: false,
+  
+  // Image optimization
   images: {
-    domains: ['firebasestorage.googleapis.com', 'images.unsplash.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  // Add comprehensive security headers and cache control
+  
+  // Security and performance headers
   async headers() {
     return [
       {
-        source: '/:all*(svg|jpg|png|jpeg|gif|webp|ico)',
+        source: '/:all*(svg|jpg|png|jpeg|gif|webp|avif|ico|woff|woff2)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -47,13 +79,23 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
+            value: 'camera=(), microphone=(), geolocation=(), payment=()',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
           },
         ],
       },
     ];
   },
-  // Temporarily allow builds with errors for this commit
+  
+  // Enable production optimizations
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@heroicons/react'],
+  },
+  
+  // Build-time optimizations (temporarily relaxed for initial deployment)
   eslint: {
     ignoreDuringBuilds: true,
   },

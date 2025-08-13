@@ -8,6 +8,7 @@ function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [countdown, setCountdown] = useState(5);
+  const localePrefix = typeof window !== 'undefined' ? `/${window.location.pathname.split('/')[1]}` : '';
   
   const sessionId = searchParams.get('session_id');
 
@@ -15,7 +16,7 @@ function PaymentSuccessContent() {
     const interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev === 1) {
-          router.push('/dashboard/brand?tab=messages');
+          router.push(`${localePrefix}/dashboard/brand?tab=messages`);
           return 0;
         }
         return prev - 1;
@@ -94,7 +95,7 @@ function PaymentSuccessContent() {
           </p>
           
           <button
-            onClick={() => router.push('/dashboard/brand?tab=messages')}
+            onClick={() => router.push(`${localePrefix}/dashboard/brand?tab=messages`)}
             className="w-full bg-red-burgundy text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
           >
             Go to Dashboard Now

@@ -1,0 +1,9 @@
+{
+  "loading": {
+    "default": "Ładowanie...",
+    "creators": "Ładowanie kreatorów...",
+    "conversations": "Ładowanie rozmów...",
+    "profile": "Ładowanie profilu kreatora...",
+    "trips": "Ładowanie podróży..."
+  }
+}

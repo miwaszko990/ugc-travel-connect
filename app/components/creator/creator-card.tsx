@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { MapPinIcon, UsersIcon } from '@heroicons/react/24/outline';
 
@@ -25,10 +26,26 @@ interface CreatorCardProps {
 }
 
 export default function CreatorCard({ creator, onClick, priority }: CreatorCardProps) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  
   const formatFollowers = (count: number) => {
     if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
     if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
     return count.toString();
+  };
+
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  const getProfileColor = (name: string) => {
+    const colors = [
+      'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500', 
+      'bg-yellow-500', 'bg-pink-500', 'bg-indigo-500', 'bg-teal-500'
+    ];
+    const index = name.length % colors.length;
+    return colors[index];
   };
 
   const followers = creator.followers || Math.floor(Math.random() * 50000) + 5000;
@@ -49,18 +66,41 @@ export default function CreatorCard({ creator, onClick, priority }: CreatorCardP
     >
       {/* Creator Image - Fixed aspect ratio */}
       <div className="relative w-full aspect-square overflow-hidden rounded-2xl mb-4 flex-shrink-0">
-        <Image
-          src={creator.profileImageUrl}
-          alt={`${creator.firstName} ${creator.lastName}, UGC creator from ${creator.homeCity}`}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          priority={priority}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = '/placeholder-profile.jpg';
-          }}
-        />
+        {/* Loading skeleton */}
+        {!imageLoaded && !imageFailed && (
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" />
+        )}
+        
+        {/* Initials fallback */}
+        {imageFailed && (
+          <div className={`absolute inset-0 ${getProfileColor(creator.firstName)} flex items-center justify-center`}>
+            <span className="text-white text-4xl font-bold">
+              {getInitials(creator.firstName, creator.lastName)}
+            </span>
+          </div>
+        )}
+        
+        {!imageFailed && (
+          <Image
+            src={creator.profileImageUrl}
+            alt={`${creator.firstName} ${creator.lastName}, UGC creator from ${creator.homeCity}`}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            priority={priority}
+            onError={(e) => {
+              console.log('Image failed to load:', creator.profileImageUrl);
+              setImageFailed(true);
+              setImageLoaded(true);
+            }}
+            onLoad={() => {
+              console.log('Image loaded successfully:', creator.profileImageUrl);
+              setImageLoaded(true);
+            }}
+          />
+        )}
       </div>
       
       {/* Creator Info - Flexible layout */}

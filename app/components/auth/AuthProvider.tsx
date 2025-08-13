@@ -2,7 +2,8 @@
 
 import React, { ReactNode, useReducer, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+// NOTE: Do not call useTranslations directly at module scope; we will access it safely inside the component
+// import { useTranslations } from 'next-intl';
 import { 
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -24,13 +25,25 @@ import {
 import { AuthErrorBoundary } from './AuthErrorBoundary';
 import type { UserData, UserRole } from '@/app/hooks/auth/types';
 
+// Safe translation accessor so the provider doesn't crash outside NextIntlClientProvider
+function useSafeT(namespace: string) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const {useTranslations} = require('next-intl');
+    return useTranslations(namespace);
+  } catch {
+    // Fallback: echo keys so UI remains functional during boot or on non-localized routes
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
+
 /**
  * Internal AuthProvider implementation
  */
 function AuthProviderInner({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
   const router = useRouter();
-  const t = useTranslations('auth.messages');
+  const t = useSafeT('auth.messages');
   const formatError = useErrorFormatter();
 
   // Clear error on route change

@@ -13,6 +13,7 @@ import { db } from '@/app/lib/firebase';
 import { Spinner } from '@/app/components/ui/spinner';
 import { toast } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
+import { useLocale } from 'next-intl';
 
 // Preload critical resources for better performance
 import { getStorage } from 'firebase/storage';
@@ -39,7 +40,26 @@ const LazyIndustrySelect = dynamic(() => import('./components/IndustrySelect'), 
 const createBrandProfileSchema = (t: (key: string) => string) => z.object({
   brandName: z.string().min(1, { message: t('validation.brandNameRequired') }),
   instagramHandle: z.string().min(1, { message: t('validation.instagramRequired') }),
-  website: z.string().url({ message: t('validation.websiteInvalid') }).optional().or(z.literal('')),
+  website: z.string()
+    .optional()
+    .or(z.literal(''))
+    .transform((val) => {
+      if (!val || val === '') return '';
+      // If URL doesn't start with http:// or https://, add https://
+      if (!val.match(/^https?:\/\//)) {
+        return `https://${val}`;
+      }
+      return val;
+    })
+    .refine((val) => {
+      if (!val || val === '') return true;
+      try {
+        new URL(val);
+        return true;
+      } catch {
+        return false;
+      }
+    }, { message: t('validation.websiteInvalid') }),
   description: z.string().min(10, { message: t('validation.descriptionTooShort') }),
   industry: z.string().min(1, { message: t('validation.industryRequired') }),
   location: z.string().min(1, { message: t('validation.locationRequired') }),
@@ -51,6 +71,7 @@ export default function BrandProfileSetup() {
   const router = useRouter();
   const { user } = useAuth();
   const t = useTranslations('brand.profileSetup');
+  const locale = useLocale();
   
   // State management
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -225,6 +246,8 @@ export default function BrandProfileSetup() {
       return;
     }
     
+    setIsSubmitting(true);
+    
     try {
       console.log('Starting brand profile submission with data:', data);
       
@@ -263,16 +286,25 @@ export default function BrandProfileSetup() {
       // Update Firestore
       await updateDoc(doc(db, 'users', user.uid), brandProfileData);
       console.log('Brand profile updated successfully!');
+      
+      // Show success message but keep loading state for smooth transition
       toast.success(isEditMode ? t('messages.profileUpdated') : t('messages.profileCreated'));
       
-      // Navigate to brand dashboard
+      // Store profile data in sessionStorage for instant dashboard loading
       sessionStorage.setItem('profileComplete', 'true');
-      router.push('/dashboard/brand');
+      sessionStorage.setItem('brandProfile', JSON.stringify(brandProfileData));
+      
+      // Small delay to let user see success message, then redirect
+      setTimeout(() => {
+        router.push(`/${locale}/dashboard/brand`);
+      }, 1000);
+      
     } catch (error) {
       console.error('Error updating brand profile:', error);
       toast.error(t('messages.updateFailed'));
+      setIsSubmitting(false);
     }
-  }, [user, t, imageFile, imagePreview, handleImageUpload, isEditMode, router]);
+  }, [user, t, imageFile, imagePreview, handleImageUpload, isEditMode, router, locale]);
 
   // Memoized titles to prevent unnecessary re-renders
   const pageTitle = useMemo(() => 
@@ -295,6 +327,21 @@ export default function BrandProfileSetup() {
 
   return (
     <div className="min-h-screen py-12 px-4" style={{backgroundColor: '#FDFCF9'}}>
+      {/* Loading overlay during submission */}
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white rounded-2xl p-8 shadow-xl text-center">
+            <Spinner size="lg" className="mx-auto mb-4" />
+            <h3 className="text-xl font-medium text-gray-900 mb-2">
+              {isEditMode ? t('form.submit.updating') : t('form.submit.creating')}
+            </h3>
+            <p className="text-gray-600">
+              {t('messages.redirecting')}
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-[600px] mx-auto bg-white rounded-[24px] shadow-lg p-8">
         <h1 className="text-3xl font-serif font-bold text-center mb-2 text-red-burgundy">
           {pageTitle}

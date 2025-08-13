@@ -11,7 +11,8 @@
     }
   },
   "navigation": {
-    "browseCreators": "Przeglądaj Twórców",
+    "home": "Strona główna",
+    "browseCreators": "Szukaj Twórców",
     "messages": "Wiadomości",
     "bookings": "Rezerwacje",
     "editProfile": "Edytuj Profil",
@@ -22,11 +23,106 @@
     "collapseSidebar": "Zwiń panel boczny",
     "brandAltText": "Marka"
   },
+  "messages": {
+    "redirecting": "Przekierowanie do panelu..."
+  },
+  "messaging": {
+    "loading": {
+      "conversations": "Ładowanie rozmów...",
+      "conversations_generic": "Ładowanie rozmów..."
+    },
+    "sidebar": {
+      "conversationCount": "{count, plural, =1 {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmów}}",
+      "noConversations": {
+        "title": "Brak rozmów",
+        "subtitle": "Zacznij pisać do twórców, aby zobaczyć rozmowy tutaj"
+      },
+      "noMessages": "Brak wiadomości"
+    },
+    "chat": {
+      "selectConversation": {
+        "title": "Wybierz rozmowę",
+        "subtitle": "Wybierz rozmowę z panelu bocznego, aby rozpocząć pisanie"
+      },
+      "noMessages": {
+        "title": "Brak wiadomości",
+        "subtitle": "Rozpocznij rozmowę poniżej"
+      },
+      "messageInput": {
+        "placeholder": "Napisz wiadomość...",
+        "sendButton": "Wyślij wiadomość"
+      },
+      "offerButton": {
+        "title": "Zaproponuj Współpracę",
+        "label": "Oferta"
+      },
+      "status": {
+        "processing": "Przetwarzanie...",
+        "sending": "Wysyłanie..."
+      }
+    },
+    "offerModal": {
+      "title": "Wyślij Ofertę Współpracy",
+      "trip": {
+        "label": "Podróż",
+        "noCreator": "Nie wybrano twórcy",
+        "loading": "Ładowanie podróży...",
+        "noTrips": "Brak dostępnych podróży",
+        "placeholder": "Wybierz podróż, którą jesteś zainteresowany..."
+      },
+      "description": {
+        "label": "Opis",
+        "placeholder": "np. 3 posty na Instagram, 2 filmy TikTok, 1 short YouTube prezentujący lokalne atrakcje..."
+      },
+      "amount": {
+        "label": "Kwota (USD)",
+        "placeholder": "500"
+      },
+      "buttons": {
+        "cancel": "Anuluj",
+        "send": "Wyślij Ofertę",
+        "sending": "Wysyłanie..."
+      }
+    },
+    "offerMessage": {
+      "title": "Oferta Współpracy",
+      "taskDescription": "Opis Zadania:",
+      "status": {
+        "pending": "Oczekuje",
+        "accepted": "Zaakceptowana",
+        "rejected": "Odrzucona",
+        "paid": "Opłacona"
+      },
+      "buttons": {
+        "accept": "Akceptuj",
+        "reject": "Odrzuć",
+        "payNow": "Zapłać Teraz",
+        "processing": "Przetwarzanie..."
+      },
+      "payment": {
+        "paid": "✅ Opłacono: ${amount}",
+        "date": "📅 {date}"
+      },
+      "systemMessages": {
+        "offerAccepted": {
+          "sidebar": "Oferta zaakceptowana. Oczekiwanie na płatność...",
+          "brand": "Twórca zaakceptował ofertę. Oczekiwanie na płatność...",
+          "creator": "Zaakceptowałeś ofertę. Oczekiwanie na płatność od marki..."
+        },
+        "offerRejected": {
+          "sidebar": "Twórca odrzucił ofertę współpracy.",
+          "general": "Twórca odrzucił ofertę współpracy."
+        }
+      }
+    }
+  },
   "browseCreators": {
-    "title": "Przeglądaj Twórców",
-    "subtitle": "Znajdź idealnego twórcę treści o luksusowych podróżach dla swojej marki. Filtruj według destynacji, dat podróży, miasta pochodzenia, wielkości audytorium i innych kryteriów.",
-    "searchPlaceholder": "Szukaj twórców według nazwy, lokalizacji lub planowanych destynacji...",
+    "title": "Szukaj Twórców",
+    "subtitle": "Znajdź idealnego content creatora dla swojej marki i zdobądź content na swoje SM z dowolnego miejsca na świecie. Filtruj według miejsca, dat podróży, miasta zamieszkania, liczby obserwujących i innych kryteriów.",
+    "searchPlaceholder": "Szukaj twórców według nazwy, lokalizacji lub planowanych podróży...",
     "filters": {
+      "destination": "Cel podróży",
+      "homeCity": "Miasto Zamieszkania",
       "anySize": "Dowolny rozmiar",
       "1k5k": "1K - 5K",
       "5k25k": "5K - 25K",
@@ -39,48 +135,58 @@
       "recentlyJoined": "Ostatnio dołączyli",
       "mostFollowers": "Najwięcej obserwujących",
       "alphabetical": "Alfabetycznie",
-      "nextTripDate": "Data następnej podróży"
+      "nextTripDate": "Data następnej podróży",
+      "clearAllFilters": "Wyczyść Wszystkie Filtry"
+    },
+    "results": {
+      "creatorsFound": "Znaleziono {count} Twórców",
+      "filteredResults": "Wyniki filtrowania",
+      "allAvailable": "Wszyscy dostępni twórcy",
+      "noCreatorsFound": "Nie znaleziono twórców",
+      "noCreatorsSubtext": "Spróbuj dostosować wyszukiwane frazy lub filtry, aby znaleźć idealnych twórców dla swojej marki."
     },
     "loading": "Ładowanie twórców...",
-    "noResults": "Nie znaleziono twórców",
-    "tryAdjusting": "Spróbuj dostosować filtry",
-    "showFilters": "Pokaż filtry",
-    "hideFilters": "Ukryj filtry"
-  },
-  "messages": {
-    "loading": "Ładowanie rozmów...",
-    "noConversations": "Brak rozmów",
-    "startConversation": "Rozpocznij rozmowę z twórcą"
+    "messageModal": {
+      "collaborationInterest": "Cześć {name}! Jestem zainteresowany/a współpracą z Tobą podczas Twojej nadchodzącej podróży do {destination}. ",
+      "generalInterest": "Cześć {name}! Jestem zainteresowany/a omówieniem potencjalnych możliwości współpracy z Tobą. "
+    }
   },
   "bookings": {
     "title": "Rezerwacje i Płatności",
     "subtitle": "Zarządzaj współpracą z twórcami i płatnościami",
     "stats": {
-      "totalBookings": "Łączne rezerwacje",
+      "totalBookings": "Łączne Rezerwacje",
       "active": "Aktywne",
       "completed": "Ukończone",
-      "totalSpent": "Łączne wydatki"
+      "totalSpent": "Łącznie Wydane"
     },
     "tabs": {
-      "all": "Wszystkie",
-      "pending": "Oczekujące",
+      "allBookings": "Wszystkie Rezerwacje",
+      "pendingPayment": "Oczekująca Płatność",
       "paid": "Opłacone",
-      "active": "Aktywne",
+      "inProgress": "W Trakcie",
       "completed": "Ukończone"
     },
-    "loading": "Ładowanie rezerwacji...",
-    "noBookings": "Brak rezerwacji",
-    "startCollaborating": "Zacznij współpracować z twórcami",
-    "actions": {
-      "releasePayment": "Zwolnij płatność",
-      "markComplete": "Oznacz jako ukończone",
-      "viewDetails": "Zobacz szczegóły"
+    "orders": {
+      "message": "Wiadomość",
+      "startWork": "Rozpocznij Pracę",
+      "completePayment": "Zakończ i Zwolnij Płatność",
+      "viewDetails": "Zobacz Szczegóły",
+      "updating": "Aktualizowanie...",
+      "processing": "Przetwarzanie...",
+      "paid": "Zapłacono"
     },
-    "status": {
-      "pending": "Oczekujące",
-      "paid": "Opłacone",
-      "inProgress": "W trakcie",
-      "completed": "Ukończone"
+    "empty": {
+      "noBookings": "Nie znaleziono rezerwacji",
+      "noBookingsSubtitle": "Nie dokonałeś jeszcze żadnych rezerwacji. Przeglądaj twórców, aby rozpocząć współpracę!",
+      "browseCreators": "Przeglądaj Twórców"
+    },
+    "toasts": {
+      "loadFailed": "Nie udało się załadować zamówień",
+      "paymentReleased": "Płatność została pomyślnie zwolniona!",
+      "releaseFailed": "Nie udało się zwolnić płatności",
+      "statusUpdated": "Status zamówienia został zaktualizowany!",
+      "updateFailed": "Nie udało się zaktualizować statusu zamówienia"
     }
   },
   "stats": {
@@ -102,9 +208,9 @@
         "required": "Nazwa marki jest wymagana"
       },
       "instagramHandle": {
-        "label": "Uchwyt Instagram",
+        "label": "Instagram",
         "placeholder": "twoja_marka",
-        "required": "Uchwyt Instagram jest wymagany"
+        "required": "Instagram jest wymagany"
       },
       "website": {
         "label": "Strona internetowa",
@@ -152,13 +258,12 @@
       }
     },
     "messages": {
+      "loginRequired": "Musisz być zalogowany, aby utworzyć profil marki",
       "profileCreated": "Profil marki został utworzony pomyślnie!",
       "profileUpdated": "Profil marki został zaktualizowany pomyślnie!",
-      "updateFailed": "Nie udało się zaktualizować profilu marki. Spróbuj ponownie.",
-      "imageUploadFailed": "Nie udało się przesłać logo marki.",
-      "invalidImageType": "Proszę wybrać plik obrazu",
-      "imageTooLarge": "Obraz musi być mniejszy niż 5MB",
-      "loginRequired": "Musisz być zalogowany, aby utworzyć profil marki"
+      "updateFailed": "Nie udało się zaktualizować profilu. Spróbuj ponownie.",
+      "imageUploadFailed": "Nie udało się przesłać obrazu. Spróbuj ponownie.",
+      "redirecting": "Przekierowywanie do panelu..."
     },
     "validation": {
       "brandNameRequired": "Nazwa marki jest wymagana",

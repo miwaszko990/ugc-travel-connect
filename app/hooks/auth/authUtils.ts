@@ -4,14 +4,23 @@ import { db } from '@/app/lib/firebase';
 import { getUserDocument } from '@/app/lib/firebase/utils';
 import type { UserData, UserRole, AuthAction } from './types';
 
+function localePrefix(): string {
+  if (typeof window === 'undefined') return '/pl';
+  const seg = (window.location.pathname.split('/')[1] || 'pl');
+  return `/${seg}`;
+}
+
 /**
  * Navigate to appropriate dashboard based on user role
  */
 export function navigateToDashboard(role: UserRole, router: ReturnType<typeof useRouter>) {
+  const lp = localePrefix();
   if (role === 'creator') {
-    router.push('/dashboard/creator');
+    router.push(`${lp}/dashboard/creator`);
   } else if (role === 'brand') {
-    router.push('/dashboard');
+    router.push(`${lp}/dashboard/brand`);
+  } else {
+    router.push(`${lp}/dashboard`);
   }
 }
 
@@ -62,10 +71,11 @@ export function handleAuthenticatedNavigation(
   if (typeof window === 'undefined') return;
   
   const path = window.location.pathname;
+  const lp = localePrefix();
   console.log('Current path during auth check:', path);
   
   // Redirect from auth pages if already logged in
-  if ((path === '/auth/login' || path === '/auth/register') && userData.role) {
+  if ((path.endsWith('/auth/login') || path.endsWith('/auth/register')) && userData.role) {
     console.log('User already logged in, redirecting to dashboard');
     navigateToDashboard(userData.role, router);
     return;
@@ -75,9 +85,9 @@ export function handleAuthenticatedNavigation(
   const hasCompletedProfile = userData.firstName && userData.lastName;
   console.log('Profile completion status:', hasCompletedProfile ? 'Complete' : 'Incomplete');
 
-  if (path === '/dashboard/creator' && !hasCompletedProfile && userData.role === 'creator') {
+  if (path.endsWith('/dashboard/creator') && !hasCompletedProfile && userData.role === 'creator') {
     console.log('User needs to complete profile, redirecting to setup');
-    router.push('/dashboard/creator/profile-setup');
+    router.push(`${lp}/dashboard/creator/profile-setup`);
     return;
   }
 
@@ -93,15 +103,16 @@ export function handleRedirectLoopPrevention(router: ReturnType<typeof useRouter
   
   const profileComplete = sessionStorage.getItem('profileComplete');
   const currentPath = window.location.pathname;
+  const lp = localePrefix();
   
   console.log('🔍 Profile complete flag:', profileComplete);
   console.log('🔍 Current path:', currentPath);
   
   // Emergency break from redirect loop
-  if (currentPath === '/dashboard/creator/profile-setup' && profileComplete === 'true') {
+  if (currentPath.endsWith('/dashboard/creator/profile-setup') && profileComplete === 'true') {
     console.log('⚠️ Detected potential redirect loop! User has completed profile but is on setup page');
     console.log('🛑 EMERGENCY REDIRECT BREAK ACTIVATED');
-    window.location.replace('/dashboard/creator?emergency=true');
+    window.location.replace(`${lp}/dashboard/creator?emergency=true`);
   }
 }
 

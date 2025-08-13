@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { doc, setDoc, serverTimestamp, updateDoc, getDoc } from 'firebase/firestore';
@@ -13,17 +14,36 @@ import { Spinner } from '@/app/components/ui/spinner';
 import { toast } from 'react-hot-toast';
 import Image from 'next/image';
 import { uploadImageToStorage } from '@/app/lib/firebase/utils';
+import { AUTH_CONSTANTS } from '@/app/lib/constants/auth';
+import dynamic from 'next/dynamic';
+import { useLocale } from 'next-intl';
 
-// Form validation schema
-const profileSchema = z.object({
-  firstName: z.string().min(1, { message: 'First name is required' }),
-  lastName: z.string().min(1, { message: 'Last name is required' }),
-  instagramHandle: z.string().min(1, { message: 'Instagram handle is required' }),
-  followerCount: z.coerce.number().min(0, { message: 'Follower count must be at least 0' }),
-  homeCity: z.string().min(1, { message: 'Home city is required' }),
+// Lazy load LanguageSwitcher
+const LazyIndustrySelect = dynamic(() => import('../../brand/profile-setup/components/IndustrySelect'), {
+  ssr: false,
+  loading: () => (
+    <select className="w-full p-3 border border-gray-300 rounded-xl animate-pulse" disabled>
+      <option>Loading...</option>
+    </select>
+  )
 });
 
-type ProfileFormValues = z.infer<typeof profileSchema>;
+// Remove LanguageSwitcher - language persists through URL routing
+// const LanguageSwitcher = dynamic(
+//   () => import('@/app/components/ui/language-switcher').then(mod => ({ default: mod.LanguageSwitcher })),
+//   { 
+//     ssr: false,
+//     loading: () => <div className="w-20 h-8 bg-gray-100 rounded animate-pulse" />
+//   }
+// );
+
+type ProfileFormValues = {
+  firstName: string;
+  lastName: string;
+  instagramHandle: string;
+  followerCount: number;
+  homeCity: string;
+};
 
 interface ProfileFormData {
   firstName: string;
@@ -38,6 +58,18 @@ interface ProfileFormData {
 export default function CreatorProfileSetup() {
   const router = useRouter();
   const { user } = useAuth();
+  const t = useTranslations('creator.profileSetup');
+  const locale = useLocale();
+  
+  // Create form validation schema with translated messages
+  const profileSchema = z.object({
+    firstName: z.string().min(1, { message: t('fields.firstName.required') }),
+    lastName: z.string().min(1, { message: t('fields.lastName.required') }),
+    instagramHandle: z.string().min(1, { message: t('fields.instagramHandle.required') }),
+    followerCount: z.coerce.number().min(0, { message: t('fields.followerCount.required') }),
+    homeCity: z.string().min(1, { message: t('fields.homeCity.required') }),
+  });
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -125,13 +157,13 @@ export default function CreatorProfileSetup() {
       
     // Validate file type
       if (!file.type.startsWith('image/')) {
-        toast.error('Please select an image file');
+        toast.error(t('messages.invalidImageType'));
         return;
       }
       
     // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image must be less than 5MB');
+        toast.error(t('messages.imageTooLarge'));
         return;
       }
       
@@ -220,7 +252,7 @@ export default function CreatorProfileSetup() {
   // Handle form submission
   const onSubmit = async (data: ProfileFormValues) => {
     if (!user) {
-      toast.error('You must be logged in to create a profile');
+      toast.error(t('messages.loginRequired'));
       return;
     }
     
@@ -236,7 +268,7 @@ export default function CreatorProfileSetup() {
           console.log('Image upload successful, URL:', imageUrl);
         } catch (error) {
           console.error('Error uploading image:', error);
-          toast.error('Failed to upload profile image.');
+          toast.error(t('messages.imageUploadFailed'));
         }
       } else if (imagePreview && !imageFile) {
         // User didn't upload a new image, but had an existing one
@@ -288,41 +320,54 @@ export default function CreatorProfileSetup() {
         }
       }
       
-      toast.success(isEditMode ? 'Profile updated successfully!' : 'Profile created successfully!');
+      toast.success(isEditMode ? t('messages.profileUpdateSuccess') : t('messages.profileCreateSuccess'));
       
       // Navigate to dashboard
       sessionStorage.setItem('profileComplete', 'true');
-        router.push('/dashboard/creator');
+        router.push(`/${locale}/dashboard/creator`);
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile. Please try again.');
+      toast.error(t('messages.profileSaveFailed'));
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <Spinner size="lg" />
+      <div className="min-h-screen flex items-center justify-center bg-ivory">
+        <div className="text-center">
+          <Spinner size="lg" />
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold text-neutral mb-2 font-playfair">{t('loading.title')}</h3>
+            <p className="text-gray-500 font-inter">{t('loading.subtitle')}</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] py-12 px-4">
-      <div className="max-w-[500px] mx-auto bg-white rounded-[24px] shadow-md p-8">
-        <h1 className="text-3xl font-bold text-center mb-2 font-playfair">
-          {isEditMode ? 'Edit Your Profile' : 'Create Your Profile'}
-        </h1>
-        <p className="text-gray-500 text-center mb-8 font-inter">
-          {isEditMode ? 'Update your creator profile details' : 'Set up your creator profile to get started'}
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-ivory p-4">
+      <div className={`bg-white ${AUTH_CONSTANTS.FORM.CARD_RADIUS} shadow-lg p-8 max-w-[600px] w-full`}>
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-neutral mb-2 font-playfair">
+              {isEditMode ? t('title.edit') : t('title.create')}
+            </h1>
+            <p className="text-gray-500 text-sm font-inter">
+              {isEditMode ? t('subtitle.edit') : t('subtitle.create')}
+            </p>
+          </div>
+          {/* <LanguageSwitcher /> */}
+        </div>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 font-inter">
+        <div className="mb-5"></div>
+        
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 font-inter">
           {/* Profile Image Upload */}
-          <div className="flex flex-col items-center mb-8">
+          <div className="flex flex-col items-center mb-6">
             <div 
               onClick={handleImageClick}
-              className="relative w-32 h-32 rounded-full overflow-hidden cursor-pointer border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors"
+              className="relative w-24 h-24 rounded-full overflow-hidden cursor-pointer border-2 border-dashed border-gray-300 flex items-center justify-center bg-[#F4F4F5] hover:bg-gray-100 transition-colors"
             >
               {imagePreview ? (
                 <Image
@@ -332,12 +377,12 @@ export default function CreatorProfileSetup() {
                   style={{ objectFit: 'cover' }}
                 />
               ) : (
-                <div className="text-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex flex-col items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <p className="text-xs mt-2">Add photo</p>
+                  <p className="text-xs text-gray-500 text-center">{t('fields.profileImage.addPhoto')}</p>
                 </div>
               )}
               
@@ -353,12 +398,13 @@ export default function CreatorProfileSetup() {
             
             {isUploading && (
               <div className="text-center mt-2">
-                <p>Uploading: {uploadProgress}%</p>
-                <progress 
-                  className="progress progress-primary w-full" 
-                  value={uploadProgress} 
-                  max="100"
-                ></progress>
+                <p className="text-sm text-gray-600">{t('fields.profileImage.uploadProgress', { progress: uploadProgress })}</p>
+                <div className="w-32 bg-gray-200 rounded-full h-1.5 mt-1">
+                  <div 
+                    className="bg-red-burgundy h-1.5 rounded-full transition-all duration-300" 
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
               </div>
             )}
           </div>
@@ -367,87 +413,117 @@ export default function CreatorProfileSetup() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* First Name */}
             <div className="form-control">
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <label className="label py-1">
+                <span className="label-text text-neutral font-medium text-sm">{t('fields.firstName.label')}</span>
+              </label>
               <input
                 type="text"
-                className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent ${
-                  errors.firstName ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-[#204A38]/20'
-                }`}
-                placeholder="John"
+                className={`input h-12 px-4 w-full rounded-xl font-medium ${
+                  errors.firstName 
+                    ? 'bg-white border-2 border-red-500' 
+                    : 'bg-[#F4F4F5] border-0'
+                } focus:bg-white focus:outline-none focus:border-2 focus:border-red-burgundy`}
+                placeholder={t('fields.firstName.placeholder')}
                 {...register('firstName')}
               />
               {errors.firstName && (
-                <p className="mt-1 text-red-500 text-xs">{errors.firstName.message}</p>
+                <label className="label py-0.5">
+                  <span className="label-text-alt text-error text-xs">{errors.firstName.message}</span>
+                </label>
               )}
             </div>
             
             {/* Last Name */}
             <div className="form-control">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <label className="label py-1">
+                <span className="label-text text-neutral font-medium text-sm">{t('fields.lastName.label')}</span>
+              </label>
               <input
                 type="text"
-                className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent ${
-                  errors.lastName ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-[#204A38]/20'
-                }`}
-                placeholder="Smith"
+                className={`input h-12 px-4 w-full rounded-xl font-medium ${
+                  errors.lastName 
+                    ? 'bg-white border-2 border-red-500' 
+                    : 'bg-[#F4F4F5] border-0'
+                } focus:bg-white focus:outline-none focus:border-2 focus:border-red-burgundy`}
+                placeholder={t('fields.lastName.placeholder')}
                 {...register('lastName')}
               />
               {errors.lastName && (
-                <p className="mt-1 text-red-500 text-xs">{errors.lastName.message}</p>
+                <label className="label py-0.5">
+                  <span className="label-text-alt text-error text-xs">{errors.lastName.message}</span>
+                </label>
               )}
             </div>
           </div>
           
           {/* Instagram Handle */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Instagram Handle</label>
+            <label className="label py-1">
+              <span className="label-text text-neutral font-medium text-sm">{t('fields.instagramHandle.label')}</span>
+            </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-500 sm:text-sm">@</span>
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span className="text-gray-500 text-sm">@</span>
               </div>
               <input
                 type="text"
-                className={`w-full p-3 pl-8 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent ${
-                  errors.instagramHandle ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-[#204A38]/20'
-                }`}
-                placeholder="your_username"
+                className={`input h-12 pl-8 pr-4 w-full rounded-xl font-medium ${
+                  errors.instagramHandle 
+                    ? 'bg-white border-2 border-red-500' 
+                    : 'bg-[#F4F4F5] border-0'
+                } focus:bg-white focus:outline-none focus:border-2 focus:border-red-burgundy`}
+                placeholder={t('fields.instagramHandle.placeholder')}
                 {...register('instagramHandle')}
               />
             </div>
             {errors.instagramHandle && (
-              <p className="mt-1 text-red-500 text-xs">{errors.instagramHandle.message}</p>
+              <label className="label py-0.5">
+                <span className="label-text-alt text-error text-xs">{errors.instagramHandle.message}</span>
+              </label>
             )}
           </div>
           
           {/* Instagram Follower Count */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Instagram Follower Count</label>
+            <label className="label py-1">
+              <span className="label-text text-neutral font-medium text-sm">{t('fields.followerCount.label')}</span>
+            </label>
             <input
               type="number"
-              className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent ${
-                errors.followerCount ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-[#204A38]/20'
-              }`}
-              placeholder="1000"
+              className={`input h-12 px-4 w-full rounded-xl font-medium ${
+                errors.followerCount 
+                  ? 'bg-white border-2 border-red-500' 
+                  : 'bg-[#F4F4F5] border-0'
+              } focus:bg-white focus:outline-none focus:border-2 focus:border-red-burgundy`}
+              placeholder={t('fields.followerCount.placeholder')}
               {...register('followerCount')}
             />
             {errors.followerCount && (
-              <p className="mt-1 text-red-500 text-xs">{errors.followerCount.message}</p>
+              <label className="label py-0.5">
+                <span className="label-text-alt text-error text-xs">{errors.followerCount.message}</span>
+              </label>
             )}
           </div>
           
           {/* Home City */}
           <div className="form-control">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Lives in</label>
+            <label className="label py-1">
+              <span className="label-text text-neutral font-medium text-sm">{t('fields.homeCity.label')}</span>
+            </label>
             <input
               type="text"
-              className={`w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent ${
-                errors.homeCity ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-[#204A38]/20'
-              }`}
-              placeholder="New York"
+              className={`input h-12 px-4 w-full rounded-xl font-medium ${
+                errors.homeCity 
+                  ? 'bg-white border-2 border-red-500' 
+                  : 'bg-[#F4F4F5] border-0'
+              } focus:bg-white focus:outline-none focus:border-2 focus:border-red-burgundy`}
+              placeholder={t('fields.homeCity.placeholder')}
               {...register('homeCity')}
             />
             {errors.homeCity && (
-              <p className="mt-1 text-red-500 text-xs">{errors.homeCity.message}</p>
+              <label className="label py-0.5">
+                <span className="label-text-alt text-error text-xs">{errors.homeCity.message}</span>
+              </label>
             )}
           </div>
 
@@ -462,8 +538,8 @@ export default function CreatorProfileSetup() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Add Your Instagram Posts</h3>
-                    <p className="text-sm text-gray-600">Showcase your best content to attract brands (optional)</p>
+                    <h3 className="font-semibold text-neutral">{t('instagramPosts.title')}</h3>
+                    <p className="text-sm text-gray-500">{t('instagramPosts.subtitle')}</p>
                   </div>
                 </div>
 
@@ -474,15 +550,15 @@ export default function CreatorProfileSetup() {
                         type="url"
                         value={post}
                         onChange={(e) => updateInstagramPost(index, e.target.value)}
-                        placeholder="https://instagram.com/p/ABC123... or https://instagram.com/reel/DEF456..."
-                        className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm"
+                        placeholder={t('instagramPosts.placeholder')}
+                        className="flex-1 input h-10 px-3 bg-[#F4F4F5] border-0 rounded-lg focus:bg-white focus:outline-none focus:border-2 focus:border-red-burgundy text-sm"
                       />
                       {instagramPosts.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeInstagramPostField(index)}
                           className="px-3 py-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Remove this post"
+                          title={t('instagramPosts.removeTitle')}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -495,12 +571,12 @@ export default function CreatorProfileSetup() {
                   <button
                     type="button"
                     onClick={addInstagramPostField}
-                    className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-pink-400 hover:text-pink-600 transition-colors flex items-center justify-center gap-2"
+                    className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-red-burgundy hover:text-red-burgundy transition-colors flex items-center justify-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    Add Another Instagram Post
+                    {t('instagramPosts.addAnother')}
                   </button>
                 </div>
 
@@ -510,10 +586,10 @@ export default function CreatorProfileSetup() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div className="text-xs text-blue-700">
-                      <p className="font-medium mb-1">How to get Instagram post URLs:</p>
-                      <p>1. Open Instagram → Find your post/reel</p>
-                      <p>2. Tap the three dots (⋯) → "Copy link"</p>
-                      <p>3. Paste the link above</p>
+                      <p className="font-medium mb-1">{t('instagramPosts.instructions.title')}</p>
+                      <p>{t('instagramPosts.instructions.step1')}</p>
+                      <p>{t('instagramPosts.instructions.step2')}</p>
+                      <p>{t('instagramPosts.instructions.step3')}</p>
                     </div>
                   </div>
                 </div>
@@ -522,22 +598,28 @@ export default function CreatorProfileSetup() {
           </div>
           
           {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting || !isValid}
-            className="w-full bg-[#204A38] hover:bg-[#204A38]/90 text-white py-3 px-4 rounded-xl mt-6 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSubmitting ? (
-              <>
-                <Spinner size="sm" color="secondary" className="mr-2" />
-                <span>Saving...</span>
-              </>
-            ) : (
-              'Save and Continue'
-            )}
-          </button>
+          <div className="form-control mt-5 flex items-center justify-center">
+            <button
+              type="submit"
+              disabled={isSubmitting || !isValid}
+              className={`btn px-6 py-3 h-auto ${AUTH_CONSTANTS.FORM.BUTTON_WIDTH} font-bold normal-case ${AUTH_CONSTANTS.FORM.BUTTON_RADIUS} border-none shadow-sm transition-all flex items-center justify-center ${
+                isSubmitting || !isValid
+                  ? 'bg-red-burgundy/60 cursor-not-allowed' 
+                  : 'bg-red-burgundy hover:bg-red-burgundy/90'
+              }`}
+            >
+              {isSubmitting ? (
+                <div className="flex items-center justify-center gap-2 text-white">
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-r-transparent"></div>
+                  <span>{t('buttons.saving')}</span>
+                </div>
+              ) : (
+                <span className="text-white">{t('buttons.saveAndContinue')}</span>
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
-} // review trigger
+}

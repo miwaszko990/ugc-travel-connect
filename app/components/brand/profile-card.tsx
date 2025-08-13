@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { DocumentData } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 
 interface ProfileCardProps {
   profile: DocumentData | null;
@@ -11,6 +12,7 @@ interface ProfileCardProps {
 
 export default function ProfileCard({ profile, isMobile = false }: ProfileCardProps) {
   const router = useRouter();
+  const locale = useLocale();
   
   if (!profile) return null;
 
@@ -70,7 +72,7 @@ export default function ProfileCard({ profile, isMobile = false }: ProfileCardPr
         
         <button 
           className="btn btn-outline btn-primary w-full"
-          onClick={handleEditProfile}
+          onClick={() => router.push(`/${locale}/dashboard/profile-setup`)}
         >
           Edit Profile
         </button>

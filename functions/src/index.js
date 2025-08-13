@@ -228,24 +228,42 @@ async function handlePaymentCompleted(session) {
 
     console.log('✅ Offer updated to paid status');
 
-    // Create an order record for the creator's dashboard
-    const orderData = {
-      id: offerId,
-      brandId: brandId,
-      creatorId: creatorId,
-      amount: session.amount_total / 100, // Convert from cents
-      currency: session.currency,
-      tripDestination: metadata.tripDestination,
-      tripCountry: metadata.tripCountry || '',
-      status: 'paid', // paid -> in_progress -> completed
-      stripeSessionId: session.id,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      paidAt: admin.firestore.FieldValue.serverTimestamp(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    };
-
-    await db.collection('orders').doc(offerId).set(orderData);
-    console.log('✅ Order record created for creator dashboard');
+    // Update existing order record (should exist from when offer was accepted)
+    try {
+      const orderRef = db.collection('orders').doc(offerId);
+      const orderDoc = await orderRef.get();
+      
+      if (orderDoc.exists()) {
+        // Update existing pending order to paid status
+        await orderRef.update({
+          status: 'paid',
+          stripeSessionId: session.id,
+          paidAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('✅ Updated existing order to paid status');
+      } else {
+        // Fallback: Create new order if none exists (shouldn't happen in normal flow)
+        const orderData = {
+          id: offerId,
+          brandId: brandId,
+          creatorId: creatorId,
+          amount: session.amount_total / 100,
+          currency: session.currency,
+          tripDestination: metadata.tripDestination,
+          tripCountry: metadata.tripCountry || '',
+          status: 'paid',
+          stripeSessionId: session.id,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          paidAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+        await orderRef.set(orderData);
+        console.log('✅ Created new paid order (fallback)');
+      }
+    } catch (error) {
+      console.error('❌ Error updating order:', error);
+    }
     
   } catch (error) {
     console.error('💥 Error updating offer status:', error);

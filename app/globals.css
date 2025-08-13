@@ -109,6 +109,35 @@ button.border-red-burgundy:hover svg {
   animation: slideInFromRight 0.8s ease-out;
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(12deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(12deg);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Additional hero section animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
 /* Calendar styles */
 .react-calendar {
   border: none !important;
@@ -188,3 +217,4 @@ button.border-red-burgundy:hover svg {
     font-size: 14px;
   }
 }
+

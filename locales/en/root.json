@@ -1,0 +1,55 @@
+{
+  "navigation": {
+    "howItWorks": "How It Works",
+    "about": "About",
+    "search": "Search",
+    "login": "Log in",
+    "signup": "Sign up",
+    "travelConnect": "Travel Connect"
+  },
+  "hero": {
+    "badge": "LUXURY TRAVEL CREATOR MARKETPLACE",
+    "title": "Lumo",
+    "subtitle": "Where luxury meets authentic storytelling",
+    "description": "Connect with premium travel creators who transform destinations into captivating stories. Elevate your brand with authentic, luxury content.",
+    "ctaButton": "Discover Creators",
+    "stats": {
+      "campaigns": {
+        "number": "2.3K+",
+        "label": "Luxury Campaigns"
+      },
+      "creators": {
+        "number": "500+",
+        "label": "Premium Creators"
+      },
+      "satisfaction": {
+        "number": "4.9/5",
+        "label": "Client Satisfaction"
+      }
+    }
+  },
+  "featuredCreators": {
+    "title": "Featured Creators",
+    "subtitle": "Discover our handpicked selection of luxury travel creators who bring destinations to life through authentic storytelling and premium content.",
+    "viewAllButton": "View All Creators",
+    "noCreatorsFound": "No creators found. Please try again later."
+  },
+  "loading": {
+    "title": "Lumo",
+    "subtitle": "Discovering amazing creators..."
+  },
+  "footer": {
+    "copyright": "© 2024 Lumo Travel Connect. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact"
+  },
+  "userMenu": {
+    "signedInAs": "Signed in as",
+    "openUserMenu": "Open user menu",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signOut": "Sign out"
+  }
+}

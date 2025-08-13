@@ -22,6 +22,58 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
   description: "Połącz się z najlepszymi twórcami treści podróżniczych, którzy przekształcają destynacje w fascynujące historie. Wzmocnij swoją markę autentycznymi, luksusowymi treściami.",
+  keywords: "twórcy podróżniczy, marketing turystyczny, treści UGC, współpraca z markami, platforma influencerów, promocja turystyki",
+  authors: [{ name: "Lumo Team" }],
+  creator: "Lumo",
+  publisher: "Lumo",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://lumo-platform.vercel.app'),
+  alternates: {
+    canonical: "/",
+    languages: {
+      "pl": "/pl",
+      "en": "/en",
+    },
+  },
+  openGraph: {
+    title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
+    description: "Połącz się z najlepszymi twórcami treści podróżniczych i przekształć swoją markę dzięki autentycznym treściom.",
+    url: "/",
+    siteName: "Lumo",
+    images: [
+      {
+        url: "/images/og-image.jpg", 
+        width: 1200,
+        height: 630,
+        alt: "Lumo - Platforma Twórców Podróżniczych",
+      },
+    ],
+    locale: "pl_PL",
+    alternateLocale: ["en_US"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
+    description: "Połącz się z najlepszymi twórcami treści podróżniczych i przekształć swoją markę dzięki autentycznym treściom.",
+    images: ["/images/twitter-image.jpg"],
+    creator: "@lumo_platform",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const viewport = {

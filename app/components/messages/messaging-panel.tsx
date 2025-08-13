@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { 
   subscribeToUserConversations, 
@@ -29,6 +30,10 @@ interface MessagingPanelProps {
 
 export default function MessagingPanel({ userRole, selectedConversationId }: MessagingPanelProps) {
   const { user } = useAuth();
+  const tBrand = useTranslations('brand.messaging');
+  const tCreator = useTranslations('creator.messaging');
+  // Use appropriate translation based on user role
+  const t = userRole === 'brand' ? tBrand : tCreator;
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -45,6 +50,29 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
 
   // Get current user role from auth context
   const currentUserRole = user?.role || 'creator';
+
+  // Helper function to translate system messages
+  const translateSystemMessage = (messageText: string, isForSidebar: boolean = false): string => {
+    // Handle offer acceptance messages
+    if (messageText === 'Offer accepted. Waiting for payment...' || 
+        messageText.includes('accepted the offer. Waiting for payment')) {
+      if (isForSidebar) {
+        return t('offerMessage.systemMessages.offerAccepted.sidebar');
+      }
+      return currentUserRole === 'brand' 
+        ? t('offerMessage.systemMessages.offerAccepted.brand')
+        : t('offerMessage.systemMessages.offerAccepted.creator');
+    }
+    
+    // Handle offer rejection messages
+    if (messageText === 'Creator declined the collaboration offer.') {
+      return isForSidebar 
+        ? t('offerMessage.systemMessages.offerRejected.sidebar')
+        : t('offerMessage.systemMessages.offerRejected.general');
+    }
+    
+    return messageText;
+  };
 
   // Subscribe to conversations
   useEffect(() => {
@@ -322,7 +350,7 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
       <div className="h-full flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-burgundy mx-auto"></div>
-          <p className="text-gray-500 mt-2">Loading conversations...</p>
+          <p className="text-gray-500 mt-2">{t('loading.conversations')}</p>
         </div>
       </div>
     );
@@ -343,7 +371,7 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
         <div className="px-6 py-4 border-b border-gray-100">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-gray-600">
-              {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
+              {t('sidebar.conversationCount', { count: conversations.length })}
             </span>
             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
           </div>
@@ -353,8 +381,8 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
         <div className="flex-1 overflow-y-auto">
           {conversations.length === 0 ? (
             <div className="p-6 text-center text-gray-500">
-              <p>No conversations yet</p>
-              <p className="text-sm mt-1">Start messaging creators to see conversations here</p>
+              <p>{t('sidebar.noConversations.title')}</p>
+              <p className="text-sm mt-1">{t('sidebar.noConversations.subtitle')}</p>
             </div>
           ) : (
             <ul className="divide-y divide-gray-100">
@@ -405,7 +433,24 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                             </p>
                           </div>
                           <p className="text-sm text-gray-500 truncate">
-                            {conv.lastMessage?.text || 'No messages yet'}
+                            {(() => {
+                              const lastMessageText = conv.lastMessage?.text;
+                              if (!lastMessageText) return t('sidebar.noMessages');
+                              
+                              // Handle offer messages
+                              if (lastMessageText.startsWith('💼 Collaboration Offer')) {
+                                return `💼 ${t('offerMessage.title')} - ${lastMessageText.split(' - ')[1] || ''}`;
+                              }
+                              
+                              // Handle system messages
+                              if (lastMessageText.includes('accepted the offer') || 
+                                  lastMessageText.includes('declined the collaboration offer') ||
+                                  lastMessageText === 'Offer accepted. Waiting for payment...') {
+                                return translateSystemMessage(lastMessageText, true);
+                              }
+                              
+                              return lastMessageText;
+                            })()}
                           </p>
                         </div>
                       </div>
@@ -465,8 +510,8 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
               {messages.length === 0 ? (
                 <div className="text-center text-gray-500 py-8">
-                  <p>No messages yet</p>
-                  <p className="text-sm mt-1">Start the conversation below</p>
+                  <p>{t('chat.noMessages.title')}</p>
+                  <p className="text-sm mt-1">{t('chat.noMessages.subtitle')}</p>
                 </div>
               ) : (
                 messages.map((message, index) => {
@@ -526,7 +571,7 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                         className="flex justify-center mb-4"
                       >
                         <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm max-w-md text-center">
-                          {displayText}
+                          {translateSystemMessage(displayText)}
                         </div>
                       </motion.div>
                     );
@@ -618,10 +663,10 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                   <button
                     onClick={() => setIsOfferModalOpen(true)}
                     className="flex-shrink-0 bg-red-burgundy text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-burgundy/90 transition-colors flex items-center gap-1.5"
-                    title="Propose Collaboration"
+                    title={t('chat.offerButton.title')}
                   >
                     <span className="text-sm">💼</span>
-                    <span className="hidden sm:inline">Offer</span>
+                    <span className="hidden sm:inline">{t('chat.offerButton.label')}</span>
                   </button>
                 )}
                 
@@ -632,7 +677,7 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                     value={messageText}
                     onChange={(e) => handleInputChange(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    placeholder="Type a message..."
+                    placeholder={t('chat.messageInput.placeholder')}
                     className="flex-1 border border-gray-200 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy bg-gray-50 transition-colors"
                     disabled={sending}
                   />
@@ -641,7 +686,7 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                     onClick={handleSendMessage}
                     disabled={!messageText.trim() || sending}
                     className="flex-shrink-0 bg-red-burgundy text-white w-10 h-10 rounded-full hover:bg-red-burgundy/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-                    title="Send message"
+                    title={t('chat.messageInput.sendButton')}
                   >
                     {sending ? (
                       <div className="w-4 h-4 border-2 border-white border-r-transparent rounded-full animate-spin"></div>
@@ -658,8 +703,8 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
         ) : (
           <div className="flex-1 flex items-center justify-center bg-gray-50">
             <div className="text-center text-gray-500">
-              <p className="text-lg font-medium">Select a conversation</p>
-              <p className="text-sm mt-1">Choose a conversation from the sidebar to start messaging</p>
+              <p className="text-lg font-medium">{t('chat.selectConversation.title')}</p>
+              <p className="text-sm mt-1">{t('chat.selectConversation.subtitle')}</p>
             </div>
           </div>
         )}

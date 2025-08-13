@@ -23,6 +23,7 @@ export interface NavigationItemWithTranslation {
   translationNamespace: string;
   index: number;
   name: string; // Translated name
+  adjustedIndex?: number; // For dashboard context when home is filtered out
 }
 
 // Sidebar configuration

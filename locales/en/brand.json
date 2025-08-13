@@ -9,6 +9,7 @@
     }
   },
   "navigation": {
+    "home": "Home",
     "browseCreators": "Browse Creators",
     "messages": "Messages",
     "bookings": "Bookings",
@@ -20,11 +21,106 @@
     "collapseSidebar": "Collapse sidebar",
     "brandAltText": "Brand"
   },
+  "messages": {
+    "redirecting": "Redirecting to dashboard..."
+  },
+  "messaging": {
+    "loading": {
+      "conversations": "Loading conversations...",
+      "conversations_generic": "Loading conversations..."
+    },
+    "sidebar": {
+      "conversationCount": "{count, plural, =1 {# conversation} other {# conversations}}",
+      "noConversations": {
+        "title": "No conversations yet",
+        "subtitle": "Start messaging creators to see conversations here"
+      },
+      "noMessages": "No messages yet"
+    },
+    "chat": {
+      "selectConversation": {
+        "title": "Select a conversation",
+        "subtitle": "Choose a conversation from the sidebar to start messaging"
+      },
+      "noMessages": {
+        "title": "No messages yet",
+        "subtitle": "Start the conversation below"
+      },
+      "messageInput": {
+        "placeholder": "Type a message...",
+        "sendButton": "Send message"
+      },
+      "offerButton": {
+        "title": "Propose Collaboration",
+        "label": "Offer"
+      },
+      "status": {
+        "processing": "Processing...",
+        "sending": "Sending..."
+      }
+    },
+    "offerModal": {
+      "title": "Send Collaboration Offer",
+      "trip": {
+        "label": "Trip",
+        "noCreator": "No creator selected",
+        "loading": "Loading trips...",
+        "noTrips": "No trips available",
+        "placeholder": "Choose which trip you're interested in..."
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "e.g. 3 Instagram posts, 2 TikTok videos, 1 YouTube short showcasing local attractions..."
+      },
+      "amount": {
+        "label": "Amount (USD)",
+        "placeholder": "500"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "send": "Send Offer",
+        "sending": "Sending..."
+      }
+    },
+    "offerMessage": {
+      "title": "Collaboration Offer",
+      "taskDescription": "Task Description:",
+      "status": {
+        "pending": "Pending",
+        "accepted": "Accepted", 
+        "rejected": "Rejected",
+        "paid": "Paid"
+      },
+      "buttons": {
+        "accept": "Accept",
+        "reject": "Reject",
+        "payNow": "Pay Now",
+        "processing": "Processing..."
+      },
+      "payment": {
+        "paid": "✅ Paid: ${amount}",
+        "date": "📅 {date}"
+      },
+      "systemMessages": {
+        "offerAccepted": {
+          "sidebar": "Offer accepted. Waiting for payment...",
+          "brand": "Creator accepted the offer. Waiting for payment...",
+          "creator": "You accepted the offer. Waiting for payment from brand..."
+        },
+        "offerRejected": {
+          "sidebar": "Creator declined the collaboration offer.",
+          "general": "Creator declined the collaboration offer."
+        }
+      }
+    }
+  },
   "browseCreators": {
     "title": "Browse Creators",
     "subtitle": "Find the perfect luxury travel creator for your brand. Filter by destination, travel dates, home city, audience size, and more.",
     "searchPlaceholder": "Search creators by name, location, or planned destinations...",
     "filters": {
+      "destination": "Destination",
+      "homeCity": "Home City",
       "anySize": "Any Size",
       "1k5k": "1K - 5K",
       "5k25k": "5K - 25K",
@@ -37,18 +133,21 @@
       "recentlyJoined": "Recently Joined",
       "mostFollowers": "Most Followers",
       "alphabetical": "Alphabetical",
-      "nextTripDate": "Next Trip Date"
+      "nextTripDate": "Next Trip Date",
+      "clearAllFilters": "Clear All Filters"
+    },
+    "results": {
+      "creatorsFound": "{count, plural, =1 {# Creator Found} other {# Creators Found}}",
+      "filteredResults": "Filtered results",
+      "allAvailable": "All available creators",
+      "noCreatorsFound": "No creators found",
+      "noCreatorsSubtext": "Try adjusting your search terms or filters to find the perfect creators for your brand."
     },
     "loading": "Loading creators...",
-    "noResults": "No creators found",
-    "tryAdjusting": "Try adjusting your filters",
-    "showFilters": "Show filters",
-    "hideFilters": "Hide filters"
-  },
-  "messages": {
-    "loading": "Loading conversations...",
-    "noConversations": "No conversations",
-    "startConversation": "Start conversation with a creator"
+    "messageModal": {
+      "collaborationInterest": "Hi {name}! I'm interested in collaborating with you for your upcoming trip to {destination}. ",
+      "generalInterest": "Hi {name}! I'm interested in discussing potential collaboration opportunities with you. "
+    }
   },
   "bookings": {
     "title": "Bookings & Payments",
@@ -60,25 +159,32 @@
       "totalSpent": "Total Spent"
     },
     "tabs": {
-      "all": "All",
-      "pending": "Pending",
-      "paid": "Paid",
-      "active": "Active",
-      "completed": "Completed"
-    },
-    "loading": "Loading bookings...",
-    "noBookings": "No bookings",
-    "startCollaborating": "Start collaborating with creators",
-    "actions": {
-      "releasePayment": "Release Payment",
-      "markComplete": "Mark Complete",
-      "viewDetails": "View Details"
-    },
-    "status": {
-      "pending": "Pending",
+      "allBookings": "All Bookings",
+      "pendingPayment": "Pending Payment",
       "paid": "Paid",
       "inProgress": "In Progress",
       "completed": "Completed"
+    },
+    "orders": {
+      "message": "Message",
+      "startWork": "Start Work",
+      "completePayment": "Complete & Release Payment",
+      "viewDetails": "View Details",
+      "updating": "Updating...",
+      "processing": "Processing...",
+      "paid": "Paid"
+    },
+    "empty": {
+      "noBookings": "No bookings found",
+      "noBookingsSubtitle": "You haven't made any bookings yet. Browse creators to start collaborating!",
+      "browseCreators": "Browse Creators"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load orders",
+      "paymentReleased": "Payment released successfully!",
+      "releaseFailed": "Failed to release payment",
+      "statusUpdated": "Order status updated!",
+      "updateFailed": "Failed to update order status"
     }
   },
   "stats": {
@@ -156,7 +262,8 @@
       "imageUploadFailed": "Failed to upload brand logo.",
       "invalidImageType": "Please select an image file",
       "imageTooLarge": "Image must be less than 5MB",
-      "loginRequired": "You must be logged in to create a brand profile"
+      "loginRequired": "You must be logged in to create a brand profile",
+      "redirecting": "Redirecting to dashboard..."
     },
     "validation": {
       "brandNameRequired": "Brand name is required",

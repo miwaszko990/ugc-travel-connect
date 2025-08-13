@@ -1,0 +1,7 @@
+{
+  "loading": {
+    "dashboard": "Ładowanie pulpitu...",
+    "authentication": "Sprawdzanie uwierzytelnienia...",
+    "message": "Ładowanie..."
+  }
+}

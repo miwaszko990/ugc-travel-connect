@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/app/lib/firebase';
@@ -10,10 +11,11 @@ import { useAuth } from '@/app/hooks/auth';
 import NewMessageModal from '@/app/components/messages/new-message-modal';
 import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
 import Navigation from '@/app/components/ui/navigation';
-import { MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon, CalendarIcon } from '@heroicons/react/24/outline';
-// import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import InstagramFeedManual from '@/app/components/creator/InstagramFeedManual';
+import { MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon, CalendarIcon, LinkIcon } from '@heroicons/react/24/outline';
+import dynamic from 'next/dynamic';
+import CreatorPackages from '@/app/components/creator/CreatorPackages';
+
+// Import framer-motion normally but conditionally render
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface TravelPlan {
@@ -40,6 +42,7 @@ interface CreatorProfile {
 export default function ClientCreatorProfile({ uid }: { uid: string }) {
   const router = useRouter();
   const { user } = useAuth();
+  const t = useTranslations('creator.profilePage');
   const [creator, setCreator] = useState<CreatorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,12 +55,20 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
   useEffect(() => {
     async function fetchCreatorProfile() {
       try {
-        // Get creator data
-        const creatorDoc = await getDoc(doc(db, 'users', uid));
+        setLoading(true);
+        
+        // Batch the Firestore operations for better performance
+        const [creatorDoc, tripsSnapshot] = await Promise.all([
+          getDoc(doc(db, 'users', uid)),
+          getDocs(query(
+            collection(db, 'users', uid, 'travelPlans'),
+            orderBy('startDate', 'asc'),
+            limit(5)
+          ))
+        ]);
         
         if (!creatorDoc.exists()) {
           setError('Creator not found');
-          setLoading(false);
           return;
         }
 
@@ -66,21 +77,11 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
         // Check if this is actually a creator
         if (creatorData.role !== 'creator') {
           setError('Not a valid creator profile');
-          setLoading(false);
           return;
         }
 
-        // Get upcoming travel plans
-        const travelPlansRef = collection(db, 'users', uid, 'travelPlans');
-        const tripsQuery = query(
-          travelPlansRef,
-          orderBy('startDate', 'asc'),
-          limit(5)
-        );
-        
-        const tripsSnapshot = await getDocs(tripsQuery);
+        // Process travel plans
         const travelPlans: TravelPlan[] = [];
-        
         tripsSnapshot.forEach(doc => {
           const data = doc.data();
           
@@ -123,6 +124,8 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
     fetchCreatorProfile();
   }, [uid]);
 
+
+
   // Check authentication when component mounts
   useEffect(() => {
     if (!loading && !user) {
@@ -146,15 +149,21 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
     return `${startMonth} ${startDay} – ${endMonth} ${endDay}, ${year}`;
   };
 
-  // Helper to get all date ranges for trips
-  const getTripDateRanges = () => {
+  // Helper to get all date ranges for trips - Memoized for performance
+  const getTripDateRanges = useMemo(() => {
     return creator?.travelPlans.map(trip => ({
       start: trip.startDate,
       end: trip.endDate,
       destination: trip.destination,
       color: '#8B0000',
     })) || [];
-  };
+  }, [creator?.travelPlans]);
+
+  // Memoize the formatted message for performance
+  const prefilledCollaborationMessage = useMemo(() => {
+    if (!creator) return '';
+    return `Hi ${creator.firstName}! I'm interested in collaborating with you on a potential UGC campaign. Could we discuss the details?`;
+  }, [creator?.firstName]);
 
   // Open message modal with prefilled message
   const handleOpenMessageModal = () => {
@@ -164,8 +173,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
     }
     
     if (!creator) return;
-    const message = `Hi ${creator.firstName}! I&apos;m interested in collaborating with you on a potential UGC campaign. Could we discuss the details?`;
-    setPrefilledMessage(message);
+    setPrefilledMessage(prefilledCollaborationMessage);
     setIsMessageModalOpen(true);
   };
 
@@ -178,7 +186,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-burgundy border-r-transparent mx-auto"></div>
             <div className="mt-6">
               <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-2">Lumo</h3>
-              <p className="text-lg text-subtext">Loading creator profile...</p>
+              <p className="text-lg text-subtext">{t('loading.profile')}</p>
             </div>
           </div>
         </div>
@@ -192,13 +200,13 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
         <Navigation sticky={true} />
         <div className="flex flex-col items-center justify-center min-h-screen px-6">
           <div className="text-center max-w-md">
-            <h1 className="text-3xl font-serif font-bold text-red-burgundy mb-4">{error || 'Creator not found'}</h1>
-            <p className="mb-8 text-subtext text-lg">The creator you're looking for doesn't exist or isn't available.</p>
+            <h1 className="text-3xl font-serif font-bold text-red-burgundy mb-4">{error || t('errors.notFound')}</h1>
+            <p className="mb-8 text-subtext text-lg">{t('errors.notFoundDescription')}</p>
             <Link href="/" className="group relative inline-flex items-center gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-6 py-3 rounded-2xl font-semibold border border-red-burgundy transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
               </svg>
-            Back to Home
+            {t('navigation.backToCreators')}
           </Link>
           </div>
         </div>
@@ -216,7 +224,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-burgundy border-r-transparent mx-auto"></div>
             <div className="mt-6">
               <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-2">Lumo</h3>
-              <p className="text-lg text-subtext">Checking authentication...</p>
+              <p className="text-lg text-subtext">{t('loading.authentication')}</p>
             </div>
           </div>
         </div>
@@ -244,14 +252,14 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
           </svg>
-            <span className="font-medium">Back to Creators</span>
+            <span className="font-medium">{t('navigation.backToCreators')}</span>
         </Link>
           
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-serif font-bold text-red-burgundy mb-3">
               {creator.firstName} {creator.lastName}
             </h1>
-            <p className="text-lg text-subtext mb-8">Luxury Travel Creator from {creator.homeCity}</p>
+            <p className="text-lg text-subtext mb-8">{t('hero.luxuryTravelCreator', { city: creator.homeCity })}</p>
             
             {/* Quick Stats */}
             <div className="inline-flex items-center gap-6 px-6 py-3 bg-white/50 backdrop-blur-sm rounded-2xl border border-red-burgundy/10">
@@ -261,7 +269,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
               </div>
               <div className="flex items-center gap-2">
                 <UserIcon className="h-4 w-4 text-red-burgundy" />
-                <span className="text-sm text-subtext">{creator.followerCount.toLocaleString()} followers</span>
+                <span className="text-sm text-subtext">{t('hero.followers', { count: creator.followerCount.toLocaleString() })}</span>
               </div>
               {creator.instagramHandle && (
                 <a 
@@ -303,6 +311,8 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
             </div>
                 </div>
 
+            <CreatorPackages />
+
             {/* Action Buttons */}
             <div className="space-y-4">
                 <button 
@@ -313,19 +323,28 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
                 <svg xmlns="http://www.w3.org/2000/svg" className="relative h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                   </svg>
-                <span className="relative">Message Creator</span>
+                <span className="relative">{t('actions.messageCreator')}</span>
                 </button>
             </div>
         </aside>
         
           {/* Right Column - Calendar & Instagram Feed */}
           <main className="space-y-8">
-          {/* Travel Calendar Section */}
+            {/* Instagram Connect Banner */}
+            <div className="bg-white rounded-3xl shadow-lg border border-red-burgundy/10 p-8 flex items-center gap-4">
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-red-burgundy/10">
+                <LinkIcon className="h-6 w-6 text-red-burgundy" />
+              </span>
+              <h2 className="text-2xl font-serif font-bold text-text">
+                {t('instagramConnectSoon')}
+              </h2>
+            </div>
+            {/* Travel Calendar Section */}
             <div className="bg-white rounded-3xl shadow-lg border border-red-burgundy/10 p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <CalendarIcon className="h-6 w-6 text-red-burgundy" />
-                  <h2 className="text-2xl font-serif font-bold text-text">Travel Calendar</h2>
+                  <h2 className="text-2xl font-serif font-bold text-text">{t('calendar.title')}</h2>
               </div>
             
             <button 
@@ -337,12 +356,12 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                      Hide Calendar
+                      {t('calendar.hideCalendar')}
                   </>
                 ) : (
                   <>
                       <CalendarIcon className="h-4 w-4" />
-                    View Full Calendar
+                    {t('calendar.showFullCalendar')}
                   </>
                 )}
             </button>
@@ -377,7 +396,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
               {/* Other Upcoming Trips - Matching the same design style */}
               {creator.travelPlans.length > 1 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-serif font-semibold text-gray-900 mb-4">Other Upcoming Trips</h3>
+                  <h3 className="text-lg font-serif font-semibold text-gray-900 mb-4">{t('trips.otherUpcomingTrips')}</h3>
                   <div className="space-y-4">
                     {creator.travelPlans.slice(1).map((trip, index) => (
                       <div key={trip.id} className="bg-gradient-to-r from-red-burgundy/5 to-red-burgundy/10 rounded-2xl p-6">
@@ -417,123 +436,128 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    {/* Calendar Component */}
-                    <div className="rounded-2xl border border-gray-100">
-                      {/* Month Navigation */}
-                      <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                        <button 
-                          onClick={() => {
-                            const newDate = new Date(currentDate);
-                            newDate.setMonth(newDate.getMonth() - 1);
-                            setCurrentDate(newDate);
-                          }}
-                          className="p-2 hover:bg-red-burgundy/5 rounded-lg transition-colors"
-                        >
-                          <ChevronLeftIcon className="h-5 w-5 text-red-burgundy" />
-                        </button>
-                        <h3 className="text-xl font-serif font-bold text-red-burgundy">
-                          {currentDate.toLocaleString('en-GB', { month: 'long', year: 'numeric' })}
-                        </h3>
-                        <button 
-                          onClick={() => {
-                            const newDate = new Date(currentDate);
-                            newDate.setMonth(newDate.getMonth() + 1);
-                            setCurrentDate(newDate);
-                          }}
-                          className="p-2 hover:bg-red-burgundy/5 rounded-lg transition-colors"
-                        >
-                          <ChevronRightIcon className="h-5 w-5 text-red-burgundy" />
-                        </button>
-                      </div>
-
-                      {/* Weekday Headers */}
-                      <div className="p-6">
-                        <div className="grid grid-cols-7 mb-4">
-                          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                            <div key={day} className="text-center text-xs font-medium text-subtext">
-                              {day}
-                            </div>
-                          ))}
+                      {/* Calendar Component */}
+                      <div className="rounded-2xl border border-gray-100">
+                        {/* Month Navigation */}
+                        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                          <button 
+                            onClick={() => {
+                              const newDate = new Date(currentDate);
+                              newDate.setMonth(newDate.getMonth() - 1);
+                              setCurrentDate(newDate);
+                            }}
+                            className="p-2 hover:bg-red-burgundy/5 rounded-lg transition-colors"
+                          >
+                            <ChevronLeftIcon className="h-5 w-5 text-red-burgundy" />
+                          </button>
+                          <h3 className="text-xl font-serif font-bold text-red-burgundy">
+                            {currentDate.toLocaleString('en-GB', { month: 'long', year: 'numeric' })}
+                          </h3>
+                          <button 
+                            onClick={() => {
+                              const newDate = new Date(currentDate);
+                              newDate.setMonth(newDate.getMonth() + 1);
+                              setCurrentDate(newDate);
+                            }}
+                            className="p-2 hover:bg-red-burgundy/5 rounded-lg transition-colors"
+                          >
+                            <ChevronRightIcon className="h-5 w-5 text-red-burgundy" />
+                          </button>
                         </div>
 
-                        {/* Calendar Grid */}
-                        <div className="grid grid-cols-7 gap-1">
-                          {Array.from({ length: 35 }, (_, i) => {
-                            const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i - 4);
-                            const today = new Date();
-                            const isToday = date.getDate() === today.getDate() && 
-                                            date.getMonth() === today.getMonth() && 
-                                            date.getFullYear() === today.getFullYear();
-                            const isTravelDay = getTripDateRanges().some(
-                              trip => date >= trip.start && date <= trip.end
-                            );
-                            const trip = getTripDateRanges().find(
-                              trip => date >= trip.start && date <= trip.end
-                            );
-                            const isCurrentMonth = date.getMonth() === currentDate.getMonth();
-                            const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-
-                          return (
-                              <div
-                                key={i}
-                                className={`
-                                  relative h-12 flex items-center justify-center group cursor-pointer
-                                  ${isCurrentMonth ? 'text-text' : 'text-subtext/30'}
-                                  ${isToday ? 'ring-1 ring-red-burgundy ring-offset-2 rounded-lg' : ''}
-                                  ${isTravelDay ? 'bg-red-burgundy/5 rounded-lg' : ''}
-                                  ${isWeekend && isCurrentMonth ? 'text-red-burgundy/80' : ''}
-                                  hover:bg-red-burgundy/10 transition-all duration-300
-                                `}
-                              >
-                                <span className={`
-                                  text-sm z-10 relative font-medium
-                                  ${isTravelDay ? 'text-red-burgundy' : ''}
-                                `}>
-                                  {date.getDate()}
-                                </span>
-                                
-                                {/* Travel Indicator */}
-                                {isTravelDay && (
-                                  <>
-                                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-red-burgundy"></div>
-                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                      <div className="absolute inset-0 bg-red-burgundy/10 rounded-lg"></div>
-                                      <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 bg-white px-2 py-0.5 rounded-full shadow-lg text-xs text-red-burgundy font-medium whitespace-nowrap">
-                                        {trip?.destination}
-                                      </div>
-                                    </div>
-                                  </>
-                                )}
-                            </div>
-                          );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Legend */}
-                      <div className="flex items-center justify-center space-x-6 border-t border-gray-100 p-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded-lg bg-red-burgundy/5 flex items-center justify-center">
-                            <div className="w-1 h-1 rounded-full bg-red-burgundy"></div>
+                        {/* Weekday Headers */}
+                        <div className="p-6">
+                          <div className="grid grid-cols-7 mb-4">
+                            {[
+                              t('calendar.weekdays.monday'),
+                              t('calendar.weekdays.tuesday'), 
+                              t('calendar.weekdays.wednesday'),
+                              t('calendar.weekdays.thursday'),
+                              t('calendar.weekdays.friday'),
+                              t('calendar.weekdays.saturday'),
+                              t('calendar.weekdays.sunday')
+                            ].map((day) => (
+                              <div key={day} className="text-center text-xs font-medium text-subtext">
+                                {day}
+                              </div>
+                            ))}
                           </div>
-                          <span className="text-xs text-subtext">Travel Days</span>
+
+                          {/* Calendar Grid */}
+                          <div className="grid grid-cols-7 gap-1">
+                            {Array.from({ length: 35 }, (_, i) => {
+                              const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i - 4);
+                              const today = new Date();
+                              const isToday = date.getDate() === today.getDate() && 
+                                              date.getMonth() === today.getMonth() && 
+                                              date.getFullYear() === today.getFullYear();
+                              const isTravelDay = getTripDateRanges.some(
+                                trip => date >= trip.start && date <= trip.end
+                              );
+                              const trip = getTripDateRanges.find(
+                                trip => date >= trip.start && date <= trip.end
+                              );
+                              const isCurrentMonth = date.getMonth() === currentDate.getMonth();
+                              const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
+                            return (
+                                <div
+                                  key={i}
+                                  className={`
+                                    relative h-12 flex items-center justify-center group cursor-pointer
+                                    ${isCurrentMonth ? 'text-text' : 'text-subtext/30'}
+                                    ${isToday ? 'ring-1 ring-red-burgundy ring-offset-2 rounded-lg' : ''}
+                                    ${isTravelDay ? 'bg-red-burgundy/5 rounded-lg' : ''}
+                                    ${isWeekend && isCurrentMonth ? 'text-red-burgundy/80' : ''}
+                                    hover:bg-red-burgundy/10 transition-all duration-300
+                                  `}
+                                >
+                                  <span className={`
+                                    text-sm z-10 relative font-medium
+                                    ${isTravelDay ? 'text-red-burgundy' : ''}
+                                  `}>
+                                    {date.getDate()}
+                                  </span>
+                                  
+                                  {/* Travel Indicator */}
+                                  {isTravelDay && (
+                                    <>
+                                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-red-burgundy"></div>
+                                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="absolute inset-0 bg-red-burgundy/10 rounded-lg"></div>
+                                        <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 bg-white px-2 py-0.5 rounded-full shadow-lg text-xs text-red-burgundy font-medium whitespace-nowrap">
+                                          {trip?.destination}
+                                        </div>
+                                      </div>
+                                    </>
+                                  )}
+                              </div>
+                            );
+                            })}
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded-lg ring-1 ring-red-burgundy ring-offset-2"></div>
-                          <span className="text-xs text-subtext">Today</span>
+
+                        {/* Legend */}
+                        <div className="flex items-center justify-center space-x-6 border-t border-gray-100 p-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-lg bg-red-burgundy/5 flex items-center justify-center">
+                              <div className="w-1 h-1 rounded-full bg-red-burgundy"></div>
+                            </div>
+                            <span className="text-xs text-subtext">{t('calendar.travelDays')}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-lg ring-1 ring-red-burgundy ring-offset-2"></div>
+                            <span className="text-xs text-subtext">{t('calendar.today')}</span>
+                          </div>
                         </div>
-                      </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
           </div>
           
             {/* Instagram Feed Section */}
-            <InstagramFeedManual 
-              creatorId={creator.uid}
-              instagramHandle={creator.instagramHandle}
-            />
+            {/* Removed InstagramFeedManual from PL localized page */}
         </main>
         </div>
       </div>

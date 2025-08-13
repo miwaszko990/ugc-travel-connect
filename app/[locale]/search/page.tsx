@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { collection, getDocs, query, where, orderBy, limit as limitQuery } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
 import { useAuth } from '@/app/hooks/auth';
 import Navigation from '@/app/components/ui/navigation';
 import CreatorCard from '@/app/components/creator/creator-card';
 import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
-import { MagnifyingGlassIcon, /* FunnelIcon, */ ChevronDownIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, FunnelIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface Creator {
   uid: string;
@@ -40,6 +41,7 @@ interface Filters {
 export default function SearchPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const t = useTranslations('search');
   const [creators, setCreators] = useState<Creator[]>([]);
   const [allCreators, setAllCreators] = useState<Creator[]>([]); // Store all creators
   const [loading, setLoading] = useState(true);
@@ -68,25 +70,25 @@ export default function SearchPage() {
   };
 
   const followerRanges = [
-    { label: 'Any Size', value: '' },
-    { label: '1K - 5K', value: '1k-5k' },
-    { label: '5K - 25K', value: '5k-25k' },
-    { label: '25K - 100K', value: '25k-100k' },
-    { label: '100K+', value: '100k+' }
+    { label: t('filters.followers.any'), value: '' },
+    { label: t('filters.followers.1k-5k'), value: '1k-5k' },
+    { label: t('filters.followers.5k-25k'), value: '5k-25k' },
+    { label: t('filters.followers.25k-100k'), value: '25k-100k' },
+    { label: t('filters.followers.100k+'), value: '100k+' }
   ];
 
   const tripStatusOptions = [
-    { label: 'Any Status', value: '' },
-    { label: 'Planned Trips', value: 'Planned' },
-    { label: 'Active Trips', value: 'Active' },
-    { label: 'Completed Trips', value: 'Completed' }
+    { label: t('filters.tripStatus.any'), value: '' },
+    { label: t('filters.tripStatus.planned'), value: 'Planned' },
+    { label: t('filters.tripStatus.active'), value: 'Active' },
+    { label: t('filters.tripStatus.completed'), value: 'Completed' }
   ];
 
   const sortOptions = [
-    { label: 'Recently Joined', value: 'recent' },
-    { label: 'Most Followers', value: 'followers' },
-    { label: 'Alphabetical', value: 'alphabetical' },
-    { label: 'Next Trip Date', value: 'tripDate' }
+    { label: t('filters.sort.recent'), value: 'recent' },
+    { label: t('filters.sort.followers'), value: 'followers' },
+    { label: t('filters.sort.alphabetical'), value: 'alphabetical' },
+    { label: t('filters.sort.tripDate'), value: 'tripDate' }
   ];
 
   // Fetch all creators once when component mounts
@@ -336,8 +338,8 @@ export default function SearchPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-burgundy border-r-transparent mx-auto"></div>
           <div className="mt-6">
-            <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-2">Lumo</h3>
-            <p className="text-lg text-subtext">Loading creators...</p>
+            <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-2">{t('loading.title')}</h3>
+            <p className="text-lg text-subtext">{t('loading.subtitle')}</p>
           </div>
         </div>
       </div>
@@ -353,10 +355,10 @@ export default function SearchPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-5xl lg:text-6xl font-serif font-bold text-red-burgundy mb-6">
-              Search All Creators
+              {t('title')}
             </h1>
             <p className="text-xl text-subtext max-w-3xl mx-auto">
-              Find the perfect luxury travel creator for your brand. Filter by destination, travel dates, home city, audience size, and more.
+              {t('subtitle')}
             </p>
           </div>
           
@@ -366,7 +368,7 @@ export default function SearchPage() {
               <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-subtext" />
               <input
                 type="text"
-                placeholder="Search creators by name, location, or planned destinations..."
+                placeholder={t('search.placeholder')}
                 value={filters.search}
                 onChange={(e) => updateFilter('search', e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-ivory border border-border/30 rounded-2xl text-text placeholder-subtext/60 focus:outline-none focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy/40 transition-all duration-300 text-lg shadow-sm"
@@ -379,13 +381,13 @@ export default function SearchPage() {
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
                 <FunnelIcon className="h-5 w-5 text-red-burgundy" />
-                <span className="font-semibold text-text">Filters</span>
+                <span className="font-semibold text-text">{t('filters.title')}</span>
                 {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
                   className="text-sm text-red-burgundy hover:text-red-wine font-medium transition-colors duration-300"
                 >
-                  Clear All
+                  {t('filters.clearAll')}
                 </button>
                 )}
               </div>
@@ -395,7 +397,7 @@ export default function SearchPage() {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Home city..."
+                    placeholder={t('filters.homeCity')}
                     value={filters.homeCity}
                     onChange={(e) => updateFilter('homeCity', e.target.value)}
                     className="w-full px-3 py-2.5 bg-background border border-border/30 rounded-lg text-sm text-text placeholder-subtext/60 focus:outline-none focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy/40 transition-all duration-300"
@@ -406,7 +408,7 @@ export default function SearchPage() {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Destination..."
+                    placeholder={t('filters.destination')}
                     value={filters.destination}
                     onChange={(e) => updateFilter('destination', e.target.value)}
                     className="w-full px-3 py-2.5 bg-background border border-border/30 rounded-lg text-sm text-text placeholder-subtext/60 focus:outline-none focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy/40 transition-all duration-300"
@@ -417,7 +419,7 @@ export default function SearchPage() {
                 <div className="relative">
                   <input
                     type="date"
-                    placeholder="From date..."
+                    placeholder={t('filters.dateStart')}
                     value={filters.dateStart}
                     onChange={(e) => updateFilter('dateStart', e.target.value)}
                     className="w-full px-3 py-2.5 bg-background border border-border/30 rounded-lg text-sm text-text focus:outline-none focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy/40 transition-all duration-300"
@@ -428,7 +430,7 @@ export default function SearchPage() {
                 <div className="relative">
                   <input
                     type="date"
-                    placeholder="To date..."
+                    placeholder={t('filters.dateEnd')}
                     value={filters.dateEnd}
                     onChange={(e) => updateFilter('dateEnd', e.target.value)}
                     className="w-full px-3 py-2.5 bg-background border border-border/30 rounded-lg text-sm text-text focus:outline-none focus:ring-2 focus:ring-red-burgundy/20 focus:border-red-burgundy/40 transition-all duration-300"
@@ -488,43 +490,43 @@ export default function SearchPage() {
         <div className="flex items-center justify-between mb-12">
           <div>
             <h2 className="text-3xl font-serif font-bold text-text mb-2">
-                {creators.length} Creator{creators.length !== 1 ? 's' : ''} Found
-              </h2>
+              {t('results.creatorsFound', { count: creators.length })}
+            </h2>
             <p className="text-subtext">
-              {hasActiveFilters ? 'Filtered results' : 'All available creators'}
+              {hasActiveFilters ? t('results.filtered') : t('results.all')}
             </p>
           </div>
-            </div>
+        </div>
 
         {/* Creator Grid - Enhanced */}
-            {creators.length > 0 ? (
+        {creators.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-                {creators.map((creator) => (
+            {creators.map((creator) => (
               <div key={creator.uid} className="transform hover:scale-[1.01] transition-transform duration-300">
-                  <CreatorCard
-                    creator={creator}
+                <CreatorCard
+                  creator={creator}
                   onClick={() => handleCreatorClick(creator)}
-                  />
+                />
               </div>
             ))}
-              </div>
-            ) : (
+          </div>
+        ) : (
           <div className="text-center py-20">
             <div className="max-w-md mx-auto">
               <div className="w-20 h-20 mx-auto mb-6 bg-red-burgundy/10 rounded-full flex items-center justify-center">
                 <MagnifyingGlassIcon className="h-10 w-10 text-red-burgundy" />
-                </div>
-                <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-3">No creators found</h3>
-              <p className="text-subtext text-lg mb-8">
-                Try adjusting your search terms or filters to find the perfect creators for your brand.
-              </p>
-                <button
-                  onClick={clearFilters}
-                className="group relative inline-flex items-center gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 border border-red-burgundy shadow-sm hover:shadow-md"
-                >
-                Clear All Filters
-                </button>
               </div>
+              <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-3">{t('results.noCreators.title')}</h3>
+              <p className="text-subtext text-lg mb-8">
+                {t('results.noCreators.subtitle')}
+              </p>
+              <button
+                onClick={clearFilters}
+                className="group relative inline-flex items-center gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 border border-red-burgundy shadow-sm hover:shadow-md"
+              >
+                {t('results.noCreators.clearFilters')}
+              </button>
+            </div>
           </div>
         )}
       </div>

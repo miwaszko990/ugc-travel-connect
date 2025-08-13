@@ -1,7 +1,8 @@
 {
   "navigation": {
+    "home": "Home",
     "travelPlans": "Travel Plans",
-    "messages": "Messages", 
+    "messages": "Messages",
     "earnings": "Earnings",
     "editProfile": "Edit Profile",
     "travel": "Travel",
@@ -10,5 +11,402 @@
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar",
     "brandAltText": "Creator"
+  },
+  "messaging": {
+    "loading": {
+      "conversations": "Loading conversations...",
+      "conversations_generic": "Loading conversations..."
+    },
+    "sidebar": {
+      "conversationCount": "{count, plural, =1 {# conversation} other {# conversations}}",
+      "noConversations": {
+        "title": "No conversations yet",
+        "subtitle": "Brands will message you here when interested in collaborations"
+      },
+      "noMessages": "No messages yet"
+    },
+    "chat": {
+      "selectConversation": {
+        "title": "Select a conversation",
+        "subtitle": "Choose a conversation from the sidebar to start messaging"
+      },
+      "noMessages": {
+        "title": "No messages yet",
+        "subtitle": "Start the conversation below"
+      },
+      "messageInput": {
+        "placeholder": "Type a message...",
+        "sendButton": "Send message"
+      },
+      "status": {
+        "processing": "Processing...",
+        "sending": "Sending..."
+      }
+    },
+    "offerMessage": {
+      "title": "Collaboration Offer",
+      "taskDescription": "Task Description:",
+      "status": {
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "rejected": "Rejected",
+        "paid": "Paid"
+      },
+      "buttons": {
+        "accept": "Accept",
+        "reject": "Reject",
+        "processing": "Processing..."
+      },
+      "payment": {
+        "paid": "✅ Paid: ${amount}",
+        "date": "📅 {date}"
+      },
+      "systemMessages": {
+        "offerAccepted": {
+          "sidebar": "Offer accepted. Waiting for payment...",
+          "brand": "Creator accepted the offer. Waiting for payment...",
+          "creator": "You accepted the offer. Waiting for payment from brand..."
+        },
+        "offerRejected": {
+          "sidebar": "Creator declined the collaboration offer.",
+          "general": "Creator declined the collaboration offer."
+        }
+      }
+    }
+  },
+  "earnings": {
+    "title": "Earnings Dashboard",
+    "subtitle": "Track your earnings, manage active projects, and view payment history",
+    "stats": {
+      "totalEarned": "Total Earned",
+      "pendingPayment": "Pending Payment",
+      "jobsCompleted": "Jobs Completed",
+      "avgPerJob": "Avg per Job"
+    },
+    "tabs": {
+      "allOrders": "All Orders",
+      "newOrders": "New Orders",
+      "activeWork": "Active Work",
+      "completed": "Completed"
+    },
+    "orders": {
+      "noOrders": "No orders yet",
+      "noOrdersSubtitle": "When brands book you for content creation, orders will appear here",
+      "messageBrand": "Message Brand",
+      "startWork": "Start Work",
+      "completeWork": "Mark Complete",
+      "uploadMaterials": "Upload Materials"
+    },
+    "paymentSettings": {
+      "title": "Payment Settings",
+      "subtitle": "Manage your payout methods and tax information",
+      "setupPayouts": "Setup Payouts"
+    },
+    "toasts": {
+      "startingWork": "Starting work on order...",
+      "workStarted": "Work started! Order status updated",
+      "workStartFailed": "Failed to start work",
+      "materialsDelivered": "Materials delivered. Brand has been notified."
+    }
+  },
+  "fileDelivery": {
+    "title": "Upload Materials",
+    "subtitle": "Deliver your final content to {brandName}",
+    "sections": {
+      "files": "Upload Files",
+      "noteToBrand": "Note to Brand (Optional)",
+      "externalLinks": "Link to Large Files (Optional)"
+    },
+    "dropzone": {
+      "title": "Drag and drop files here",
+      "subtitle": "or click to select files from your computer",
+      "selectFiles": "Select Files",
+      "supportedTypes": "Images, videos, PDFs, presentations up to 100MB"
+    },
+    "fileList": {
+      "title": "Files to Upload",
+      "uploaded": "Uploaded",
+      "ready": "Ready to upload"
+    },
+    "placeholders": {
+      "noteToBrand": "Add a message for the brand about your deliverables...",
+      "externalLinks": "Add links to WeTransfer, Google Drive, Dropbox, etc..."
+    },
+    "hints": {
+      "externalLinks": "For files larger than 100MB, use external file sharing services"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "sendForApproval": "Send for Approval",
+      "uploading": "Uploading..."
+    },
+    "validation": {
+      "fileTooLarge": "File is too large (max 100MB)",
+      "fileTypeNotAllowed": "File type not supported",
+      "noFiles": "Please select at least one file"
+    },
+    "success": {
+      "materialsDelivered": "Materials delivered successfully!"
+    },
+    "errors": {
+      "deliveryFailed": "Failed to deliver materials. Please try again."
+    },
+    "info": {
+      "title": "Delivery Information",
+      "maxFileSize": "Maximum file size: 100MB per file",
+      "supportedFormats": "Supported: Images, Videos, PDFs, ZIP, PowerPoint",
+      "deliveryProcess": "Brand will be notified and can review your materials"
+    }
+  },
+  "dashboard": {
+    "title": "Creator Dashboard",
+    "loading": "Loading dashboard..."
+  },
+  "travelCalendar": {
+    "title": "Travel Calendar",
+    "subtitle": "Manage your upcoming destinations and let brands find you",
+    "planFirstTrip": "Plan Your First Trip",
+    "loading": "Loading travel plans...",
+    "fields": {
+      "destination": {
+        "label": "Destination",
+        "placeholder": "e.g. Paris"
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "e.g. France"
+      },
+      "startDate": {
+        "label": "Start Date"
+      },
+      "endDate": {
+        "label": "End Date"
+      },
+      "status": {
+        "label": "Status"
+      }
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "saveTrip": "Save Trip",
+      "saving": "Saving..."
+    },
+    "noTrips": {
+      "title": "Ready to explore the world?",
+      "subtitle": "Add your first destination and start building your creator profile for brands to discover",
+      "buttonText": "Plan Your First Trip"
+    },
+    "statuses": {
+      "planned": "Planned",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "daysUntil": "in {days} days",
+    "actions": {
+      "edit": "Edit trip",
+      "delete": "Delete trip"
+    }
+  },
+  "addTripModal": {
+    "title": "Add New Trip",
+    "fields": {
+      "destination": {
+        "label": "Destination",
+        "placeholder": "e.g. Paris"
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "e.g. France"
+      },
+      "startDate": {
+        "label": "Start Date"
+      },
+      "endDate": {
+        "label": "End Date"
+      },
+      "status": {
+        "label": "Status",
+        "options": {
+          "planned": "Planned",
+          "active": "Active",
+          "completed": "Completed"
+        }
+      }
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "saveTrip": "Save Trip"
+    }
+  },
+  "profileSetup": {
+    "title": {
+      "create": "Complete Your Creator Profile",
+      "edit": "Edit Your Creator Profile"
+    },
+    "subtitle": {
+      "create": "Tell us about yourself and start attracting brands",
+      "edit": "Update your profile information"
+    },
+    "form": {
+      "firstName": {
+        "label": "First Name *",
+        "placeholder": "e.g. Maria",
+        "required": "First name is required"
+      },
+      "lastName": {
+        "label": "Last Name *",
+        "placeholder": "e.g. Kowalski",
+        "required": "Last name is required"
+      },
+      "homeCity": {
+        "label": "Home City *",
+        "placeholder": "e.g. Warsaw",
+        "required": "Home city is required"
+      },
+      "instagramHandle": {
+        "label": "Instagram Handle",
+        "placeholder": "e.g. mariakowalski"
+      },
+      "followerCount": {
+        "label": "Follower Count",
+        "placeholder": "e.g. 10000"
+      },
+      "bio": {
+        "label": "Bio",
+        "placeholder": "Tell us about yourself and your travel content..."
+      },
+      "profileImage": {
+        "addPhoto": "Add photo",
+        "uploadProgress": "Uploading: {progress}%"
+      }
+    },
+    "profileImage": {
+      "title": "Profile Photo",
+      "subtitle": "Upload a professional photo that represents you",
+      "uploadText": "Click to upload",
+      "dragText": "or drag and drop",
+      "formatText": "PNG, JPG, GIF up to 10MB"
+    },
+    "buttons": {
+      "save": "Save Profile",
+      "saving": "Saving..."
+    },
+    "messages": {
+      "loginRequired": "You must be logged in to create a profile",
+      "imageUploadFailed": "Failed to upload profile image.",
+      "invalidImageType": "Please select an image file",
+      "imageTooLarge": "Image must be less than 5MB",
+      "profileCreateSuccess": "Profile created successfully!",
+      "profileUpdateSuccess": "Profile updated successfully!",
+      "profileSaveFailed": "Failed to update profile. Please try again."
+    },
+    "loading": {
+      "title": "Loading Profile...",
+      "subtitle": "Please wait while we load your profile information"
+    }
+  },
+  "profilePage": {
+    "loading": {
+      "profile": "Loading creator profile...",
+      "authentication": "Checking authentication..."
+    },
+    "errors": {
+      "notFound": "Creator not found",
+      "notFoundDescription": "The creator you're looking for doesn't exist or isn't available.",
+      "invalidProfile": "Not a valid creator profile",
+      "loadFailed": "Failed to load creator profile"
+    },
+    "navigation": {
+      "backToCreators": "Back to Creators"
+    },
+    "hero": {
+      "luxuryTravelCreator": "Luxury Travel Creator from {city}",
+      "followers": "{count} followers"
+    },
+    "actions": {
+      "messageCreator": "Message Creator"
+    },
+    "calendar": {
+      "title": "Travel Calendar",
+      "showFullCalendar": "View Full Calendar",
+      "hideCalendar": "Hide Calendar",
+      "travelDays": "Travel Days",
+      "today": "Today",
+      "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+      },
+      "weekdays": {
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun"
+      }
+    },
+    "trips": {
+      "otherUpcomingTrips": "Other Upcoming Trips",
+      "statuses": {
+        "planned": "Planned",
+        "active": "Active",
+        "completed": "Completed"
+      }
+          },
+      "packages": {
+        "title": "Creator Packages",
+        "mini": {
+          "title": "Mini Social Boost – PLN 200",
+          "bullets": {
+            "stories": "3 x Instagram Stories",
+            "tagging": "Brand tagging + 1 swipe-up link",
+            "delivery": "Delivery within 24 hours of recording"
+          }
+        },
+        "content": {
+          "title": "Content Impact – PLN 450",
+          "bullets": {
+            "video": "1 x Instagram Reel or TikTok video (up to 30 seconds)",
+            "story": "1 x Instagram Story promoting the content",
+            "editing": "Editing the content + adapting it to the platform"
+          }
+        },
+        "full": {
+          "title": "Full Campaign Package – PLN 900",
+          "bullets": {
+            "reelsTikTok": "1 x Instagram Reel and 1 x TikTok (adapted to both platforms)",
+            "stories": "3 x Instagram Stories (promoting the content)",
+            "versions": "Vertical and horizontal versions",
+            "delivery": "Delivery within 3 business days"
+          }
+        },
+        "photosComingSoon": "Instagram photos section is coming soon. You'll be able to add posts here in the future."
+      },
+      "instagramConnectSoon": "You'll be able to connect your Instagram soon.",
+      "latestFromInstagram": "Latest from Instagram",
+    "instagram": {
+      "add": "Add Instagram Post",
+      "urlPlaceholder": "Paste Instagram post or reel URL…",
+      "submit": "Add",
+      "adding": "Adding…",
+      "empty": "No posts yet",
+      "errors": {
+        "invalidUrl": "Please paste a valid Instagram post or reel URL.",
+        "fetch": "Could not fetch preview. Try another URL.",
+        "rate": "Too many requests. Please wait and try again."
+      },
+      "viewOnInstagram": "View on Instagram"
+    }
   }
 }

@@ -15,14 +15,7 @@ import { useRouter } from 'next/navigation';
 
 // Client component optimized for performance
 
-// Lazy load LanguageSwitcher - it's not critical for login functionality
-const LanguageSwitcher = dynamic(
-  () => import('@/app/components/ui/language-switcher').then(mod => ({ default: mod.LanguageSwitcher })),
-  { 
-    ssr: false,
-    loading: () => <div className="w-20 h-8 bg-gray-100 rounded animate-pulse" />
-  }
-)
+
 
 // Constants for better performance and maintainability
 const FORM_TIMEOUT = 30000; // 30 seconds
@@ -303,12 +296,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-ivory p-4">
       <div className={`bg-white ${AUTH_CONSTANTS.FORM.CARD_RADIUS} shadow-lg p-8 ${AUTH_CONSTANTS.FORM.MAX_WIDTH} w-full`}>
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-neutral mb-2 font-playfair">{t('welcomeBack')}</h1>
-            <p className="text-gray-500 text-sm font-inter">{t('loginToAccount')}</p>
-          </div>
-          <LanguageSwitcher />
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-neutral mb-2 font-playfair">{t('welcomeBack')}</h1>
+          <p className="text-gray-500 text-sm font-inter">{t('loginToAccount')}</p>
         </div>
         
         <div className="mb-5"></div>

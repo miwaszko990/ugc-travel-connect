@@ -26,12 +26,12 @@ export function getAuthErrorType(error: string | null): AuthErrorType {
 }
 
 /**
- * Gets the appropriate dashboard path based on user role
+ * Gets the appropriate dashboard path based on user role and locale
  */
-export function getDashboardPath(role: 'creator' | 'brand'): string {
+export function getDashboardPath(role: 'creator' | 'brand', locale: string = 'pl'): string {
   return role === 'creator' 
-    ? '/dashboard/creator/profile-setup' 
-    : '/dashboard/brand/profile-setup';
+    ? `/${locale}/dashboard/creator/profile-setup` 
+    : `/${locale}/dashboard/brand/profile-setup`;
 }
 
 /**

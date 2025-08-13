@@ -20,6 +20,6 @@ export const STRIPE_CONFIG = {
   currency: 'usd',
   payment_method_types: ['card'],
   mode: 'payment' as const,
-  success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/brand?tab=messages&payment=success`,
-  cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/brand?tab=messages&payment=cancelled`,
+  success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/en/dashboard/brand?tab=messages&payment=success`,
+  cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/en/dashboard/brand?tab=messages&payment=cancelled`,
 }; // review trigger

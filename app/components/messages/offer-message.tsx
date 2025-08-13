@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Message } from '@/app/lib/firebase/messages';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -28,7 +29,20 @@ export default function OfferMessage({
 }: OfferMessageProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const timestamp = message.sentAt?.toDate?.() || new Date(message.sentAt);
+  const t = useTranslations('brand.messaging.offerMessage');
+  
+  // Helper function to safely convert timestamps to Date objects
+  const toSafeDate = (timestamp: any): Date => {
+    if (timestamp?.toDate && typeof timestamp.toDate === 'function') {
+      return timestamp.toDate();
+    }
+    if (timestamp?.seconds) {
+      return new Date(timestamp.seconds * 1000);
+    }
+    return new Date(timestamp);
+  };
+  
+  const timestamp = toSafeDate(message.sentAt);
   
   if (!message.trip || !message.description || !message.price) {
     return null;
@@ -79,7 +93,7 @@ export default function OfferMessage({
         tripCountry: message.trip.country,
       };
 
-      const { url } = await createCheckoutSession(checkoutData);
+      const { url } = await createCheckoutSession(checkoutData) as { url: string };
       await redirectToCheckout(url);
     } catch (error: any) {
       console.error('Payment initiation failed:', error);
@@ -125,28 +139,28 @@ export default function OfferMessage({
           textColor: 'text-green-600', 
           bgColor: 'bg-green-50', 
           borderColor: 'border-green-200',
-          text: 'Accepted' 
+          text: t('status.accepted') 
         };
       case 'rejected':
         return { 
           textColor: 'text-red-600', 
           bgColor: 'bg-red-50', 
           borderColor: 'border-red-200',
-          text: 'Rejected' 
+          text: t('status.rejected') 
         };
       case 'paid':
-        return { 
-          textColor: 'text-blue-600', 
+        return {
+          textColor: 'text-blue-700', 
           bgColor: 'bg-blue-50', 
           borderColor: 'border-blue-200',
-          text: 'Paid' 
+          text: t('status.paid')
         };
       default:
-        return { 
-          textColor: 'text-yellow-600', 
+        return {
+          textColor: 'text-yellow-700', 
           bgColor: 'bg-yellow-50', 
           borderColor: 'border-yellow-200',
-          text: 'Pending' 
+          text: t('status.pending')
         };
     }
   };
@@ -179,7 +193,7 @@ export default function OfferMessage({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span className="text-lg">💼</span>
-              <span className="font-semibold">Collaboration Offer</span>
+                              <span className="font-semibold">{t('title')}</span>
             </div>
             <div className={`px-2 py-1 rounded-full text-xs font-medium ${statusDisplay.textColor} ${statusDisplay.bgColor} ${statusDisplay.borderColor} border`}>
               {statusDisplay.text}
@@ -194,13 +208,13 @@ export default function OfferMessage({
               📍 {message.trip.destination}
             </h4>
             <p className={`text-sm ${isFromUser ? 'text-red-burgundy/70' : 'text-gray-600'}`}>
-              {format(new Date(message.trip.startDate), 'MMM d')} - {format(new Date(message.trip.endDate), 'MMM d, yyyy')}
+              {format(toSafeDate(message.trip.startDate), 'MMM d')} - {format(toSafeDate(message.trip.endDate), 'MMM d, yyyy')}
             </p>
           </div>
 
           <div>
             <h5 className={`font-medium text-sm ${isFromUser ? 'text-white' : 'text-gray-900'}`}>
-              Task Description:
+              {t('taskDescription')}
             </h5>
             <p className={`text-sm ${isFromUser ? 'text-red-burgundy/70' : 'text-gray-600'}`}>
               {message.description}
@@ -216,8 +230,11 @@ export default function OfferMessage({
           {/* Payment Info for Paid Offers */}
           {message.offerStatus === 'paid' && message.paymentData && (
             <div className={`text-sm ${isFromUser ? 'text-red-burgundy/70' : 'text-gray-600'}`}>
-              <p>✅ Paid: ${message.paymentData.amountPaid.toLocaleString()}</p>
-              <p>📅 {format(new Date(message.paymentData.paidAt), 'MMM d, yyyy')}</p>
+              <p>{t('payment.paid').replace('${amount}', message.paymentData.amountPaid.toLocaleString())}</p>
+              <p>{t('payment.date').replace('{date}', format(
+                toSafeDate(message.paymentData.paidAt), 
+                'MMM d, yyyy'
+              ))}</p>
             </div>
           )}
         </div>
@@ -231,14 +248,14 @@ export default function OfferMessage({
                 disabled={isProcessing}
                 className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isProcessing ? 'Processing...' : 'Accept'}
+                {isProcessing ? t('buttons.processing') : t('buttons.accept')}
               </button>
               <button
                 onClick={handleReject}
                 disabled={isProcessing}
                 className="flex-1 bg-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isProcessing ? 'Processing...' : 'Reject'}
+                {isProcessing ? t('buttons.processing') : t('buttons.reject')}
               </button>
             </div>
           </div>
@@ -255,12 +272,12 @@ export default function OfferMessage({
               {isPaymentProcessing ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Processing...</span>
+                  <span>{t('buttons.processing')}</span>
                 </>
               ) : (
                 <>
                   <span>💳</span>
-                  <span>Pay Now - ${message.price.toLocaleString()}</span>
+                  <span>{t('buttons.payNow')} - ${message.price.toLocaleString()}</span>
                 </>
               )}
             </button>

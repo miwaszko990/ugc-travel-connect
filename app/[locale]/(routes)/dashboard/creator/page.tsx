@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { doc, getDoc, DocumentData } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from '@/app/components/ui/spinner';
+import { useLocale } from 'next-intl';
 
 // Import our components
 import ProfileSidebar from '@/app/components/creator/profile-sidebar';
@@ -17,6 +19,8 @@ export default function CreatorDashboard() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('creator.dashboard');
+  const locale = useLocale();
   const [loading, setLoading] = useState(true);
   const [hasProfile, setHasProfile] = useState(false);
   const [profile, setProfile] = useState<DocumentData | null>(null);
@@ -68,10 +72,10 @@ export default function CreatorDashboard() {
             setProfile(userData);
             setLoading(false);
           } else {
-            router.push('/dashboard/creator/profile-setup');
+            router.push(`/${locale}/dashboard/creator/profile-setup`);
           }
         } else {
-          router.push('/dashboard/creator/profile-setup');
+          router.push(`/${locale}/dashboard/creator/profile-setup`);
         }
       } catch (error) {
         console.error('Error checking creator profile:', error);
@@ -79,13 +83,13 @@ export default function CreatorDashboard() {
           setHasProfile(true);
           setLoading(false);
         } else {
-          router.push('/dashboard/creator/profile-setup');
+          router.push(`/${locale}/dashboard/creator/profile-setup`);
         }
       }
     };
     
     checkCreatorProfile();
-  }, [user, router]);
+  }, [user, router, locale]);
 
   // Memoized components to prevent unnecessary re-renders
   const TravelPlansComponent = useMemo(() => 
@@ -100,7 +104,10 @@ export default function CreatorDashboard() {
     return (
       <div className="min-h-screen bg-gray-50 flex justify-center items-center">
         <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <Spinner size="lg" />
+          <div className="text-center">
+            <Spinner size="lg" />
+            <p className="mt-4 text-gray-600 font-inter">{t('loading')}</p>
+          </div>
         </div>
       </div>
     );

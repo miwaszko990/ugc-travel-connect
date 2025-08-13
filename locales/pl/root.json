@@ -1,0 +1,55 @@
+{
+  "navigation": {
+    "howItWorks": "Jak to działa?",
+    "about": "O nas",
+    "search": "Szukaj",
+    "login": "Zaloguj się",
+    "signup": "Zarejestruj się",
+    "travelConnect": "Travel Connect"
+  },
+  "hero": {
+    "badge": "ZDOBĄDŹ CONTENT Z DOWOLNEGO MIEJSCA",
+    "title": "Lumo",
+    "subtitle": "Zarabiaj tworząc content dla marek z miejsca w którym aktualnie jesteś.",
+    "description": "Połącz się z najlepszymi content creatorami w szybki i bezpieczny sposób. ",
+    "ctaButton": "Odkryj Twórców",
+    "stats": {
+      "campaigns": {
+        "number": "2,3K+",
+        "label": "Kampanii"
+      },
+      "creators": {
+        "number": "500+",
+        "label": "Najlepsi Twórcy"
+      },
+      "satisfaction": {
+        "number": "4,9/5",
+        "label": "Zadowolenie Klientów"
+      }
+    }
+  },
+  "featuredCreators": {
+    "title": "Polecani Twórcy",
+    "subtitle": "Znajdź Twórców, którzy ożwią Twoje social media poprzez autentyczne opowieści i treści z dowolnego miejsca na świecie",
+    "viewAllButton": "Zobacz wszystkich Twórców",
+    "noCreatorsFound": "Nie znaleziono twórców. Spróbuj ponownie później."
+  },
+  "loading": {
+    "title": "Lumo",
+    "subtitle": "Odkrywaj twórców..."
+  },
+  "footer": {
+    "copyright": "© 2024 Lumo Travel Connect. Wszelkie prawa zastrzeżone.",
+    "privacy": "Polityka Prywatności",
+    "terms": "Regulamin",
+    "contact": "Kontakt"
+  },
+  "userMenu": {
+    "signedInAs": "Zalogowany jako",
+    "openUserMenu": "Otwórz menu użytkownika",
+    "dashboard": "Dashboard",
+    "profile": "Profil",
+    "settings": "Ustawienia", 
+    "signOut": "Wyloguj się"
+  }
+}

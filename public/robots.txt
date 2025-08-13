@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Main sitemap
+Sitemap: https://your-domain.com/sitemap.xml
+
+# Block admin and private areas
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /_next/
+Disallow: /admin/
+
+# Allow specific public pages
+Allow: /
+Allow: /pl/
+Allow: /en/
+Allow: /pl/auth/
+Allow: /en/auth/
+Allow: /pl/creator/
+Allow: /en/creator/
+Allow: /pl/search/
+Allow: /en/search/
+
+# Crawl-delay for being respectful
+Crawl-delay: 1 

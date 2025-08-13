@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useAuth } from '@/app/hooks/auth';
@@ -20,6 +21,7 @@ interface OfferModalProps {
 
 export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creatorName }: OfferModalProps) {
   const { user } = useAuth();
+  const t = useTranslations('brand.messaging.offerModal');
   const [selectedTripId, setSelectedTripId] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -100,7 +102,7 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Send Collaboration Offer</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{t('title')}</h3>
           <button
             onClick={handleClose}
             disabled={isSubmitting}
@@ -114,19 +116,19 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
           {/* Trip Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Trip
+              {t('trip.label')}
             </label>
             {!creatorId ? (
               <div className="w-full border border-gray-300 rounded px-3 py-2 text-gray-500 text-sm">
-                No creator selected
+                {t('trip.noCreator')}
               </div>
             ) : loadingTrips ? (
               <div className="w-full border border-gray-300 rounded px-3 py-2 text-gray-500 text-sm">
-                Loading trips...
+                {t('trip.loading')}
               </div>
             ) : trips.length === 0 ? (
               <div className="w-full border border-gray-300 rounded px-3 py-2 text-gray-500 text-sm">
-                No trips available
+                {t('trip.noTrips')}
               </div>
             ) : (
               <select
@@ -136,7 +138,7 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
                 required
                 disabled={isSubmitting}
               >
-                <option value="">Choose which trip you're interested in...</option>
+                <option value="">{t('trip.placeholder')}</option>
                 {trips.map((trip) => (
                   <option key={trip.id} value={trip.id}>
                     {trip.destination}, {trip.country}
@@ -149,12 +151,12 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
           {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
+              {t('description.label')}
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="e.g. 3 Instagram posts, 2 TikTok videos, 1 YouTube short showcasing local attractions..."
+              placeholder={t('description.placeholder')}
               rows={3}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:border-red-burgundy focus:ring-1 focus:ring-red-burgundy resize-none text-sm"
               required
@@ -165,7 +167,7 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
           {/* Price */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Amount (USD)
+              {t('amount.label')}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-2 text-gray-500 text-sm">$</span>
@@ -173,7 +175,7 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                placeholder="500"
+                placeholder={t('amount.placeholder')}
                 min="1"
                 className="w-full border border-gray-300 rounded pl-7 pr-3 py-2 focus:border-red-burgundy focus:ring-1 focus:ring-red-burgundy text-sm"
                 required
@@ -190,14 +192,14 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
               disabled={isSubmitting}
               className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 disabled:opacity-50 text-sm"
             >
-              Cancel
+              {t('buttons.cancel')}
             </button>
             <button
               type="submit"
               disabled={isSubmitting || loadingTrips || trips.length === 0 || !creatorId}
               className="flex-1 bg-red-burgundy text-white px-4 py-2 rounded hover:bg-red-burgundy/90 disabled:opacity-50 text-sm font-medium"
             >
-              {isSubmitting ? 'Sending...' : 'Send Offer'}
+              {isSubmitting ? t('buttons.sending') : t('buttons.send')}
             </button>
           </div>
         </form>

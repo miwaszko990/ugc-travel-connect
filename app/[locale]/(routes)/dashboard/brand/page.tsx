@@ -7,12 +7,23 @@ import { doc, getDoc, DocumentData } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from '@/app/components/ui/spinner';
+import { useLocale } from 'next-intl';
 
-// Import brand components
+// Lazy load brand components for better performance
 import BrandProfileSidebar from '@/app/components/brand/profile-sidebar';
-import BrowseCreators from '@/app/components/brand/browse-creators';
-import BrandMessages from '@/app/components/brand/messages';
-import BrandBookings from '@/app/components/brand/bookings';
+import dynamic from 'next/dynamic';
+
+const BrowseCreators = dynamic(() => import('@/app/components/brand/browse-creators'), {
+  loading: () => <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-burgundy"></div></div>
+});
+
+const BrandMessages = dynamic(() => import('@/app/components/brand/messages'), {
+  loading: () => <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-burgundy"></div></div>
+});
+
+const BrandBookings = dynamic(() => import('@/app/components/brand/bookings'), {
+  loading: () => <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-burgundy"></div></div>
+});
 
 // Constants for better maintainability
 const BRAND_TABS = ['browse-creators', 'messages', 'bookings'] as const;
@@ -30,6 +41,7 @@ export default function BrandDashboard() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const locale = useLocale();
   const [loading, setLoading] = useState(true);
   const [hasProfile, setHasProfile] = useState(false);
   const [profile, setProfile] = useState<BrandProfile | null>(null);
@@ -38,7 +50,7 @@ export default function BrandDashboard() {
   // Tab logic with performance optimization
   const [selectedIndex, setSelectedIndex] = useState(DEFAULT_TAB_INDEX);
 
-  // Initialize tab from URL only once
+  // Initialize tab from URL and respond to URL changes
   useEffect(() => {
     const tabParam = searchParams.get('tab') ?? '';
     if (!tabParam || tabParam === BRAND_TABS[0]) {
@@ -47,7 +59,7 @@ export default function BrandDashboard() {
       const idx = BRAND_TABS.indexOf(tabParam as BrandTab);
       setSelectedIndex(idx >= 0 ? idx : DEFAULT_TAB_INDEX);
     }
-  }, []); // Remove searchParams dependency to prevent unnecessary re-runs
+  }, [searchParams]); // Listen to URL parameter changes
 
   // Fast tab switching callback
   const handleTabChange = useCallback((tabIndex: number) => {
@@ -58,7 +70,7 @@ export default function BrandDashboard() {
     // Update URL without triggering navigation
     const newTab = BRAND_TABS[tabIndex];
     if (newTab && typeof window !== 'undefined') {
-      window.history.replaceState(null, '', `/dashboard/brand?tab=${newTab}`);
+      window.history.replaceState(null, '', `${window.location.pathname.split('/').slice(0,2).join('/')}/dashboard/brand?tab=${newTab}`);
     }
   }, []);
 
@@ -78,6 +90,23 @@ export default function BrandDashboard() {
         setLoading(true);
         setError(null);
         
+        // Check for cached profile data first (from recent profile creation)
+        const cachedProfile = sessionStorage.getItem('brandProfile');
+        const profileComplete = sessionStorage.getItem('profileComplete');
+        
+        if (cachedProfile && profileComplete === 'true') {
+          console.log('✅ Using cached brand profile data for faster loading');
+          const profileData = JSON.parse(cachedProfile);
+          setHasProfile(true);
+          setProfile(profileData);
+          setLoading(false);
+          // Clear cache after use to prevent stale data
+          sessionStorage.removeItem('brandProfile');
+          return;
+        }
+        
+        // Fallback to database fetch if no cache
+        console.log('📦 Fetching brand profile from database');
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         
         if (userDoc.exists()) {
@@ -89,12 +118,12 @@ export default function BrandDashboard() {
             setProfile(userData);
           } else {
             // Redirect to profile setup if incomplete
-            router.push('/dashboard/brand/profile-setup');
+            router.push(`/${locale}/dashboard/brand/profile-setup`);
             return;
           }
         } else {
           // No user document - redirect to setup
-          router.push('/dashboard/brand/profile-setup');
+          router.push(`/${locale}/dashboard/brand/profile-setup`);
           return;
         }
       } catch (error) {
@@ -106,7 +135,7 @@ export default function BrandDashboard() {
           setHasProfile(true);
           setProfile({ brandName: 'Test Brand' });
         } else {
-          router.push('/dashboard/brand/profile-setup');
+          router.push(`/${locale}/dashboard/brand/profile-setup`);
           return;
         }
       } finally {
@@ -115,7 +144,7 @@ export default function BrandDashboard() {
     };
     
     checkBrandProfile();
-  }, [user, router]);
+  }, [user, router, locale]);
 
   // Memoized components to prevent unnecessary re-renders
   const BrowseCreatorsComponent = useMemo(() => <BrowseCreators />, []);
