@@ -192,7 +192,16 @@
         },
         "photosComingSoon": "Sekcja zdjęć z Instagrama już wkrótce. W przyszłości będzie można dodawać posty tutaj."
       },
-      "instagramConnectSoon": "Wkrótce będziesz mógł/mogła połączyć swój Instagram."
+      "instagramConnectSoon": "Wkrótce będziesz mógł/mogła połączyć swój Instagram.",
+      "instagramConnectionComing": {
+        "title": "Integracja z Instagramem już wkrótce",
+        "description": "Pracujemy nad bezproblemową integracją z Instagramem, aby automatycznie prezentować Twoje treści i wzmocnić Twój profil twórcy.",
+        "features": {
+          "autoSync": "Auto-synchronizacja postów",
+          "portfolioDisplay": "Wyświetlanie portfolio",
+          "engagement": "Metryki zaangażowania"
+        }
+      }
     },
   "messaging": {
     "loading": {

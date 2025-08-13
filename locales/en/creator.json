@@ -395,6 +395,15 @@
       },
       "instagramConnectSoon": "You'll be able to connect your Instagram soon.",
       "latestFromInstagram": "Latest from Instagram",
+      "instagramConnectionComing": {
+        "title": "Instagram Integration Coming Soon",
+        "description": "We're working on seamless Instagram integration to showcase your content automatically and boost your creator profile.",
+        "features": {
+          "autoSync": "Auto-sync posts",
+          "portfolioDisplay": "Portfolio display",
+          "engagement": "Engagement metrics"
+        }
+      },
     "instagram": {
       "add": "Add Instagram Post",
       "urlPlaceholder": "Paste Instagram post or reel URL…",
