@@ -24,7 +24,7 @@ const MAX_RETRY_ATTEMPTS = 3;
 
 export default function LoginPage() {
   // Use granular auth namespace for optimal bundle size
-  const t = useTranslations('auth');
+  const t = useTranslations('auth-login');
   const { signIn, loading, error } = useAuth();
   const router = useRouter();
   

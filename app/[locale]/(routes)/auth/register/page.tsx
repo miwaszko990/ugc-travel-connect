@@ -39,7 +39,7 @@ interface RoleOption {
 
 export default function RegisterPage() {
   // Use granular translations for better bundle splitting
-  const t = useTranslations('auth.register');
+  const t = useTranslations('auth-register');
   const locale = useLocale();
   const router = useRouter();
   const { signUp, loading, error } = useAuth();

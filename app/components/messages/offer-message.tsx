@@ -31,7 +31,7 @@ export default function OfferMessage({
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const t = useTranslations('brand.messaging.offerMessage');
   const tPackages = useTranslations('brand.messaging.offerModal.packages');
-  const tPackages = useTranslations('brand.messaging.offerModal.packages');
+
   
   // Helper function to safely convert timestamps to Date objects
   const toSafeDate = (timestamp: any): Date => {
@@ -45,7 +45,6 @@ export default function OfferMessage({
   };
   
   const timestamp = toSafeDate(message.sentAt);
-  const tPackages = useTranslations('brand.messaging.offerModal.packages');
   
   // Function to translate package descriptions dynamically
   const getTranslatedDescription = (description: string): string => {
