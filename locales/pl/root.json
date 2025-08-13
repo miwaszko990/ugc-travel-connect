@@ -51,5 +51,56 @@
     "profile": "Profil",
     "settings": "Ustawienia", 
     "signOut": "Wyloguj się"
+  },
+  "howItWorks": {
+    "badge": "PROSTY I BEZPIECZNY PROCES",
+    "title": "Jak to działa?",
+    "subtitle": "Połącz się z twórcami i markami w kilku prostych krokach. Nasza platforma sprawia, że współpraca jest płynna i bezpieczna.",
+    "brand": {
+      "title": "Dla Marek",
+      "subtitle": "Znajdź idealnego twórcę dla swojej kampanii i otrzymaj autentyczne treści z dowolnego miejsca na świecie",
+      "step1": {
+        "title": "Odkryj Twórców",
+        "description": "Przeglądaj naszą wyselekcjonowaną kolekcję twórców podróżniczych i znajdź idealne dopasowanie dla swojej marki i destynacji."
+      },
+      "step2": {
+        "title": "Wyślij Oferty",
+        "description": "Wybierz z gotowych pakietów lub stwórz niestandardowe oferty współpracy. Chatuj bezpośrednio z twórcami."
+      },
+      "step3": {
+        "title": "Bezpieczna Płatność",
+        "description": "Płać bezpiecznie przez naszą platformę. Środki są bezpiecznie przechowywane do momentu otrzymania i zatwierdzenia treści."
+      },
+      "step4": {
+        "title": "Otrzymaj Treści",
+        "description": "Otrzymuj wysokiej jakości, autentyczne treści dostarczane bezpośrednio do twojego dashboardu. Gotowe do użycia na wszystkich platformach."
+      }
+    },
+    "creator": {
+      "title": "Dla Twórców",
+      "subtitle": "Monetyzuj swoje podróże i twórz niesamowite treści dla marek podczas odkrywania świata",
+      "step1": {
+        "title": "Stwórz Profil",
+        "description": "Ustaw swój profil twórcy ze swoim stylem podróżowania, odbiorcami i specjalizacją w tworzeniu treści."
+      },
+      "step2": {
+        "title": "Dodaj Plany Podróży",
+        "description": "Udostępnij swoje nadchodzące podróże i destynacje. Marki znajdą Cię na podstawie tego, dokąd się wybierasz."
+      },
+      "step3": {
+        "title": "Twórz Treści",
+        "description": "Współpracuj z markami i twórz autentyczne treści podczas swoich podróży. Podążaj za briefem i dostarczaj wysokiej jakości pracę."
+      },
+      "step4": {
+        "title": "Otrzymuj Wypłaty",
+        "description": "Otrzymuj bezpieczne płatności bezpośrednio na swoje konto po zatwierdzeniu treści przez markę. Buduj swoją reputację."
+      }
+    },
+    "cta": {
+      "title": "Gotowy, żeby zacząć?",
+      "subtitle": "Dołącz do tysięcy twórców i marek już korzystających z Lumo do tworzenia niesamowitych treści na całym świecie",
+      "brandButton": "Zacznij jako Marka",
+      "creatorButton": "Dołącz jako Twórca"
+    }
   }
 }

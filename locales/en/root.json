@@ -51,5 +51,56 @@
     "profile": "Profile",
     "settings": "Settings",
     "signOut": "Sign out"
+  },
+  "howItWorks": {
+    "badge": "SIMPLE & SECURE PROCESS",
+    "title": "How It Works",
+    "subtitle": "Connect with creators and brands in just a few simple steps. Our platform makes collaboration seamless and secure.",
+    "brand": {
+      "title": "For Brands",
+      "subtitle": "Find the perfect creator for your campaign and get authentic content from anywhere in the world",
+      "step1": {
+        "title": "Discover Creators",
+        "description": "Browse our curated selection of travel creators and find the perfect match for your brand and destination."
+      },
+      "step2": {
+        "title": "Send Offers",
+        "description": "Choose from pre-made packages or create custom collaboration offers. Chat directly with creators."
+      },
+      "step3": {
+        "title": "Secure Payment",
+        "description": "Pay securely through our platform. Funds are held safely until you receive and approve the content."
+      },
+      "step4": {
+        "title": "Receive Content",
+        "description": "Get high-quality, authentic content delivered directly to your dashboard. Ready to use across all platforms."
+      }
+    },
+    "creator": {
+      "title": "For Creators",
+      "subtitle": "Monetize your travels and create amazing content for brands while exploring the world",
+      "step1": {
+        "title": "Create Profile",
+        "description": "Set up your creator profile with your travel style, audience, and content expertise."
+      },
+      "step2": {
+        "title": "Add Travel Plans",
+        "description": "Share your upcoming trips and destinations. Brands will find you based on where you're going."
+      },
+      "step3": {
+        "title": "Create Content",
+        "description": "Collaborate with brands and create authentic content during your travels. Follow the brief and deliver quality work."
+      },
+      "step4": {
+        "title": "Get Paid",
+        "description": "Receive secure payments directly to your account once the brand approves your content. Build your reputation."
+      }
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Join thousands of creators and brands already using Lumo to create amazing content worldwide",
+      "brandButton": "Start as Brand",
+      "creatorButton": "Join as Creator"
+    }
   }
 }
