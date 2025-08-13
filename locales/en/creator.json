@@ -389,9 +389,8 @@
             "stories": "3 x Instagram Stories (promoting the content)",
             "versions": "Vertical and horizontal versions",
             "delivery": "Delivery within 3 business days"
-          }
-        },
-        "photosComingSoon": "Instagram photos section is coming soon. You'll be able to add posts here in the future."
+                              }
+        }
       },
       "instagramConnectSoon": "You'll be able to connect your Instagram soon.",
       "latestFromInstagram": "Latest from Instagram",

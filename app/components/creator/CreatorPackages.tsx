@@ -60,10 +60,6 @@ export default function CreatorPackages() {
           </div>
         </div>
       </div>
-
-      <div className="mt-6 rounded-2xl border border-dashed border-red-burgundy/20 p-4 bg-red-burgundy/5 text-sm text-subtext">
-        {t("photosComingSoon")}
-      </div>
     </div>
   );
 } 

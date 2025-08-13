@@ -330,16 +330,8 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
         
           {/* Right Column - Calendar & Instagram Feed */}
           <main className="space-y-8">
-            {/* Instagram Connect Banner */}
-            <div className="bg-white rounded-3xl shadow-lg border border-red-burgundy/10 p-8 flex items-center gap-4">
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-red-burgundy/10">
-                <LinkIcon className="h-6 w-6 text-red-burgundy" />
-              </span>
-              <h2 className="text-2xl font-serif font-bold text-text">
-                {t('instagramConnectSoon')}
-              </h2>
-            </div>
-            {/* Travel Calendar Section */}
+
+          {/* Travel Calendar Section */}
             <div className="bg-white rounded-3xl shadow-lg border border-red-burgundy/10 p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
