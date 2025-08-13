@@ -149,9 +149,13 @@ export async function uploadImageToStorage(
  */
 export async function getCreatorProfile(uid: string): Promise<any | null> {
   try {
-    const profileDoc = await getDoc(doc(db, 'creators', uid));
+    const profileDoc = await getDoc(doc(db, 'users', uid));
     if (profileDoc.exists()) {
-      return profileDoc.data();
+      const data = profileDoc.data();
+      // Only return data if it's a creator user
+      if (data.role === 'creator') {
+        return data;
+      }
     }
     return null;
   } catch (error) {
@@ -167,9 +171,13 @@ export async function getCreatorProfile(uid: string): Promise<any | null> {
  */
 export async function getBrandProfile(uid: string): Promise<any | null> {
   try {
-    const profileDoc = await getDoc(doc(db, 'brands', uid));
+    const profileDoc = await getDoc(doc(db, 'users', uid));
     if (profileDoc.exists()) {
-      return profileDoc.data();
+      const data = profileDoc.data();
+      // Only return data if it's a brand user
+      if (data.role === 'brand') {
+        return data;
+      }
     }
     return null;
   } catch (error) {
