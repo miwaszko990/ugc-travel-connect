@@ -32,32 +32,26 @@ export function useNavigation({
     return `/${locale}${path}`;
   };
 
-  // Get navigation configuration based on role and filter out home for dashboard pages
+  // Get navigation configuration based on role - always include home icon
   const navigationConfig = useMemo(() => {
     const config = getNavigationConfig(role, false);
-    // Filter out home tab when on dashboard pages to match tab indices
-    if (pathname.includes('/dashboard/') && onTabChange) {
-      return config.filter(item => item.key !== 'home');
-    }
     return config;
-  }, [role, pathname, onTabChange]);
+  }, [role]);
   
   const mobileNavigationConfig = useMemo(() => {
     const config = getNavigationConfig(role, true);
-    // Filter out home tab when on dashboard pages to match tab indices
-    if (pathname.includes('/dashboard/') && onTabChange) {
-      return config.filter(item => item.key !== 'home');
-    }
     return config;
-  }, [role, pathname, onTabChange]);
+  }, [role]);
 
   // Transform navigation items with translations and adjust indices
   const navigationItems: NavigationItemWithTranslation[] = useMemo(() => 
     navigationConfig.map((item, index) => ({
       ...item,
       name: t(item.key),
-      // Adjust index for dashboard context when home is filtered out
-      adjustedIndex: pathname.includes('/dashboard/') && onTabChange ? index : item.index
+      // Adjust index for dashboard tabs (subtract 1 to account for home icon at index 0)
+      adjustedIndex: pathname.includes('/dashboard/') && onTabChange && item.key !== 'home' 
+        ? item.index - 1 
+        : item.index
     })),
     [navigationConfig, t, pathname, onTabChange]
   );
@@ -66,8 +60,10 @@ export function useNavigation({
     mobileNavigationConfig.map((item, index) => ({
       ...item,
       name: t(item.key),
-      // Adjust index for dashboard context when home is filtered out
-      adjustedIndex: pathname.includes('/dashboard/') && onTabChange ? index : item.index
+      // Adjust index for dashboard tabs (subtract 1 to account for home icon at index 0)
+      adjustedIndex: pathname.includes('/dashboard/') && onTabChange && item.key !== 'home' 
+        ? item.index - 1 
+        : item.index
     })),
     [mobileNavigationConfig, t, pathname, onTabChange]
   );
@@ -111,21 +107,25 @@ export function useNavigation({
   const handleNavClick = (item: NavigationItemWithTranslation, index: number): void => {
     const profileSetupPath = withLocale(PROFILE_SETUP_PATHS[role]);
 
-    if (item.href === '/') {
+    // Home navigation - always navigate to home page
+    if (item.href === '/' || item.key === 'home') {
       router.push(withLocale('/'));
       return;
     }
 
+    // Profile setup navigation
     if (withLocale(item.href) === profileSetupPath || item.href === PROFILE_SETUP_PATHS[role]) {
       router.push(profileSetupPath);
       return;
     }
 
-    if (onTabChange) {
+    // Dashboard tab navigation
+    if (onTabChange && pathname.includes('/dashboard/')) {
       // Use adjustedIndex if available, otherwise use the index parameter
       const tabIndex = 'adjustedIndex' in item ? item.adjustedIndex : index;
       onTabChange(tabIndex);
     } else {
+      // Direct navigation for non-dashboard pages
       router.push(withLocale(item.href));
     }
   };

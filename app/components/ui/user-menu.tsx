@@ -10,7 +10,7 @@ import { useAuth } from '@/app/hooks/auth';
 
 function useSafeT(namespace: string) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
     const {useTranslations} = require('next-intl');
     return useTranslations(namespace);
   } catch {

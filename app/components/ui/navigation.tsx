@@ -14,7 +14,7 @@ import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/o
 // Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
 function useSafeT(namespace: string) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
     const {useTranslations} = require('next-intl');
     return useTranslations(namespace);
   } catch {

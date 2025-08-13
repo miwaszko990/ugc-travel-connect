@@ -22,6 +22,7 @@ import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import OfferModal from './offer-modal';
 import OfferMessage from './offer-message';
+import BrandProfileModal from './brand-profile-modal';
 
 interface MessagingPanelProps {
   userRole: 'brand' | 'creator';
@@ -44,9 +45,10 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
   const [dragging, setDragging] = useState(false);
   const [isOtherUserTyping, setIsOtherUserTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [otherUserInfo, setOtherUserInfo] = useState<{name: string; profilePic?: string} | null>(null);
+  const [otherUserInfo, setOtherUserInfo] = useState<{name: string; profilePic?: string; role?: string; instagram?: string} | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [showBrandProfile, setShowBrandProfile] = useState(false);
 
   // Get current user role from auth context
   const currentUserRole = user?.role || 'creator';
@@ -170,10 +172,12 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
       getUserDocument(otherUserId).then(userData => {
         if (userData) {
           setOtherUserInfo({
-            name: userData.firstName && userData.lastName 
+            name: userData.brandName || (userData.firstName && userData.lastName 
               ? `${userData.firstName} ${userData.lastName}`
-              : userData.email || 'User',
-            profilePic: userData.profileImageUrl
+              : userData.email || 'User'),
+            profilePic: userData.profileImageUrl,
+            role: userData.role,
+            instagram: userData.instagramHandle
           });
         }
       }).catch(console.error);
@@ -494,7 +498,26 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
                   )}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{otherUserInfo?.name || 'User'}</h3>
+                  <button
+                    onClick={() => otherUserInfo?.role === 'brand' && setShowBrandProfile(true)}
+                    className={`text-lg font-semibold text-gray-900 text-left ${
+                      otherUserInfo?.role === 'brand' 
+                        ? 'hover:text-red-burgundy cursor-pointer transition-colors' 
+                        : ''
+                    }`}
+                  >
+                    {otherUserInfo?.name || 'User'}
+                  </button>
+                  {otherUserInfo?.instagram && (
+                    <a
+                      href={`https://instagram.com/${otherUserInfo.instagram}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-blue-500 hover:underline block"
+                    >
+                      @{otherUserInfo.instagram}
+                    </a>
+                  )}
                   <p className="text-sm text-gray-500">
                     {isOtherUserTyping ? (
                       <span className="text-red-burgundy font-medium">typing...</span>
@@ -718,6 +741,17 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
         creatorId={selectedConversation ? selectedConversation.participants.find(id => id !== user?.uid) : undefined}
         creatorName={otherUserInfo?.name}
       />
+      
+      {/* Brand Profile Modal */}
+      {otherUserInfo?.role === 'brand' && (
+        <BrandProfileModal
+          isOpen={showBrandProfile}
+          onClose={() => setShowBrandProfile(false)}
+          brandId={selectedConversation ? selectedConversation.participants.find(id => id !== user?.uid) || '' : ''}
+          brandName={otherUserInfo.name}
+          brandProfilePic={otherUserInfo.profilePic}
+        />
+      )}
     </div>
   );
 } // review trigger

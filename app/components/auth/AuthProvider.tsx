@@ -28,7 +28,7 @@ import type { UserData, UserRole } from '@/app/hooks/auth/types';
 // Safe translation accessor so the provider doesn't crash outside NextIntlClientProvider
 function useSafeT(namespace: string) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
     const {useTranslations} = require('next-intl');
     return useTranslations(namespace);
   } catch {
