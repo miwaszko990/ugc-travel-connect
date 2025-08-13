@@ -328,10 +328,9 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
             </div>
         </aside>
         
-          {/* Right Column - Calendar & Instagram Feed */}
+                    {/* Right Column - Calendar & Instagram Feed */}
           <main className="space-y-8">
-
-          {/* Travel Calendar Section */}
+            {/* Travel Calendar Section */}
             <div className="bg-white rounded-3xl shadow-lg border border-red-burgundy/10 p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
