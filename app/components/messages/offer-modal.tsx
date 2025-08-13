@@ -14,6 +14,7 @@ interface OfferModalProps {
     trip: Trip;
     description: string;
     price: number;
+    packageId?: string;
   }) => void;
   creatorId?: string; // ID of the creator whose trips we want to fetch
   creatorName?: string; // Name of the creator for display
@@ -65,7 +66,8 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
     if (selectedPackage) {
       const pkg = PACKAGES.find(p => p.id === selectedPackage);
       if (pkg) {
-        setDescription(tPackages(pkg.descriptionKey));
+        // Store package ID for dynamic translation
+        setDescription(`[PACKAGE:${selectedPackage}]${tPackages(pkg.descriptionKey)}`);
         setPrice(pkg.price.toString());
       }
     } else if (selectedPackage === 'custom') {

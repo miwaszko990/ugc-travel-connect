@@ -30,6 +30,8 @@ export default function OfferMessage({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const t = useTranslations('brand.messaging.offerMessage');
+  const tPackages = useTranslations('brand.messaging.offerModal.packages');
+  const tPackages = useTranslations('brand.messaging.offerModal.packages');
   
   // Helper function to safely convert timestamps to Date objects
   const toSafeDate = (timestamp: any): Date => {
@@ -43,6 +45,33 @@ export default function OfferMessage({
   };
   
   const timestamp = toSafeDate(message.sentAt);
+  const tPackages = useTranslations('brand.messaging.offerModal.packages');
+  
+  // Function to translate package descriptions dynamically
+  const getTranslatedDescription = (description: string): string => {
+    // Check if description contains package ID prefix
+    const packageMatch = description.match(/^\[PACKAGE:(\w+)\]/);
+    if (packageMatch) {
+      const packageId = packageMatch[1];
+      // Map package IDs to translation keys
+      const packageKeyMap: Record<string, string> = {
+        'mini': 'mini.description',
+        'content': 'content.description', 
+        'full': 'full.description'
+      };
+      
+      const translationKey = packageKeyMap[packageId];
+      if (translationKey) {
+        return tPackages(translationKey);
+      }
+      
+      // Fallback: return description without the prefix
+      return description.replace(/^\[PACKAGE:\w+\]/, '').trim();
+    }
+    
+    // Return original description for custom offers
+    return description;
+  };
   
   if (!message.trip || !message.description || !message.price) {
     return null;
@@ -207,7 +236,7 @@ export default function OfferMessage({
             <h4 className={`font-medium ${isFromUser ? 'text-white' : 'text-gray-900'}`}>
               📍 {message.trip.destination}
             </h4>
-            <p className={`text-sm ${isFromUser ? 'text-red-burgundy/70' : 'text-gray-600'}`}>
+            <p className={`text-sm ${isFromUser ? 'text-white font-medium' : 'text-gray-600'}`}>
               {format(toSafeDate(message.trip.startDate), 'MMM d')} - {format(toSafeDate(message.trip.endDate), 'MMM d, yyyy')}
             </p>
           </div>
@@ -216,8 +245,8 @@ export default function OfferMessage({
             <h5 className={`font-medium text-sm ${isFromUser ? 'text-white' : 'text-gray-900'}`}>
               {t('taskDescription')}
             </h5>
-            <p className={`text-sm ${isFromUser ? 'text-red-burgundy/70' : 'text-gray-600'}`}>
-              {message.description}
+            <p className={`text-sm ${isFromUser ? 'text-white font-medium' : 'text-gray-600'} leading-relaxed`}>
+              {getTranslatedDescription(message.description)}
             </p>
           </div>
 

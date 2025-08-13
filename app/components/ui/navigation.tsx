@@ -100,7 +100,7 @@ export default function Navigation({
             {!hideNavLinks && (
               <nav className="hidden md:flex items-center space-x-12">
                 <Link 
-                  href="#how-it-works" 
+                  href="/how-it-works" 
                   className="relative text-sm font-medium text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
                 >
                   {t('howItWorks')}
@@ -223,7 +223,7 @@ export default function Navigation({
                       {!hideNavLinks && (
                         <div className="px-6 py-6 space-y-6">
                           <Link 
-                            href="#how-it-works" 
+                            href="/how-it-works" 
                             className="block text-lg font-medium text-subtext hover:text-red-burgundy transition-all duration-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                           >
