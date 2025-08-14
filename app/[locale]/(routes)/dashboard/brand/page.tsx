@@ -16,7 +16,6 @@ import BrandBookings from '@/app/components/brand/bookings';
 
 
 // Mobile navigation items - stable icons
-import { NavigationIcons } from '@/app/lib/navigation-config';
 
 // Tab management
 type BrandTab = 'browse' | 'messages' | 'bookings';

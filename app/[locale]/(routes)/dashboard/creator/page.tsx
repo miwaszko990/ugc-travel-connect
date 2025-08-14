@@ -17,7 +17,6 @@ import CreatorEarnings from '@/app/components/creator/earnings';
 
 
 // Mobile navigation items - stable icons
-import { NavigationIcons } from '@/app/lib/navigation-config';
 
 interface CreatorProfile extends DocumentData {
   uid?: string;
