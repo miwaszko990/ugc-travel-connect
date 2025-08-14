@@ -6,7 +6,7 @@ import { useAuth } from '@/app/hooks/auth';
 import { subscribeToUserConversations, Conversation } from '@/app/lib/firebase/messages';
 import MessagingPanel from '@/app/components/messages/messaging-panel';
 import { useSearchParams } from 'next/navigation';
-import { ChevronLeft, MoreVertical } from 'lucide-react';
+// Icons no longer needed - using MessagingPanel's built-in header
 import React from 'react';
 
 // Stable helper function outside component to prevent re-creation
@@ -112,56 +112,6 @@ function MobileConversationList({
   );
 }
 
-// Mobile-only chat header component
-function MobileChatHeader({ 
-  conversation, 
-  onBack 
-}: { 
-  conversation: Conversation; 
-  onBack: () => void; 
-}) {
-  const { user } = useAuth();
-  const otherParticipant = conversation.participants.find(id => id !== user?.uid);
-  const otherUserInfo = otherParticipant ? conversation.participantInfo[otherParticipant] : null;
-
-  return (
-    <div className="sm:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center space-x-3 flex-shrink-0">
-      {/* Back Button */}
-      <button 
-        onClick={onBack}
-        className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
-      >
-        <ChevronLeft className="w-5 h-5 text-gray-600" />
-      </button>
-      
-      {/* Profile Info */}
-      <div className="flex items-center space-x-3 flex-1 min-w-0">
-        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-          {otherUserInfo?.profilePic && (
-            <img 
-              src={otherUserInfo.profilePic} 
-              alt={otherUserInfo.name || 'User'} 
-              className="w-full h-full object-cover"
-            />
-          )}
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 truncate">
-            {otherUserInfo?.name || 'Unknown User'}
-          </h3>
-          <p className="text-sm text-gray-500 truncate">@{otherUserInfo?.name?.toLowerCase().replace(/\s+/g, '') || 'user'}</p>
-          <p className="text-xs text-green-600">Active</p>
-        </div>
-      </div>
-      
-      {/* More Options */}
-      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0">
-        <MoreVertical className="w-5 h-5 text-gray-600" />
-      </button>
-    </div>
-  );
-}
-
 // Mobile-only chat view component
 function MobileChatView({ 
   conversation, 
@@ -172,9 +122,6 @@ function MobileChatView({
 }) {
   return (
     <div className="sm:hidden h-full flex flex-col">
-      {/* Mobile Header */}
-      <MobileChatHeader conversation={conversation} onBack={onBack} />
-      
       {/* Desktop messaging panel in mobile view with custom styling */}
       <div className="flex-1 overflow-hidden relative">
         <div className="h-full pb-20"> {/* Add bottom padding for navigation */}
@@ -182,6 +129,7 @@ function MobileChatView({
             userRole="brand" 
             selectedConversationId={conversation.id}
             hideSidebar={true}
+            onMobileBack={onBack}
           />
         </div>
       </div>
