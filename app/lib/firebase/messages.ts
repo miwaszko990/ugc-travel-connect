@@ -1,16 +1,3 @@
-import { 
-  subscribeToUserConversations, 
-  subscribeToConversationMessages, 
-  sendMessage,
-  sendOfferMessage,
-  updateTypingStatus,
-  subscribeToTypingStatus,
-  markMessagesAsRead,
-  acceptOffer,
-  rejectOffer,
-  Conversation,
-  Message 
-} from '@/app/lib/firebase/messages';
 import { getUserDocument } from '@/app/lib/firebase/utils';
 import { db } from '@/app/lib/firebase';
 import { 
