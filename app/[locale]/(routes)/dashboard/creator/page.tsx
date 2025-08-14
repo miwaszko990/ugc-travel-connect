@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { doc, getDoc, DocumentData } from 'firebase/firestore';
@@ -28,12 +28,12 @@ interface CreatorProfile extends DocumentData {
 function MobileBottomNavigation({ selectedIndex, onTabChange }: { selectedIndex: number; onTabChange: (index: number) => void; }) {
   const t = useTranslations('creator.navigation');
   
-  // Stable tab configuration to prevent re-renders
-  const tabs = useMemo(() => [
-    { name: t('travels'), icon: NavigationIcons.travel, index: 0 },
-    { name: t('messages'), icon: NavigationIcons.messages, index: 1 },
-    { name: t('earnings'), icon: NavigationIcons.earnings, index: 2 }
-  ], [t]);
+  // Stable tab configuration - fixed tab names to prevent re-renders
+  const tabs = [
+    { name: 'Travels', icon: NavigationIcons.travel, index: 0 },
+    { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
+    { name: 'Earnings', icon: NavigationIcons.earnings, index: 2 }
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex justify-around items-center h-16 sm:hidden shadow-lg">
