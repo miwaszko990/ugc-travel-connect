@@ -180,6 +180,7 @@ function MobileChatView({
           <MessagingPanel 
             userRole="creator" 
             selectedConversationId={conversation.id}
+            hideSidebar={true}
           />
         </div>
       </div>

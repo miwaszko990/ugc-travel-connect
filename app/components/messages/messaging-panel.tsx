@@ -27,9 +27,10 @@ import BrandProfileModal from './brand-profile-modal';
 interface MessagingPanelProps {
   userRole: 'brand' | 'creator';
   selectedConversationId?: string;
+  hideSidebar?: boolean; // New prop to hide sidebar on mobile
 }
 
-export default function MessagingPanel({ userRole, selectedConversationId }: MessagingPanelProps) {
+export default function MessagingPanel({ userRole, selectedConversationId, hideSidebar = false }: MessagingPanelProps) {
   const { user } = useAuth();
   const tBrand = useTranslations('brand.messaging');
   const tCreator = useTranslations('creator.messaging');
@@ -396,15 +397,16 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
 
   return (
     <div className="bg-white h-full flex flex-col md:flex-row border border-gray-100">
-      {/* Left sidebar - conversation list */}
-      <div
-        className="h-full flex flex-col border-r border-gray-100 bg-white transition-all duration-300"
-        style={{ 
-          width: sidebarWidth, 
-          minWidth: 220, 
-          maxWidth: 500
-        }}
-      >
+      {/* Left sidebar - conversation list (hidden on mobile when hideSidebar=true) */}
+      {!hideSidebar && (
+        <div
+          className="h-full flex flex-col border-r border-gray-100 bg-white transition-all duration-300"
+          style={{ 
+            width: sidebarWidth, 
+            minWidth: 220, 
+            maxWidth: 500
+          }}
+        >
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-100">
           <div className="flex items-center justify-between">
@@ -500,12 +502,15 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
           )}
         </div>
       </div>
+      )}
 
-      {/* Draggable gutter */}
-      <div
-        className="w-1 bg-gray-200 hover:bg-gray-300 cursor-col-resize hidden md:block"
-        onMouseDown={handleMouseDown}
-      />
+      {/* Draggable gutter (hidden when sidebar is hidden) */}
+      {!hideSidebar && (
+        <div
+          className="w-1 bg-gray-200 hover:bg-gray-300 cursor-col-resize hidden md:block"
+          onMouseDown={handleMouseDown}
+        />
+      )}
 
       {/* Main chat area */}
       <div className="flex-1 flex flex-col">
