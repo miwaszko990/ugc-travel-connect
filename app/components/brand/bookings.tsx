@@ -132,49 +132,64 @@ export default function BrandBookings() {
   }
 
   return (
-    <div className="p-8" style={{backgroundColor: '#FDFCF9'}}>
+    <div 
+      className="p-4 sm:p-8 w-full max-w-full min-w-0" 
+      style={{
+        backgroundColor: '#FDFCF9',
+        overflowX: 'hidden',
+        maxWidth: '100vw',
+        width: '100%'
+      }}
+    >
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mb-2 break-words">
           {t('title')}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 break-words">
           {t('subtitle')}
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <div className="text-2xl font-bold text-gray-900 mb-1">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100 min-w-0">
+          <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 truncate">
             {stats.totalOrders}
           </div>
-          <div className="text-sm text-gray-500">{t('stats.totalBookings')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 break-words">{t('stats.totalBookings')}</div>
         </div>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <div className="text-2xl font-bold text-blue-600 mb-1">
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100 min-w-0">
+          <div className="text-xl sm:text-2xl font-bold text-blue-600 mb-1 truncate">
             {stats.paid + stats.inProgress}
           </div>
-          <div className="text-sm text-gray-500">{t('stats.active')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 break-words">{t('stats.active')}</div>
         </div>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <div className="text-2xl font-bold text-green-600 mb-1">
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100 min-w-0">
+          <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1 truncate">
             {stats.completed}
           </div>
-          <div className="text-sm text-gray-500">{t('stats.completed')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 break-words">{t('stats.completed')}</div>
         </div>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <div className="text-2xl font-bold text-red-burgundy mb-1">
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100 min-w-0">
+          <div className="text-xl sm:text-2xl font-bold text-red-burgundy mb-1 truncate">
             ${stats.totalSpent.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-500">{t('stats.totalSpent')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 break-words">{t('stats.totalSpent')}</div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-8">
-        <div className="border-b border-gray-100">
-          <nav className="flex space-x-8 px-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 sm:mb-8 w-full max-w-full">
+        <div className="border-b border-gray-100 overflow-x-auto">
+          <nav 
+            className="flex space-x-2 sm:space-x-8 px-3 sm:px-6 min-w-max sm:min-w-0"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
             {[
               { key: 'all', label: t('tabs.allBookings'), count: stats.totalOrders },
               { key: 'pending', label: t('tabs.pendingPayment'), count: stats.pendingPayment },
@@ -185,30 +200,30 @@ export default function BrandBookings() {
               <button
                 key={tab.key}
                 onClick={() => setSelectedTab(tab.key)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`py-3 sm:py-4 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap flex-shrink-0 ${
                   selectedTab === tab.key
                     ? 'border-red-burgundy text-red-burgundy'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                {tab.label} ({tab.count})
+                <span className="truncate">{tab.label} ({tab.count})</span>
               </button>
             ))}
           </nav>
         </div>
 
         {/* Orders List */}
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-gray-100 w-full max-w-full overflow-x-hidden">
           {filteredOrders.map((order) => (
             <motion.div
               key={order.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="p-6 hover:bg-gray-50/50 transition-colors"
+              className="p-3 sm:p-6 hover:bg-gray-50/50 transition-colors w-full max-w-full min-w-0"
             >
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 w-full max-w-full min-w-0">
                 {/* Main Content */}
-                <div className="flex items-start gap-4 flex-1">
+                <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
                   {/* Creator Avatar */}
                   <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-red-burgundy/10">
                     <Image
@@ -220,17 +235,17 @@ export default function BrandBookings() {
                   </div>
 
                   {/* Order Details */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0 mb-2">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-gray-900 truncate">
                           {order.creator?.firstName} {order.creator?.lastName}
                         </h3>
-                        <p className="text-sm text-red-burgundy font-medium">
+                        <p className="text-sm text-red-burgundy font-medium truncate">
                           @{order.creator?.instagramHandle}
                         </p>
                       </div>
-                      <div className="text-right">
+                      <div className="text-left sm:text-right flex-shrink-0">
                         <div className="text-lg font-bold text-gray-900">
                           {order.formattedAmount}
                         </div>
@@ -244,13 +259,13 @@ export default function BrandBookings() {
 
                     {/* Trip Details */}
                     <div className="mb-3">
-                      <div className="text-sm text-gray-900 font-medium mb-1">
+                      <div className="text-sm text-gray-900 font-medium mb-1 break-words">
                         📍 {order.tripDestination}, {order.tripCountry}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-500 break-words">
                         Created: {formatOrderDate(order.createdAt)}
                         {order.paidAt && (
-                          <span className="ml-3">
+                          <span className="block sm:inline sm:ml-3">
                             {t('orders.paid')}: {formatOrderDate(order.paidAt)}
                           </span>
                         )}
@@ -258,10 +273,10 @@ export default function BrandBookings() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-2 sm:gap-3 w-full">
                       <button
                         onClick={() => handleMessageCreator(order.creator?.instagramHandle || '')}
-                        className="px-3 py-1 text-sm border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="px-2 sm:px-3 py-1 text-xs sm:text-sm border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0"
                       >
                         {t('orders.message')}
                       </button>
@@ -270,9 +285,11 @@ export default function BrandBookings() {
                         <button
                           onClick={() => handleUpdateStatus(order.id, 'in_progress')}
                           disabled={processingOrders.has(order.id)}
-                          className="px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                          className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex-shrink-0"
                         >
-                          {processingOrders.has(order.id) ? t('orders.updating') : t('orders.startWork')}
+                          <span className="truncate">
+                            {processingOrders.has(order.id) ? t('orders.updating') : t('orders.startWork')}
+                          </span>
                         </button>
                       )}
                       
@@ -280,14 +297,16 @@ export default function BrandBookings() {
                         <button
                           onClick={() => handleReleasePayment(order.id)}
                           disabled={processingOrders.has(order.id)}
-                          className="px-3 py-1 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                          className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex-shrink-0"
                         >
-                          {processingOrders.has(order.id) ? t('orders.processing') : t('orders.completePayment')}
+                          <span className="truncate">
+                            {processingOrders.has(order.id) ? t('orders.processing') : t('orders.completePayment')}
+                          </span>
                         </button>
                       )}
                       
-                      <button className="px-3 py-1 text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                        {t('orders.viewDetails')}
+                      <button className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-gray-500 hover:text-gray-700 transition-colors flex-shrink-0">
+                        <span className="truncate">{t('orders.viewDetails')}</span>
                       </button>
                     </div>
                   </div>
@@ -328,6 +347,8 @@ export default function BrandBookings() {
           )}
         </div>
       )}
+      {/* Mobile bottom padding for navigation */}
+      <div className="h-20 sm:h-0"></div>
     </div>
   );
 } // review trigger
