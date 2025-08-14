@@ -212,13 +212,13 @@ export default function BrandDashboard() {
       </div>
 
       <div className="relative z-10 flex">
-        {/* Mobile-only profile summary */}
-        <BrandProfileSidebar 
+        {/* Mobile-only profile summary - HIDDEN */}
+        {/* <BrandProfileSidebar 
           profile={profile} 
           isMobile={true} 
           onTabChange={handleTabChange}
           activeTabIndex={selectedIndex}
-        />
+        /> */}
         
         {/* Left sidebar */}
         <BrandProfileSidebar 

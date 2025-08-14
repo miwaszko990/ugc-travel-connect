@@ -136,13 +136,13 @@ export default function CreatorDashboard() {
       </div>
 
       <div className="relative z-10 flex">
-        {/* Mobile-only profile summary */}
-        <ProfileSidebar 
+        {/* Mobile-only profile summary - HIDDEN */}
+        {/* <ProfileSidebar 
           profile={profile} 
           isMobile={true} 
           onTabChange={handleTabChange}
           activeTabIndex={selectedIndex}
-        />
+        /> */}
         
         {/* Left sidebar */}
         <ProfileSidebar 
