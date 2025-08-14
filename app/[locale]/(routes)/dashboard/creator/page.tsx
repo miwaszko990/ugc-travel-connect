@@ -26,8 +26,6 @@ interface CreatorProfile extends DocumentData {
 
 // Mobile Bottom Navigation Component
 function MobileBottomNavigation({ selectedIndex, onTabChange }: { selectedIndex: number; onTabChange: (index: number) => void; }) {
-  const t = useTranslations('creator.navigation');
-  
   // Stable tab configuration - fixed tab names to prevent re-renders
   const tabs = [
     { name: 'Travels', icon: NavigationIcons.travel, index: 0 },

@@ -36,8 +36,6 @@ function MobileBottomNavigation({
   selectedIndex: number; 
   onTabChange: (index: number) => void; 
 }) {
-  const t = useTranslations('brand.navigation');
-  
   // Stable tab configuration - fixed tab names to prevent re-renders
   const tabs = [
     { name: 'Browse', icon: NavigationIcons.search, index: 0 },
