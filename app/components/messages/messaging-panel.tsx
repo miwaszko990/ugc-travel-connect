@@ -722,8 +722,8 @@ export default function MessagingPanel({ userRole, selectedConversationId }: Mes
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Message input */}
-            <div className="px-4 py-3 border-t border-gray-100 bg-white">
+            {/* Message input with mobile bottom padding for navigation */}
+            <div className="px-4 py-3 border-t border-gray-100 bg-white sm:pb-3 pb-6">
               <div className="flex items-center gap-2">
                 {/* Collaboration button for brands - compact design */}
                 {currentUserRole === 'brand' && (

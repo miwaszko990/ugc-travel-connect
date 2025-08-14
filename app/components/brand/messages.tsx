@@ -39,25 +39,33 @@ function MobileConversationList({
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">No conversations yet</h3>
-          <p className="text-gray-500 text-sm">Start connecting with creators to begin conversations</p>
+          <p className="text-gray-500 text-sm">Start networking with creators to begin conversations</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="sm:hidden h-full bg-white">
+    <div className="sm:hidden h-full bg-white flex flex-col">
       {/* Header */}
-      <div className="px-4 py-6 border-b border-gray-200">
+      <div className="px-4 py-6 border-b border-gray-200 flex-shrink-0">
         <h2 className="text-2xl font-serif font-bold text-gray-900">Messages</h2>
         <p className="text-gray-500 mt-1">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
       </div>
       
-      {/* Conversation List */}
-      <div className="overflow-y-auto">
+      {/* Conversation List with bottom padding for navigation */}
+      <div className="flex-1 overflow-y-auto pb-20">
         {conversations.map((conversation) => {
           const otherParticipant = conversation.participants.find(id => id !== user?.uid);
           const otherUserInfo = otherParticipant ? conversation.participantInfo[otherParticipant] : null;
+          
+          // Format timestamp properly
+          const formatTimestamp = (timestamp: number | { seconds: number }) => {
+            const date = typeof timestamp === 'number' 
+              ? new Date(timestamp) 
+              : new Date(timestamp.seconds * 1000);
+            return date.toLocaleDateString();
+          };
           
           return (
             <button
@@ -84,13 +92,13 @@ function MobileConversationList({
                       {otherUserInfo?.name || 'Unknown User'}
                     </h3>
                     {conversation.lastMessage && (
-                      <span className="text-xs text-gray-500 flex-shrink-0">
-                        {new Date(conversation.lastMessage.timestamp).toLocaleDateString()}
+                      <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
+                        {formatTimestamp(conversation.lastMessage.timestamp)}
                       </span>
                     )}
                   </div>
                   {conversation.lastMessage && (
-                    <p className="text-sm text-gray-500 truncate">
+                    <p className="text-sm text-gray-500 truncate pr-4">
                       {conversation.lastMessage.text}
                     </p>
                   )}
@@ -117,18 +125,18 @@ function MobileChatHeader({
   const otherUserInfo = otherParticipant ? conversation.participantInfo[otherParticipant] : null;
 
   return (
-    <div className="sm:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center space-x-3">
+    <div className="sm:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center space-x-3 flex-shrink-0">
       {/* Back Button */}
       <button 
         onClick={onBack}
-        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
       >
         <ChevronLeft className="w-5 h-5 text-gray-600" />
       </button>
       
       {/* Profile Info */}
-      <div className="flex items-center space-x-3 flex-1">
-        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+      <div className="flex items-center space-x-3 flex-1 min-w-0">
+        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
           {otherUserInfo?.profilePic && (
             <img 
               src={otherUserInfo.profilePic} 
@@ -141,13 +149,13 @@ function MobileChatHeader({
           <h3 className="text-lg font-semibold text-gray-900 truncate">
             {otherUserInfo?.name || 'Unknown User'}
           </h3>
-          <p className="text-sm text-gray-500 truncate">@instagram_handle</p>
+          <p className="text-sm text-gray-500 truncate">@{otherUserInfo?.name?.toLowerCase().replace(/\s+/g, '') || 'user'}</p>
           <p className="text-xs text-green-600">Active</p>
         </div>
       </div>
       
       {/* More Options */}
-      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0">
         <MoreVertical className="w-5 h-5 text-gray-600" />
       </button>
     </div>
@@ -167,12 +175,14 @@ function MobileChatView({
       {/* Mobile Header */}
       <MobileChatHeader conversation={conversation} onBack={onBack} />
       
-      {/* Desktop messaging panel in mobile view */}
-      <div className="flex-1 overflow-hidden">
-        <MessagingPanel 
-          userRole="brand" 
-          selectedConversationId={conversation.id}
-        />
+      {/* Desktop messaging panel in mobile view with custom styling */}
+      <div className="flex-1 overflow-hidden relative">
+        <div className="h-full pb-20"> {/* Add bottom padding for navigation */}
+          <MessagingPanel 
+            userRole="brand" 
+            selectedConversationId={conversation.id}
+          />
+        </div>
       </div>
     </div>
   );
