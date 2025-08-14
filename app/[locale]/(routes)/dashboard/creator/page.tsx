@@ -181,32 +181,77 @@ export default function CreatorDashboard() {
       </div>
 
       <div className="relative z-10 flex flex-col">
-        {/* Top Navigation Bar - Desktop only */}
-        <div className="hidden sm:block sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
-          <div className="px-6 py-4">
-            <nav className="flex space-x-8">
-              {[
-                { name: 'Travels', icon: NavigationIcons.travel, index: 0 },
-                { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
-                { name: 'Earnings', icon: NavigationIcons.earnings, index: 2 }
-              ].map((tab) => {
-                const isActive = selectedIndex === tab.index;
-                return (
-                  <button
-                    key={tab.index}
-                    onClick={() => handleTabChange(tab.index)}
-                    className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                      isActive 
-                        ? 'text-red-burgundy bg-red-burgundy/10 border border-red-burgundy/20' 
-                        : 'text-gray-600 hover:text-red-burgundy hover:bg-red-burgundy/5'
-                    }`}
-                  >
-                    <tab.icon className={`w-5 h-5 ${isActive ? 'text-red-burgundy' : 'text-gray-500'}`} />
-                    <span className="font-serif">{tab.name}</span>
-                  </button>
-                );
-              })}
-            </nav>
+        {/* Dashboard Navigation Bar - Desktop only */}
+        <div className="hidden sm:block sticky top-0 z-20" style={{ 
+          backgroundColor: 'rgba(253, 252, 249, 0.95)', 
+          backdropFilter: 'blur(20px)',
+          boxShadow: '0 1px 3px rgba(139, 0, 0, 0.1)'
+        }}>
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-40"></div>
+          
+          <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20">
+              {/* Logo Section */}
+              <div className="flex items-center">
+                <button 
+                  onClick={() => window.location.href = `/${locale}`}
+                  className="flex items-center group"
+                >
+                  <div className="relative">
+                    <span className="text-3xl font-serif font-bold text-red-burgundy group-hover:text-red-wine transition-all duration-300 transform group-hover:scale-105">
+                      Lumo
+                    </span>
+                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
+                  </div>
+                  <span className="ml-3 text-sm font-medium text-gray-600 hidden lg:block tracking-wide uppercase">
+                    Travel Connect
+                  </span>
+                </button>
+              </div>
+
+              {/* Navigation Tabs */}
+              <nav className="flex items-center space-x-8">
+                {[
+                  { name: 'Travels', icon: NavigationIcons.travel, index: 0 },
+                  { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
+                  { name: 'Earnings', icon: NavigationIcons.earnings, index: 2 }
+                ].map((tab) => {
+                  const isActive = selectedIndex === tab.index;
+                  return (
+                    <button
+                      key={tab.index}
+                      onClick={() => handleTabChange(tab.index)}
+                      className={`relative flex items-center gap-3 px-4 py-3 font-medium transition-all duration-300 group rounded-xl ${
+                        isActive 
+                          ? 'text-red-burgundy bg-red-burgundy/10 shadow-sm' 
+                          : 'text-gray-600 hover:text-red-burgundy hover:bg-red-burgundy/5'
+                      }`}
+                    >
+                      <tab.icon className={`w-5 h-5 transition-colors duration-300 ${
+                        isActive ? 'text-red-burgundy' : 'text-gray-500 group-hover:text-red-burgundy'
+                      }`} />
+                      <span className="font-serif text-sm">{tab.name}</span>
+                      {isActive && (
+                        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-red-burgundy rounded-full"></div>
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Profile Section */}
+              <div className="flex items-center">
+                <div className="text-right">
+                  <div className="text-sm font-medium text-gray-900 truncate max-w-32">
+                    {profile?.firstName ? `${profile.firstName}` : 'Creator Dashboard'}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Creator Account
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         
