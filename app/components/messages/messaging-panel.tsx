@@ -397,7 +397,7 @@ export default function MessagingPanel({ userRole, selectedConversationId, hideS
   }
 
   return (
-    <div className="bg-white h-full flex flex-col md:flex-row border border-gray-100">
+    <div className="bg-white h-full flex flex-col md:flex-row border border-gray-100 sm:pt-20">
       {/* Left sidebar - conversation list (hidden on mobile when hideSidebar=true) */}
       {!hideSidebar && (
         <div

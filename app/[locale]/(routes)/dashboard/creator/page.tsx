@@ -47,12 +47,12 @@ function MobileBottomNavigation({
     { key: 'travels', icon: NavigationIcons.travel, index: 0 },
     { key: 'messages', icon: NavigationIcons.messages, index: 1 },
     { key: 'earnings', icon: NavigationIcons.earnings, index: 2 },
-    { 
-      key: 'profile', 
-      icon: NavigationIcons.edit, 
-      index: -2, // Special index for profile
-      action: () => window.location.href = `/${locale}/creator/profile/settings` 
-    }
+            { 
+          key: 'profile', 
+          icon: NavigationIcons.edit, 
+          index: -2, // Special index for profile
+          action: () => window.location.href = `/${locale}/dashboard/creator/profile-setup` 
+        }
   ];
 
   return (
@@ -266,7 +266,7 @@ export default function CreatorDashboard() {
               {/* Profile Section */}
               <div className="flex items-center">
                 <button 
-                  onClick={() => window.location.href = `/${locale}/creator/profile/settings`}
+                  onClick={() => window.location.href = `/${locale}/dashboard/creator/profile-setup`}
                   className="text-right hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
                 >
                   <div className="text-sm font-medium text-gray-900 truncate max-w-32 group-hover:text-red-burgundy transition-colors duration-300">

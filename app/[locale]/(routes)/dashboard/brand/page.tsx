@@ -51,12 +51,12 @@ function MobileBottomNavigation({
     { key: 'browse', icon: NavigationIcons.search, index: 0 },
     { key: 'messages', icon: NavigationIcons.messages, index: 1 },
     { key: 'bookings', icon: NavigationIcons.bookings, index: 2 },
-    { 
-      key: 'profile', 
-      icon: NavigationIcons.edit, 
-      index: -2, // Special index for profile
-      action: () => window.location.href = `/${locale}/brand/profile/settings` 
-    }
+            { 
+          key: 'profile', 
+          icon: NavigationIcons.edit, 
+          index: -2, // Special index for profile
+          action: () => window.location.href = `/${locale}/dashboard/brand/profile-setup` 
+        }
   ];
 
   return (
@@ -276,7 +276,7 @@ export default function BrandDashboard() {
               {/* Profile Section */}
               <div className="flex items-center">
                 <button 
-                  onClick={() => window.location.href = `/${locale}/brand/profile/settings`}
+                  onClick={() => window.location.href = `/${locale}/dashboard/brand/profile-setup`}
                   className="text-right hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
                 >
                   <div className="text-sm font-medium text-gray-900 truncate max-w-32 group-hover:text-red-burgundy transition-colors duration-300">
