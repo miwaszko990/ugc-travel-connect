@@ -7,12 +7,13 @@ import { doc, getDoc, DocumentData } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from '@/app/components/ui/spinner';
+import { NavigationIcons } from '@/app/lib/navigation-config';
 
 // Import our components
 import BrowseCreators from '@/app/components/brand/browse-creators';
 import BrandMessages from '@/app/components/brand/messages';
 import BrandBookings from '@/app/components/brand/bookings';
-import BrandProfileSidebar from '@/app/components/brand/profile-sidebar';
+
 
 // Mobile navigation items - stable icons
 import { NavigationIcons } from '@/app/lib/navigation-config';
@@ -196,18 +197,38 @@ export default function BrandDashboard() {
         <div className="absolute top-1/3 right-1/4 w-1/5 h-1/5 bg-gradient-to-bl from-red-burgundy/1 to-transparent rounded-full blur-2xl"></div>
       </div>
 
-      <div className="relative z-10 flex">
-        {/* Left sidebar - hidden on mobile */}
-        <div className="hidden sm:block">
-          <BrandProfileSidebar 
-            profile={profile} 
-            onTabChange={handleTabChange}
-            activeTabIndex={selectedIndex}
-          />
+      <div className="relative z-10 flex flex-col">
+        {/* Top Navigation Bar - Desktop only */}
+        <div className="hidden sm:block sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
+          <div className="px-6 py-4">
+            <nav className="flex space-x-8">
+              {[
+                { name: 'Browse', icon: NavigationIcons.search, index: 0 },
+                { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
+                { name: 'Bookings', icon: NavigationIcons.bookings, index: 2 }
+              ].map((tab) => {
+                const isActive = selectedIndex === tab.index;
+                return (
+                  <button
+                    key={tab.index}
+                    onClick={() => handleTabChange(tab.index)}
+                    className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                      isActive 
+                        ? 'text-red-burgundy bg-red-burgundy/10 border border-red-burgundy/20' 
+                        : 'text-gray-600 hover:text-red-burgundy hover:bg-red-burgundy/5'
+                    }`}
+                  >
+                    <tab.icon className={`w-5 h-5 ${isActive ? 'text-red-burgundy' : 'text-gray-500'}`} />
+                    <span className="font-serif">{tab.name}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
         </div>
         
         {/* Main content area - mobile optimized */}
-        <div className="flex-1 sm:ml-0">
+        <div className="flex-1">
           <div className="w-full">
             {/* Main content - Mobile responsive */}
             <div className="min-h-screen pb-20 sm:pb-0">
