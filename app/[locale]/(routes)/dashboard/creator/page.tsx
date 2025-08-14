@@ -93,15 +93,15 @@ export default function CreatorDashboard() {
     // Update URL without triggering navigation (optional)
     const newTab = tabNames[tabIndex];
     if (newTab) {
-      window.history.replaceState(null, '', `/dashboard/creator?tab=${newTab}`);
+      window.history.replaceState(null, '', `/${locale}/dashboard/creator?tab=${newTab}`);
     }
-  }, [tabNames]);
+  }, [tabNames, locale]);
 
   useEffect(() => {
     if (user && user.role !== 'creator') {
-      router.replace('/dashboard');
+      router.replace(`/${locale}/dashboard`);
     }
-  }, [user, router]);
+  }, [user, router, locale]);
 
   useEffect(() => {
     const checkCreatorProfile = async () => {
