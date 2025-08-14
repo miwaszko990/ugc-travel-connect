@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { doc, getDoc, DocumentData } from 'firebase/firestore';
@@ -173,10 +173,10 @@ export default function BrandDashboard() {
     );
   }
 
-  // Memoized components to prevent unnecessary re-renders
-  const BrowseCreatorsComponent = useMemo(() => <BrowseCreators />, []);
-  const MessagesComponent = useMemo(() => <BrandMessages />, []);
-  const BookingsComponent = useMemo(() => <BrandBookings />, []); 
+  // Temporary: Removed useMemo to fix infinite loop
+  const BrowseCreatorsComponent = <BrowseCreators />;
+  const MessagesComponent = <BrandMessages />;
+  const BookingsComponent = <BrandBookings />; 
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#FDFCF9'}}>
