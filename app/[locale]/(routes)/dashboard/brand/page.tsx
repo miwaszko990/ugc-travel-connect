@@ -1,39 +1,74 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { doc, getDoc, DocumentData } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from '@/app/components/ui/spinner';
-import { useLocale } from 'next-intl';
 
-// Lazy load brand components for better performance
+// Import our components
+import BrowseCreators from '@/app/components/brand/browse-creators';
+import BrandMessages from '@/app/components/brand/messages';
+import BrandBookings from '@/app/components/brand/bookings';
 import BrandProfileSidebar from '@/app/components/brand/profile-sidebar';
-import dynamic from 'next/dynamic';
 
-const BrowseCreators = dynamic(() => import('@/app/components/brand/browse-creators'), {
-  loading: () => <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-burgundy"></div></div>
-});
+// Mobile navigation items
+import { BRAND_MOBILE_NAV_ITEMS } from '@/app/lib/navigation-config';
 
-const BrandMessages = dynamic(() => import('@/app/components/brand/messages'), {
-  loading: () => <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-burgundy"></div></div>
-});
-
-const BrandBookings = dynamic(() => import('@/app/components/brand/bookings'), {
-  loading: () => <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-burgundy"></div></div>
-});
-
-// Constants for better maintainability
-const BRAND_TABS = ['browse-creators', 'messages', 'bookings'] as const;
+// Tab management
+type BrandTab = 'browse' | 'messages' | 'bookings';
+const BRAND_TABS: BrandTab[] = ['browse', 'messages', 'bookings'];
 const DEFAULT_TAB_INDEX = 0;
 
-type BrandTab = typeof BRAND_TABS[number];
-
 interface BrandProfile extends DocumentData {
+  uid?: string;
   brandName?: string;
   profileComplete?: boolean;
+}
+
+// Mobile Bottom Navigation Component
+function MobileBottomNavigation({ 
+  selectedIndex, 
+  onTabChange 
+}: { 
+  selectedIndex: number; 
+  onTabChange: (index: number) => void; 
+}) {
+  const t = useTranslations('brand.navigation');
+  
+  const tabs = [
+    { name: t('browse'), icon: BRAND_MOBILE_NAV_ITEMS[1].icon, index: 0 },
+    { name: t('messages'), icon: BRAND_MOBILE_NAV_ITEMS[2].icon, index: 1 },
+    { name: t('bookings'), icon: BRAND_MOBILE_NAV_ITEMS[3].icon, index: 2 }
+  ];
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex justify-around items-center h-16 sm:hidden shadow-lg">
+      {tabs.map((tab) => {
+        const isActive = selectedIndex === tab.index;
+        return (
+          <button
+            key={tab.index}
+            onClick={() => onTabChange(tab.index)}
+            className={`flex flex-col items-center justify-center flex-1 h-full text-xs font-medium transition-all duration-300 ${
+              isActive 
+                ? 'text-white bg-gradient-to-t from-red-burgundy to-red-burgundy/90' 
+                : 'text-gray-500 hover:text-red-burgundy hover:bg-red-burgundy/5'
+            }`}
+          >
+            <tab.icon
+              className={`w-6 h-6 mb-1 transition-colors duration-300 ${
+                isActive ? 'text-white' : 'text-gray-400'
+              }`}
+            />
+            <span className="font-serif">{tab.name}</span>
+          </button>
+        );
+      })}
+    </nav>
+  );
 }
 
 export default function BrandDashboard() {
@@ -78,124 +113,73 @@ export default function BrandDashboard() {
   useEffect(() => {
     if (user && user.role !== 'brand') {
       router.replace('/dashboard');
+      return;
     }
   }, [user, router]);
 
-  // Profile verification and setup
+  // Fetch brand profile
   useEffect(() => {
-    const checkBrandProfile = async () => {
+    const fetchBrandProfile = async () => {
       if (!user?.uid) return;
-      
+
       try {
         setLoading(true);
-        setError(null);
-        
-        // Check for cached profile data first (from recent profile creation)
-        const cachedProfile = sessionStorage.getItem('brandProfile');
-        const profileComplete = sessionStorage.getItem('profileComplete');
-        
-        if (cachedProfile && profileComplete === 'true') {
-          console.log('✅ Using cached brand profile data for faster loading');
-          const profileData = JSON.parse(cachedProfile);
+        const docRef = doc(db, 'users', user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const userData = { uid: user.uid, ...docSnap.data() } as BrandProfile;
+          setProfile(userData);
           setHasProfile(true);
-          setProfile(profileData);
-          setLoading(false);
-          // Clear cache after use to prevent stale data
-          sessionStorage.removeItem('brandProfile');
-          return;
-        }
-        
-        // Fallback to database fetch if no cache
-        console.log('📦 Fetching brand profile from database');
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        
-        if (userDoc.exists()) {
-          const userData = userDoc.data() as BrandProfile;
-          
-          // Check if brand profile is complete
-          if (userData.brandName && userData.profileComplete !== false) {
-            setHasProfile(true);
-            setProfile(userData);
-          } else {
-            // Redirect to profile setup if incomplete
-            router.push(`/${locale}/dashboard/brand/profile-setup`);
-            return;
-          }
         } else {
-          // No user document - redirect to setup
-          router.push(`/${locale}/dashboard/brand/profile-setup`);
-          return;
+          console.warn('No brand profile document found');
+          setHasProfile(false);
         }
       } catch (error) {
-        console.error('Error checking brand profile:', error);
-        setError('Failed to load profile');
-        
-        // Development fallback
-        if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-          setHasProfile(true);
-          setProfile({ brandName: 'Test Brand' });
-        } else {
-          router.push(`/${locale}/dashboard/brand/profile-setup`);
-          return;
-        }
+        console.error('Error fetching brand profile:', error);
+        setError('Failed to load profile data');
       } finally {
         setLoading(false);
       }
     };
-    
-    checkBrandProfile();
-  }, [user, router, locale]);
 
-  // Memoized components to prevent unnecessary re-renders
-  const BrowseCreatorsComponent = useMemo(() => <BrowseCreators />, []);
-  const MessagesComponent = useMemo(() => <BrandMessages />, []);
-  const BookingsComponent = useMemo(() => <BrandBookings />, []);
+    fetchBrandProfile();
+  }, [user]);
 
-  // Loading state
-  if (loading) {
+  // Show loading state
+  if (loading || !user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <div className="text-center">
-            <Spinner size="lg" />
-            <p className="mt-4 text-gray-600">{t('loading')}</p>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Spinner size="lg" />
       </div>
     );
   }
 
-  // Error state
+  // Show error state
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-        <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
-          <div className="text-red-600 mb-4">
-            <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L3.348 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-          </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('error.title')}</h3>
-          <p className="text-gray-600 mb-4">{t('error.message')}</p>
-          <button
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button 
             onClick={() => window.location.reload()}
-            className="bg-red-burgundy text-white px-4 py-2 rounded-lg hover:bg-red-burgundy/90 transition-colors"
+            className="px-4 py-2 bg-red-burgundy text-white rounded hover:bg-red-wine"
           >
-            {t('error.retry')}
+            {t('retry')}
           </button>
         </div>
       </div>
     );
   }
 
-  // Profile not complete - will redirect
-  if (!hasProfile) {
-    return null;
-  }
+  // Memoized components to prevent unnecessary re-renders
+  const BrowseCreatorsComponent = useMemo(() => <BrowseCreators />, []);
+  const MessagesComponent = useMemo(() => <BrandMessages />, []);
+  const BookingsComponent = useMemo(() => <BrandBookings />, []); 
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#FDFCF9'}}>
-      {/* Sophisticated Background Pattern - matching creator dashboard */}
+      {/* Sophisticated Background Pattern */}
       <div className="absolute inset-0">
         {/* Subtle dot pattern */}
         <div 
@@ -212,39 +196,41 @@ export default function BrandDashboard() {
       </div>
 
       <div className="relative z-10 flex">
-        {/* Mobile-only profile summary - HIDDEN */}
-        {/* <BrandProfileSidebar 
-          profile={profile} 
-          isMobile={true} 
-          onTabChange={handleTabChange}
-          activeTabIndex={selectedIndex}
-        /> */}
+        {/* Left sidebar - hidden on mobile */}
+        <div className="hidden sm:block">
+          <BrandProfileSidebar 
+            profile={profile} 
+            onTabChange={handleTabChange}
+            activeTabIndex={selectedIndex}
+          />
+        </div>
         
-        {/* Left sidebar */}
-        <BrandProfileSidebar 
-          profile={profile} 
-          onTabChange={handleTabChange}
-          activeTabIndex={selectedIndex}
-        />
-        
-        {/* Main content area */}
-        <div className="flex-1">
-          <div className="max-w-7xl mx-auto">
-            {/* Main content - Components stay mounted for better performance */}
-            <div className="min-h-screen">
-              <div style={{ display: selectedIndex === 0 ? 'block' : 'none' }}>
-                {BrowseCreatorsComponent}
-              </div>
-              <div style={{ display: selectedIndex === 1 ? 'block' : 'none' }}>
-                {MessagesComponent}
-              </div>
-              <div style={{ display: selectedIndex === 2 ? 'block' : 'none' }}>
-                {BookingsComponent}
+        {/* Main content area - mobile optimized */}
+        <div className="flex-1 sm:ml-0">
+          <div className="w-full">
+            {/* Main content - Mobile responsive */}
+            <div className="min-h-screen pb-20 sm:pb-0">
+              <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+                <div style={{ display: selectedIndex === 0 ? 'block' : 'none' }}>
+                  {BrowseCreatorsComponent}
+                </div>
+                <div style={{ display: selectedIndex === 1 ? 'block' : 'none' }}>
+                  {MessagesComponent}
+                </div>
+                <div style={{ display: selectedIndex === 2 ? 'block' : 'none' }}>
+                  {BookingsComponent}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNavigation 
+        selectedIndex={selectedIndex} 
+        onTabChange={handleTabChange} 
+      />
     </div>
   );
 }

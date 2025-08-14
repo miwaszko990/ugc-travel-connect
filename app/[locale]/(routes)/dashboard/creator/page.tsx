@@ -15,6 +15,52 @@ import TravelPlans from '@/app/components/creator/travel-plans';
 import Messages from '@/app/components/creator/messages';
 import Earnings from '@/app/components/creator/earnings';
 
+// Mobile navigation items
+import { CREATOR_MOBILE_NAV_ITEMS } from '@/app/lib/navigation-config';
+
+// Mobile Bottom Navigation Component
+function MobileBottomNavigation({ 
+  selectedIndex, 
+  onTabChange 
+}: { 
+  selectedIndex: number; 
+  onTabChange: (index: number) => void; 
+}) {
+  const t = useTranslations('creator.navigation');
+  
+  const tabs = [
+    { name: t('travels'), icon: CREATOR_MOBILE_NAV_ITEMS[1].icon, index: 0 },
+    { name: t('messages'), icon: CREATOR_MOBILE_NAV_ITEMS[2].icon, index: 1 },
+    { name: t('earnings'), icon: CREATOR_MOBILE_NAV_ITEMS[3].icon, index: 2 }
+  ];
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex justify-around items-center h-16 sm:hidden shadow-lg">
+      {tabs.map((tab) => {
+        const isActive = selectedIndex === tab.index;
+        return (
+          <button
+            key={tab.index}
+            onClick={() => onTabChange(tab.index)}
+            className={`flex flex-col items-center justify-center flex-1 h-full text-xs font-medium transition-all duration-300 ${
+              isActive 
+                ? 'text-white bg-gradient-to-t from-red-burgundy to-red-burgundy/90' 
+                : 'text-gray-500 hover:text-red-burgundy hover:bg-red-burgundy/5'
+            }`}
+          >
+            <tab.icon
+              className={`w-6 h-6 mb-1 transition-colors duration-300 ${
+                isActive ? 'text-white' : 'text-gray-400'
+              }`}
+            />
+            <span className="font-serif">{tab.name}</span>
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
 export default function CreatorDashboard() {
   const { user } = useAuth();
   const router = useRouter();
@@ -60,10 +106,10 @@ export default function CreatorDashboard() {
   useEffect(() => {
     const checkCreatorProfile = async () => {
       if (!user) return;
-      
+
       try {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
-        
+
         if (userDoc.exists()) {
           const userData = userDoc.data();
           
@@ -136,39 +182,41 @@ export default function CreatorDashboard() {
       </div>
 
       <div className="relative z-10 flex">
-        {/* Mobile-only profile summary - HIDDEN */}
-        {/* <ProfileSidebar 
-          profile={profile} 
-          isMobile={true} 
-          onTabChange={handleTabChange}
-          activeTabIndex={selectedIndex}
-        /> */}
+        {/* Left sidebar - hidden on mobile */}
+        <div className="hidden sm:block">
+          <ProfileSidebar 
+            profile={profile} 
+            onTabChange={handleTabChange}
+            activeTabIndex={selectedIndex}
+          />
+        </div>
         
-        {/* Left sidebar */}
-        <ProfileSidebar 
-          profile={profile} 
-          onTabChange={handleTabChange}
-          activeTabIndex={selectedIndex}
-        />
-        
-        {/* Main content area */}
-        <div className="flex-1">
-          <div className="max-w-7xl mx-auto">
-            {/* Main content - Components stay mounted for better performance */}
-            <div className="min-h-screen">
-              <div style={{ display: selectedIndex === 0 ? 'block' : 'none' }}>
-                {TravelPlansComponent}
-              </div>
-              <div style={{ display: selectedIndex === 1 ? 'block' : 'none' }}>
-                {MessagesComponent}
-              </div>
-              <div style={{ display: selectedIndex === 2 ? 'block' : 'none' }}>
-                {EarningsComponent}
+        {/* Main content area - mobile optimized */}
+        <div className="flex-1 sm:ml-0">
+          <div className="w-full">
+            {/* Main content - Mobile responsive */}
+            <div className="min-h-screen pb-20 sm:pb-0">
+              <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+                <div style={{ display: selectedIndex === 0 ? 'block' : 'none' }}>
+                  {TravelPlansComponent}
+                </div>
+                <div style={{ display: selectedIndex === 1 ? 'block' : 'none' }}>
+                  {MessagesComponent}
+                </div>
+                <div style={{ display: selectedIndex === 2 ? 'block' : 'none' }}>
+                  {EarningsComponent}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNavigation 
+        selectedIndex={selectedIndex} 
+        onTabChange={handleTabChange} 
+      />
     </div>
   );
 } 
