@@ -8,6 +8,14 @@ import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, MoreVertical } from 'lucide-react';
 import React from 'react';
 
+// Stable helper function outside component to prevent re-creation
+const formatTimestamp = (timestamp: number | { seconds: number }) => {
+  const date = typeof timestamp === 'number' 
+    ? new Date(timestamp) 
+    : new Date(timestamp.seconds * 1000);
+  return date.toLocaleDateString();
+};
+
 // Mobile-only conversation list component
 function MobileConversationList({ 
   conversations, 
@@ -57,14 +65,6 @@ function MobileConversationList({
         {conversations.map((conversation) => {
           const otherParticipant = conversation.participants.find(id => id !== user?.uid);
           const otherUserInfo = otherParticipant ? conversation.participantInfo[otherParticipant] : null;
-          
-          // Format timestamp properly
-          const formatTimestamp = (timestamp: number | { seconds: number }) => {
-            const date = typeof timestamp === 'number' 
-              ? new Date(timestamp) 
-              : new Date(timestamp.seconds * 1000);
-            return date.toLocaleDateString();
-          };
           
           return (
             <button
@@ -215,7 +215,7 @@ export default React.memo(function CreatorMessages() {
     });
     
     return () => unsubscribe();
-  }, [user, chatId]);
+  }, [user?.uid, chatId]);
 
   const handleSelectConversation = (conversation: Conversation) => {
     setSelectedConversation(conversation);
