@@ -161,25 +161,25 @@ const TravelPlans: React.FC<TravelPlansProps> = ({ onAddTrip }) => {
 
   // Empty state component
   const EmptyState = () => (
-    <div className="text-center py-16">
-      <div className="mb-8">
-        <div className="mx-auto w-24 h-24 bg-gradient-to-br from-red-burgundy/10 to-red-burgundy/5 rounded-full flex items-center justify-center mb-6">
-          <Plane className="w-12 h-12 text-red-burgundy" />
+    <div className="text-center py-12 sm:py-16 px-4">
+      <div className="mb-6 sm:mb-8">
+        <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-red-burgundy/10 to-red-burgundy/5 rounded-full flex items-center justify-center mb-4 sm:mb-6">
+          <Plane className="w-10 h-10 sm:w-12 sm:h-12 text-red-burgundy" />
         </div>
-        <h3 className="text-2xl font-serif font-semibold text-red-burgundy mb-3">
+        <h3 className="text-xl sm:text-2xl font-serif font-semibold text-red-burgundy mb-2 sm:mb-3">
           {t('noTrips.title')}
         </h3>
-        <p className="text-lg text-subtext max-w-md mx-auto mb-8">
+        <p className="text-base sm:text-lg text-subtext max-w-md mx-auto mb-6 sm:mb-8">
           {t('noTrips.subtitle')}
         </p>
       </div>
       
       <button 
         onClick={() => setIsModalOpen(true)}
-        className="group relative inline-flex items-center gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 overflow-hidden border border-red-burgundy"
+        className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-red-burgundy text-sm sm:text-base w-full sm:w-auto max-w-xs sm:max-w-none mx-auto"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-burgundy/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-        <Plus className="relative w-5 h-5 text-red-burgundy group-hover:text-white transition-colors duration-300" />
+        <Plus className="relative w-4 h-4 sm:w-5 sm:h-5 text-red-burgundy group-hover:text-white transition-colors duration-300" />
         <span className="relative">{t('noTrips.buttonText')}</span>
       </button>
     </div>
@@ -234,22 +234,22 @@ const TravelPlans: React.FC<TravelPlansProps> = ({ onAddTrip }) => {
         <div className="absolute bottom-1/3 right-1/4 w-24 h-px bg-gradient-to-r from-transparent via-red-burgundy/20 to-transparent"></div>
       </div>
 
-      <div className="relative z-10 p-6">
-        {/* Header section with improved typography */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-serif font-bold text-red-burgundy mb-2">{t('title')}</h1>
-              <p className="text-lg text-subtext">{t('subtitle')}</p>
+      <div className="relative z-10 p-4 sm:p-6">
+        {/* Header section with mobile-optimized typography */}
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6">
+            <div className="mb-4 sm:mb-0">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-red-burgundy mb-2">{t('title')}</h1>
+              <p className="text-base sm:text-lg text-subtext">{t('subtitle')}</p>
             </div>
             
             {travelPlans.length > 0 && (
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="group relative inline-flex items-center gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 overflow-hidden border border-red-burgundy"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white px-4 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-red-burgundy text-sm sm:text-base w-full sm:w-auto"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-burgundy/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                <Plus className="relative w-5 h-5 text-red-burgundy group-hover:text-white transition-colors duration-300" />
+                <Plus className="relative w-4 h-4 sm:w-5 sm:h-5 text-red-burgundy group-hover:text-white transition-colors duration-300" />
                 <span className="relative">{t('planFirstTrip')}</span>
               </button>
             )}
@@ -260,25 +260,29 @@ const TravelPlans: React.FC<TravelPlansProps> = ({ onAddTrip }) => {
         {travelPlans.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:gap-6">
             {travelPlans.map((trip) => (
               <div key={trip.id}
-                className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-red-burgundy/10 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-3xl shadow-lg border border-red-burgundy/10 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-red-burgundy/20 to-red-burgundy/5 rounded-2xl flex items-center justify-center">
-                        <MapPin className="w-8 h-8 text-red-burgundy" />
+                <div className="p-4 sm:p-6">
+                  {/* Mobile: Stack layout, Desktop: Horizontal layout */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    {/* Trip info section */}
+                    <div className="flex items-start sm:items-center space-x-3 sm:space-x-4 mb-4 sm:mb-0">
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-red-burgundy/20 to-red-burgundy/5 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-red-burgundy" />
                       </div>
                       
-                      <div className="flex-1">
-                        <h3 className="text-xl font-serif font-semibold text-red-burgundy">{trip.destination}, {trip.country}</h3>
-                        <div className="flex items-center text-subtext mt-1">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          <span>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</span>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg sm:text-xl font-serif font-semibold text-red-burgundy mb-1 truncate">{trip.destination}, {trip.country}</h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center text-subtext text-sm sm:text-base">
+                          <div className="flex items-center">
+                            <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
+                            <span className="truncate">{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</span>
+                          </div>
                           {trip.status === 'Planned' && (
-                            <span className="ml-3 text-red-burgundy font-medium">
+                            <span className="mt-1 sm:mt-0 sm:ml-3 text-red-burgundy font-medium text-sm">
                               • {t('daysUntil', { days: getDaysUntil(trip.startDate) })}
                             </span>
                           )}
@@ -286,20 +290,19 @@ const TravelPlans: React.FC<TravelPlansProps> = ({ onAddTrip }) => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(trip.status)}`}>
+                    {/* Actions section */}
+                    <div className="flex items-center justify-between sm:justify-end space-x-3">
+                      <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(trip.status)}`}>
                         {getStatusTranslation(trip.status)}
                       </span>
                       
-                      <div className="flex space-x-1">
-                        <button 
-                          onClick={() => handleDeleteTrip(trip.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-                          title={tActions('delete')}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+                      <button 
+                        onClick={() => handleDeleteTrip(trip.id)}
+                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg sm:rounded-xl transition-colors flex-shrink-0"
+                        title={tActions('delete')}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
