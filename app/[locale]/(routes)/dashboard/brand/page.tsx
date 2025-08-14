@@ -55,7 +55,7 @@ function MobileBottomNavigation({
       key: 'profile', 
       icon: NavigationIcons.edit, 
       index: -2, // Special index for profile
-      action: () => window.location.href = `/${locale}/dashboard/brand/profile/settings` 
+      action: () => window.location.href = `/${locale}/brand/profile/settings` 
     }
   ];
 
@@ -118,7 +118,7 @@ export default function BrandDashboard() {
     
     setSelectedIndex(tabIndex);
     
-    // Update URL without triggering navigation
+    // Update URL without triggering navigation (clear chatId to prevent auto-opening conversations)
     const newTab = BRAND_TABS[tabIndex];
     if (newTab && typeof window !== 'undefined') {
       window.history.replaceState(null, '', `/${locale}/dashboard/brand?tab=${newTab}`);
@@ -275,14 +275,17 @@ export default function BrandDashboard() {
 
               {/* Profile Section */}
               <div className="flex items-center">
-                <div className="text-right">
-                  <div className="text-sm font-medium text-gray-900 truncate max-w-32">
+                <button 
+                  onClick={() => window.location.href = `/${locale}/brand/profile/settings`}
+                  className="text-right hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
+                >
+                  <div className="text-sm font-medium text-gray-900 truncate max-w-32 group-hover:text-red-burgundy transition-colors duration-300">
                     {profile?.brandName || 'Brand Dashboard'}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-500 group-hover:text-red-burgundy/70 transition-colors duration-300">
                     Brand Account
                   </div>
-                </div>
+                </button>
               </div>
             </div>
           </div>

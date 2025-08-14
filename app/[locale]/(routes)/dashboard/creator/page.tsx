@@ -51,7 +51,7 @@ function MobileBottomNavigation({
       key: 'profile', 
       icon: NavigationIcons.edit, 
       index: -2, // Special index for profile
-      action: () => window.location.href = `/${locale}/dashboard/creator/profile/settings` 
+      action: () => window.location.href = `/${locale}/creator/profile/settings` 
     }
   ];
 
@@ -112,7 +112,7 @@ export default function CreatorDashboard() {
   const handleTabChange = useCallback((tabIndex: number) => {
     setSelectedIndex(tabIndex);
     
-    // Update URL without triggering navigation (optional)
+    // Update URL without triggering navigation (clear chatId to prevent auto-opening conversations)
     const newTab = tabNames[tabIndex];
     if (newTab) {
       window.history.replaceState(null, '', `/${locale}/dashboard/creator?tab=${newTab}`);
@@ -265,14 +265,17 @@ export default function CreatorDashboard() {
 
               {/* Profile Section */}
               <div className="flex items-center">
-                <div className="text-right">
-                  <div className="text-sm font-medium text-gray-900 truncate max-w-32">
+                <button 
+                  onClick={() => window.location.href = `/${locale}/creator/profile/settings`}
+                  className="text-right hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
+                >
+                  <div className="text-sm font-medium text-gray-900 truncate max-w-32 group-hover:text-red-burgundy transition-colors duration-300">
                     {profile?.firstName ? `${profile.firstName}` : 'Creator Dashboard'}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-500 group-hover:text-red-burgundy/70 transition-colors duration-300">
                     Creator Account
                   </div>
-                </div>
+                </button>
               </div>
             </div>
           </div>
