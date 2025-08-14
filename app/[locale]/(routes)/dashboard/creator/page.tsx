@@ -10,29 +10,30 @@ import { Spinner } from '@/app/components/ui/spinner';
 import { useLocale } from 'next-intl';
 
 // Import our components
-import ProfileSidebar from '@/app/components/creator/profile-sidebar';
 import TravelPlans from '@/app/components/creator/travel-plans';
-import Messages from '@/app/components/creator/messages';
-import Earnings from '@/app/components/creator/earnings';
+import CreatorMessages from '@/app/components/creator/messages';
+import CreatorEarnings from '@/app/components/creator/earnings';
+import CreatorProfileSidebar from '@/app/components/creator/profile-sidebar';
 
-// Mobile navigation items
-import { CREATOR_MOBILE_NAV_ITEMS } from '@/app/lib/navigation-config';
+// Mobile navigation items - stable icons
+import { NavigationIcons } from '@/app/lib/navigation-config';
+
+interface CreatorProfile extends DocumentData {
+  uid?: string;
+  firstName?: string;
+  profileComplete?: boolean;
+}
 
 // Mobile Bottom Navigation Component
-function MobileBottomNavigation({ 
-  selectedIndex, 
-  onTabChange 
-}: { 
-  selectedIndex: number; 
-  onTabChange: (index: number) => void; 
-}) {
+function MobileBottomNavigation({ selectedIndex, onTabChange }: { selectedIndex: number; onTabChange: (index: number) => void; }) {
   const t = useTranslations('creator.navigation');
   
-  const tabs = [
-    { name: t('travels'), icon: CREATOR_MOBILE_NAV_ITEMS[1].icon, index: 0 },
-    { name: t('messages'), icon: CREATOR_MOBILE_NAV_ITEMS[2].icon, index: 1 },
-    { name: t('earnings'), icon: CREATOR_MOBILE_NAV_ITEMS[3].icon, index: 2 }
-  ];
+  // Stable tab configuration to prevent re-renders
+  const tabs = useMemo(() => [
+    { name: t('travels'), icon: NavigationIcons.travel, index: 0 },
+    { name: t('messages'), icon: NavigationIcons.messages, index: 1 },
+    { name: t('earnings'), icon: NavigationIcons.earnings, index: 2 }
+  ], [t]);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex justify-around items-center h-16 sm:hidden shadow-lg">
@@ -143,8 +144,8 @@ export default function CreatorDashboard() {
     []
   );
   
-  const MessagesComponent = useMemo(() => <Messages />, []);
-  const EarningsComponent = useMemo(() => <Earnings />, []);
+  const MessagesComponent = useMemo(() => <CreatorMessages />, []);
+  const EarningsComponent = useMemo(() => <CreatorEarnings />, []);
 
   if (loading) {
     return (
@@ -184,7 +185,7 @@ export default function CreatorDashboard() {
       <div className="relative z-10 flex">
         {/* Left sidebar - hidden on mobile */}
         <div className="hidden sm:block">
-          <ProfileSidebar 
+          <CreatorProfileSidebar 
             profile={profile} 
             onTabChange={handleTabChange}
             activeTabIndex={selectedIndex}

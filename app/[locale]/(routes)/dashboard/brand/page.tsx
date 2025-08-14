@@ -14,8 +14,8 @@ import BrandMessages from '@/app/components/brand/messages';
 import BrandBookings from '@/app/components/brand/bookings';
 import BrandProfileSidebar from '@/app/components/brand/profile-sidebar';
 
-// Mobile navigation items
-import { BRAND_MOBILE_NAV_ITEMS } from '@/app/lib/navigation-config';
+// Mobile navigation items - stable icons
+import { NavigationIcons } from '@/app/lib/navigation-config';
 
 // Tab management
 type BrandTab = 'browse' | 'messages' | 'bookings';
@@ -38,11 +38,12 @@ function MobileBottomNavigation({
 }) {
   const t = useTranslations('brand.navigation');
   
-  const tabs = [
-    { name: t('browse'), icon: BRAND_MOBILE_NAV_ITEMS[1].icon, index: 0 },
-    { name: t('messages'), icon: BRAND_MOBILE_NAV_ITEMS[2].icon, index: 1 },
-    { name: t('bookings'), icon: BRAND_MOBILE_NAV_ITEMS[3].icon, index: 2 }
-  ];
+  // Stable tab configuration to prevent re-renders
+  const tabs = useMemo(() => [
+    { name: t('browse'), icon: NavigationIcons.search, index: 0 },
+    { name: t('messages'), icon: NavigationIcons.messages, index: 1 },
+    { name: t('bookings'), icon: NavigationIcons.bookings, index: 2 }
+  ], [t]);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex justify-around items-center h-16 sm:hidden shadow-lg">
