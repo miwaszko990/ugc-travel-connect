@@ -204,8 +204,8 @@ export default React.memo(function CreatorMessages() {
         )}
       </div>
 
-      {/* Desktop View - completely unchanged */}
-      <div className="hidden sm:flex flex-1 overflow-hidden">
+      {/* Desktop View - Full screen messaging */}
+      <div className="hidden sm:block sm:fixed sm:inset-0 sm:z-10">
         <MessagingPanel 
           userRole="creator" 
           selectedConversationId={chatId}
