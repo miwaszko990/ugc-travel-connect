@@ -195,12 +195,15 @@ export default function CreatorDashboard() {
           <div className="w-full">
             {/* Main content - Mobile responsive */}
             <div className="min-h-screen pb-20 sm:pb-0">
+              {/* Messages - Full width without padding */}
+              <div style={{ display: selectedIndex === 1 ? 'block' : 'none' }} className="h-full">
+                {MessagesComponent}
+              </div>
+              
+              {/* Other content with padding */}
               <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
                 <div style={{ display: selectedIndex === 0 ? 'block' : 'none' }}>
                   {TravelPlansComponent}
-                </div>
-                <div style={{ display: selectedIndex === 1 ? 'block' : 'none' }}>
-                  {MessagesComponent}
                 </div>
                 <div style={{ display: selectedIndex === 2 ? 'block' : 'none' }}>
                   {EarningsComponent}
