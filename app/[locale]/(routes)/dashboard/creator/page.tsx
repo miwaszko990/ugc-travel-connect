@@ -25,12 +25,34 @@ interface CreatorProfile extends DocumentData {
 }
 
 // Mobile Bottom Navigation Component
-function MobileBottomNavigation({ selectedIndex, onTabChange }: { selectedIndex: number; onTabChange: (index: number) => void; }) {
-  // Stable tab configuration - fixed tab names to prevent re-renders
+function MobileBottomNavigation({ 
+  selectedIndex, 
+  onTabChange,
+  locale 
+}: { 
+  selectedIndex: number; 
+  onTabChange: (index: number) => void;
+  locale: string; 
+}) {
+  const tNav = useTranslations('creator.navigation');
+  
+  // Enhanced tab configuration with Home and Profile
   const tabs = [
-    { name: 'Travels', icon: NavigationIcons.travel, index: 0 },
-    { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
-    { name: 'Earnings', icon: NavigationIcons.earnings, index: 2 }
+    { 
+      key: 'home', 
+      icon: NavigationIcons.home, 
+      index: -1, // Special index for home
+      action: () => window.location.href = `/${locale}` 
+    },
+    { key: 'travels', icon: NavigationIcons.travel, index: 0 },
+    { key: 'messages', icon: NavigationIcons.messages, index: 1 },
+    { key: 'earnings', icon: NavigationIcons.earnings, index: 2 },
+    { 
+      key: 'profile', 
+      icon: NavigationIcons.edit, 
+      index: -2, // Special index for profile
+      action: () => window.location.href = `/${locale}/dashboard/creator/profile/settings` 
+    }
   ];
 
   return (
@@ -39,8 +61,8 @@ function MobileBottomNavigation({ selectedIndex, onTabChange }: { selectedIndex:
         const isActive = selectedIndex === tab.index;
         return (
           <button
-            key={tab.index}
-            onClick={() => onTabChange(tab.index)}
+            key={tab.key}
+            onClick={() => tab.action ? tab.action() : onTabChange(tab.index)}
             className={`flex flex-col items-center justify-center flex-1 h-full text-xs font-medium transition-all duration-300 ${
               isActive 
                 ? 'text-white bg-gradient-to-t from-red-burgundy to-red-burgundy/90' 
@@ -52,7 +74,7 @@ function MobileBottomNavigation({ selectedIndex, onTabChange }: { selectedIndex:
                 isActive ? 'text-white' : 'text-gray-400'
               }`}
             />
-            <span className="font-serif">{tab.name}</span>
+            <span className="font-serif">{tNav(tab.key)}</span>
           </button>
         );
       })}
@@ -65,6 +87,7 @@ export default function CreatorDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('creator.dashboard');
+  const tNav = useTranslations('creator.navigation');
   const locale = useLocale();
   const [loading, setLoading] = useState(true);
   const [hasProfile, setHasProfile] = useState(false);
@@ -213,9 +236,9 @@ export default function CreatorDashboard() {
               {/* Navigation Tabs */}
               <nav className="flex items-center space-x-8">
                 {[
-                  { name: 'Travels', icon: NavigationIcons.travel, index: 0 },
-                  { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
-                  { name: 'Earnings', icon: NavigationIcons.earnings, index: 2 }
+                  { key: 'travels', icon: NavigationIcons.travel, index: 0 },
+                  { key: 'messages', icon: NavigationIcons.messages, index: 1 },
+                  { key: 'earnings', icon: NavigationIcons.earnings, index: 2 }
                 ].map((tab) => {
                   const isActive = selectedIndex === tab.index;
                   return (
@@ -231,7 +254,7 @@ export default function CreatorDashboard() {
                       <tab.icon className={`w-5 h-5 transition-colors duration-300 ${
                         isActive ? 'text-red-burgundy' : 'text-gray-500 group-hover:text-red-burgundy'
                       }`} />
-                      <span className="font-serif text-sm">{tab.name}</span>
+                      <span className="font-serif text-sm">{tNav(tab.key)}</span>
                       {isActive && (
                         <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-red-burgundy rounded-full"></div>
                       )}
@@ -282,7 +305,8 @@ export default function CreatorDashboard() {
       {/* Mobile Bottom Navigation */}
       <MobileBottomNavigation 
         selectedIndex={selectedIndex} 
-        onTabChange={handleTabChange} 
+        onTabChange={handleTabChange}
+        locale={locale}
       />
     </div>
   );

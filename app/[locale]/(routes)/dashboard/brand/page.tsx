@@ -31,16 +31,32 @@ interface BrandProfile extends DocumentData {
 // Mobile Bottom Navigation Component
 function MobileBottomNavigation({ 
   selectedIndex, 
-  onTabChange 
+  onTabChange,
+  locale 
 }: { 
   selectedIndex: number; 
-  onTabChange: (index: number) => void; 
+  onTabChange: (index: number) => void;
+  locale: string; 
 }) {
-  // Stable tab configuration - fixed tab names to prevent re-renders
+  const tNav = useTranslations('brand.navigation');
+  
+  // Enhanced tab configuration with Home and Profile
   const tabs = [
-    { name: 'Browse', icon: NavigationIcons.search, index: 0 },
-    { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
-    { name: 'Bookings', icon: NavigationIcons.bookings, index: 2 }
+    { 
+      key: 'home', 
+      icon: NavigationIcons.home, 
+      index: -1, // Special index for home
+      action: () => window.location.href = `/${locale}` 
+    },
+    { key: 'browse', icon: NavigationIcons.search, index: 0 },
+    { key: 'messages', icon: NavigationIcons.messages, index: 1 },
+    { key: 'bookings', icon: NavigationIcons.bookings, index: 2 },
+    { 
+      key: 'profile', 
+      icon: NavigationIcons.edit, 
+      index: -2, // Special index for profile
+      action: () => window.location.href = `/${locale}/dashboard/brand/profile/settings` 
+    }
   ];
 
   return (
@@ -49,8 +65,8 @@ function MobileBottomNavigation({
         const isActive = selectedIndex === tab.index;
         return (
           <button
-            key={tab.index}
-            onClick={() => onTabChange(tab.index)}
+            key={tab.key}
+            onClick={() => tab.action ? tab.action() : onTabChange(tab.index)}
             className={`flex flex-col items-center justify-center flex-1 h-full text-xs font-medium transition-all duration-300 ${
               isActive 
                 ? 'text-white bg-gradient-to-t from-red-burgundy to-red-burgundy/90' 
@@ -62,7 +78,7 @@ function MobileBottomNavigation({
                 isActive ? 'text-white' : 'text-gray-400'
               }`}
             />
-            <span className="font-serif">{tab.name}</span>
+            <span className="font-serif">{tNav(tab.key)}</span>
           </button>
         );
       })}
@@ -72,6 +88,7 @@ function MobileBottomNavigation({
 
 export default function BrandDashboard() {
   const t = useTranslations('brand.dashboard');
+  const tNav = useTranslations('brand.navigation');
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -229,9 +246,9 @@ export default function BrandDashboard() {
               {/* Navigation Tabs */}
               <nav className="flex items-center space-x-8">
                 {[
-                  { name: 'Browse', icon: NavigationIcons.search, index: 0 },
-                  { name: 'Messages', icon: NavigationIcons.messages, index: 1 },
-                  { name: 'Bookings', icon: NavigationIcons.bookings, index: 2 }
+                  { key: 'browse', icon: NavigationIcons.search, index: 0 },
+                  { key: 'messages', icon: NavigationIcons.messages, index: 1 },
+                  { key: 'bookings', icon: NavigationIcons.bookings, index: 2 }
                 ].map((tab) => {
                   const isActive = selectedIndex === tab.index;
                   return (
@@ -247,7 +264,7 @@ export default function BrandDashboard() {
                       <tab.icon className={`w-5 h-5 transition-colors duration-300 ${
                         isActive ? 'text-red-burgundy' : 'text-gray-500 group-hover:text-red-burgundy'
                       }`} />
-                      <span className="font-serif text-sm">{tab.name}</span>
+                      <span className="font-serif text-sm">{tNav(tab.key)}</span>
                       {isActive && (
                         <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-red-burgundy rounded-full"></div>
                       )}
@@ -298,7 +315,8 @@ export default function BrandDashboard() {
       {/* Mobile Bottom Navigation */}
       <MobileBottomNavigation 
         selectedIndex={selectedIndex} 
-        onTabChange={handleTabChange} 
+        onTabChange={handleTabChange}
+        locale={locale}
       />
     </div>
   );
