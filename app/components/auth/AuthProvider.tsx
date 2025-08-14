@@ -193,9 +193,8 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
   return (
-    // Temporarily disabled AuthErrorBoundary to see real errors
-    // <AuthErrorBoundary>
+    <AuthErrorBoundary>
       <AuthProviderInner>{children}</AuthProviderInner>
-    // </AuthErrorBoundary>
+    </AuthErrorBoundary>
   );
 } 

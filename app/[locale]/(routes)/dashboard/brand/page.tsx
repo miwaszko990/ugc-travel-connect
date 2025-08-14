@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { doc, getDoc, DocumentData } from 'firebase/firestore';
