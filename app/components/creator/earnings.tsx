@@ -250,7 +250,7 @@ export default React.memo(function Earnings() {
   }
 
   return (
-    <div className="p-4 sm:p-8 overflow-x-hidden" style={{backgroundColor: '#FDFCF9'}}>
+    <div className="p-4 sm:p-8 overflow-x-hidden w-full max-w-full" style={{backgroundColor: '#FDFCF9'}}>
       {/* Header */}
       <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mb-2">
@@ -261,38 +261,38 @@ export default React.memo(function Earnings() {
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
-          <div className="text-lg sm:text-2xl font-bold text-emerald-600 mb-1">
+      {/* Stats Cards - Optimized for mobile */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 mb-6 sm:mb-8">
+        <div className="bg-white rounded-lg sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <div className="text-base sm:text-2xl font-bold text-emerald-600 mb-1 truncate">
             ${stats.totalEarned.toLocaleString()}
           </div>
-          <div className="text-xs sm:text-sm text-gray-500">{t('stats.totalEarned')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 leading-tight">{t('stats.totalEarned')}</div>
         </div>
-        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
-          <div className="text-lg sm:text-2xl font-bold text-amber-600 mb-1">
+        <div className="bg-white rounded-lg sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <div className="text-base sm:text-2xl font-bold text-amber-600 mb-1 truncate">
             ${stats.pendingPayment.toLocaleString()}
           </div>
-          <div className="text-xs sm:text-sm text-gray-500">{t('stats.pendingPayment')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 leading-tight">{t('stats.pendingPayment')}</div>
         </div>
-        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
-          <div className="text-lg sm:text-2xl font-bold text-red-burgundy mb-1">
+        <div className="bg-white rounded-lg sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <div className="text-base sm:text-2xl font-bold text-red-burgundy mb-1 truncate">
             {stats.completed}
           </div>
-          <div className="text-xs sm:text-sm text-gray-500">{t('stats.jobsCompleted')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 leading-tight">{t('stats.jobsCompleted')}</div>
         </div>
-        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
-          <div className="text-lg sm:text-2xl font-bold text-gray-900 mb-1">
+        <div className="bg-white rounded-lg sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <div className="text-base sm:text-2xl font-bold text-gray-900 mb-1 truncate">
             ${stats.averagePerOrder.toLocaleString()}
           </div>
-          <div className="text-xs sm:text-sm text-gray-500">{t('stats.avgPerJob')}</div>
+          <div className="text-xs sm:text-sm text-gray-500 leading-tight">{t('stats.avgPerJob')}</div>
         </div>
       </div>
       
-      {/* Tabs */}
-      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 mb-6 sm:mb-8">
+      {/* Tabs - Better mobile scrolling */}
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 mb-6 sm:mb-8 overflow-hidden">
         <div className="border-b border-gray-100">
-          <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 overflow-x-auto">
+                      <nav className="flex px-2 sm:px-6 overflow-x-auto" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
             {[
               { key: 'all', label: t('tabs.allOrders'), count: stats.totalOrders },
               { key: 'paid', label: t('tabs.newOrders'), count: orders.filter(o => o.status === 'paid').length },
@@ -302,13 +302,15 @@ export default React.memo(function Earnings() {
               <button
                 key={tab.key}
                 onClick={() => setSelectedTab(tab.key)}
-                className={`py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
+                className={`py-3 sm:py-4 px-2 sm:px-4 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap flex-shrink-0 ${
                   selectedTab === tab.key
                     ? 'border-red-burgundy text-red-burgundy'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                {tab.label} ({tab.count})
+                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+                <span className="ml-1">({tab.count})</span>
               </button>
             ))}
           </nav>
@@ -317,7 +319,7 @@ export default React.memo(function Earnings() {
         {/* Orders List */}
         <div className="divide-y divide-gray-100">
           {filteredOrders.length === 0 ? (
-              <div className="text-center py-12 sm:py-16">
+              <div className="text-center py-12 sm:py-16 px-4">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -339,11 +341,11 @@ export default React.memo(function Earnings() {
                 key={order.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="p-4 sm:p-6 hover:bg-gray-50/50 transition-colors"
+                className="p-3 sm:p-6 hover:bg-gray-50/50 transition-colors"
               >
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
-                  {/* Main Content */}
-                  <div className="flex items-start gap-3 sm:gap-4 flex-1">
+                <div className="flex flex-col space-y-3 sm:space-y-4">
+                  {/* Mobile: Vertical layout, Desktop: Horizontal layout */}
+                  <div className="flex items-start gap-3 sm:gap-4">
                     {/* Brand Avatar */}
                     <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden ring-2 ring-red-burgundy/10 flex-shrink-0">
                       <Image
@@ -356,16 +358,16 @@ export default React.memo(function Earnings() {
 
                     {/* Order Details */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                         <div className="mb-2 sm:mb-0">
-                          <h3 className="font-semibold text-gray-900 text-sm sm:text-base">
+                          <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                             {order.creator?.firstName || 'Brand'}
                           </h3>
-                          <p className="text-xs sm:text-sm text-red-burgundy font-medium">
+                          <p className="text-xs sm:text-sm text-red-burgundy font-medium truncate">
                             @{order.creator?.instagramHandle || 'brand'}
                           </p>
                         </div>
-                        <div className="text-left sm:text-right">
+                        <div className="text-left sm:text-right flex-shrink-0">
                           <div className="text-lg sm:text-xl font-bold text-gray-900">
                             {order.formattedAmount}
                           </div>
@@ -378,25 +380,23 @@ export default React.memo(function Earnings() {
                       </div>
 
                       {/* Trip Details */}
-                      <div className="mb-3">
-                        <div className="text-xs sm:text-sm text-gray-900 font-medium mb-1">
+                      <div className="mb-3 mt-2">
+                        <div className="text-xs sm:text-sm text-gray-900 font-medium mb-1 truncate">
                           📍 {order.tripDestination}, {order.tripCountry}
                         </div>
                         <div className="text-xs text-gray-500">
-                          Created: {formatOrderDate(order.createdAt)}
+                          <div>Created: {formatOrderDate(order.createdAt)}</div>
                           {order.paidAt && (
-                            <span className="block sm:inline sm:ml-3">
-                              Paid: {formatOrderDate(order.paidAt)}
-                            </span>
+                            <div>Paid: {formatOrderDate(order.paidAt)}</div>
                           )}
                         </div>
                       </div>
 
-                      {/* Actions */}
-                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                      {/* Actions - Always stacked on mobile */}
+                      <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
                         <button
                           onClick={() => handleMessageBrand(order.creator?.instagramHandle || '')}
-                          className="px-3 py-2 text-xs sm:text-sm border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-center"
                         >
                           {t('orders.messageBrand')}
                         </button>
@@ -405,7 +405,7 @@ export default React.memo(function Earnings() {
                           <button
                             onClick={() => handleStartWork(order.id)}
                             disabled={processingOrders.has(order.id)}
-                            className="px-3 py-2 text-xs sm:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                            className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 text-center"
                           >
                             {processingOrders.has(order.id) ? 'Starting...' : t('orders.startWork')}
                           </button>
@@ -415,11 +415,11 @@ export default React.memo(function Earnings() {
                           <>
                             <button 
                               onClick={() => handleUploadMaterials(order.id, order.brand?.brandName || 'Brand')}
-                              className="px-3 py-2 text-xs sm:text-sm bg-red-burgundy text-white rounded-lg hover:bg-red-burgundy/90 transition-colors"
+                              className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm bg-red-burgundy text-white rounded-lg hover:bg-red-burgundy/90 transition-colors text-center"
                             >
                               {t('orders.uploadMaterials')}
                             </button>
-                            <button className="px-3 py-2 text-xs sm:text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            <button className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-center">
                               {t('orders.completeWork')}
                             </button>
                           </>
@@ -427,12 +427,15 @@ export default React.memo(function Earnings() {
                       </div>
                     </div>
                   </div>
-              </div>
-              </motion.div>
+                </div>
+            </motion.div>
             ))
-            )}
+          )}
         </div>
-          </div>
+      </div>
+
+      {/* Add bottom padding for mobile navigation */}
+      <div className="h-20 sm:h-0" />
           
           {/* Payment Settings Footer */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
