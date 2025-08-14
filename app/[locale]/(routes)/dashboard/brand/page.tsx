@@ -82,6 +82,14 @@ export default function BrandDashboard() {
   const [profile, setProfile] = useState<BrandProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Debug logging
+  useEffect(() => {
+    console.log('🔍 Brand Dashboard Debug - User:', user);
+    console.log('🔍 Brand Dashboard Debug - User Role:', user?.role);
+    console.log('🔍 Brand Dashboard Debug - User UID:', user?.uid);
+    console.log('🔍 Brand Dashboard Debug - Loading:', loading);
+  }, [user, loading]);
+
   // Tab logic with performance optimization
   const [selectedIndex, setSelectedIndex] = useState(DEFAULT_TAB_INDEX);
 
@@ -111,7 +119,9 @@ export default function BrandDashboard() {
 
   // Role-based access control
   useEffect(() => {
+    console.log('🔍 Role Check - User:', user, 'Role:', user?.role);
     if (user && user.role !== 'brand') {
+      console.log('⚠️ User role is not brand, redirecting...', user.role);
       router.replace('/dashboard');
       return;
     }
@@ -120,23 +130,28 @@ export default function BrandDashboard() {
   // Fetch brand profile
   useEffect(() => {
     const fetchBrandProfile = async () => {
-      if (!user?.uid) return;
+      if (!user?.uid) {
+        console.log('⚠️ No user UID available');
+        return;
+      }
 
       try {
+        console.log('🔍 Fetching brand profile for UID:', user.uid);
         setLoading(true);
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const userData = { uid: user.uid, ...docSnap.data() } as BrandProfile;
+          console.log('✅ Brand profile found:', userData);
           setProfile(userData);
           setHasProfile(true);
         } else {
-          console.warn('No brand profile document found');
+          console.warn('⚠️ No brand profile document found for UID:', user.uid);
           setHasProfile(false);
         }
       } catch (error) {
-        console.error('Error fetching brand profile:', error);
+        console.error('❌ Error fetching brand profile:', error);
         setError('Failed to load profile data');
       } finally {
         setLoading(false);
