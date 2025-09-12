@@ -4,7 +4,12 @@
     "tripSelection": {
       "label": "Select a Trip (Optional)",
       "placeholder": "Choose a trip destination",
-      "none": "No trip selected"
+      "none": "No trip selected",
+      "generalInquiry": "General inquiry"
+    },
+    "packageSelection": {
+      "label": "Interested Package (Optional)",
+      "generalInquiry": "General inquiry"
     },
     "form": {
       "placeholder": "Write your message here...",
@@ -38,6 +43,10 @@
     },
     "tripContext": {
       "messagingAbout": "Messaging about {destination} ({dateRange})"
+    },
+    "packageContext": {
+      "interestedIn": "Interested in",
+      "description": "Description"
     }
   },
   "brandProfile": {

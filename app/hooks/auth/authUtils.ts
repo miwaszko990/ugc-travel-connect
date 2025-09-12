@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 import { getUserDocument } from '@/app/lib/firebase/utils';
 import type { UserData, UserRole, AuthAction } from './types';
@@ -123,16 +123,32 @@ export async function handleMissingUserDocument(
   user: { uid: string; email: string | null },
   dispatch: React.Dispatch<AuthAction>
 ) {
-  console.warn('User exists in Auth but not in Firestore:', user.uid);
-  console.log('Attempting to create missing user document');
+  console.warn('⚠️ User exists in Auth but not in Firestore:', user.uid);
+  console.log('🔧 Attempting to create missing user document with retry logic');
   
   try {
+    // Try to get the document one more time with a small delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const userRef = doc(db, 'users', user.uid);
+    const retrySnapshot = await getDoc(userRef);
+    
+    if (retrySnapshot.exists()) {
+      console.log('✅ User document found on retry');
+      const userData = retrySnapshot.data() as UserData;
+      dispatch({ type: 'AUTH_STATE_CHANGED', payload: userData });
+      return;
+    }
+    
+    // Document still doesn't exist, create basic user data
     const basicUserData = createBasicUserData(user);
-    await setDoc(doc(db, 'users', user.uid), basicUserData);
-    console.log('Created missing user document with basic data');
+    await setDoc(userRef, basicUserData, { merge: true });
+    console.log('✅ Created missing user document with basic data');
     dispatch({ type: 'AUTH_STATE_CHANGED', payload: basicUserData });
   } catch (createError) {
-    console.error('Failed to create missing user document:', createError);
-    dispatch({ type: 'AUTH_STATE_CHANGED', payload: null });
+    console.error('❌ Failed to create missing user document:', createError);
+    // Don't set user to null, let them stay logged in with minimal data
+    const fallbackData = createBasicUserData(user);
+    dispatch({ type: 'AUTH_STATE_CHANGED', payload: fallbackData });
   }
 } 

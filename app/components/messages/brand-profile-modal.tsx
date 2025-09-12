@@ -2,6 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+
+// Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
+function useSafeT(namespace: string) {
+  try {
+    return useTranslations(namespace);
+  } catch (error) {
+    console.warn(`NextIntl context not available for namespace ${namespace}, using fallback`);
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
 import Image from 'next/image';
 import { X, Globe, MapPin, Users, Calendar, ExternalLink } from 'lucide-react';
 import { getBrandProfile } from '@/app/lib/firebase/utils';
@@ -33,7 +43,7 @@ export default function BrandProfileModal({
   brandName,
   brandProfilePic 
 }: BrandProfileModalProps) {
-  const t = useTranslations('messages.brandProfile');
+  const t = useSafeT('messages.brandProfile');
   const [brandProfile, setBrandProfile] = useState<BrandProfile | null>(null);
   const [loading, setLoading] = useState(false);
 

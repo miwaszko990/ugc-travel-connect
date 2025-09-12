@@ -102,6 +102,75 @@
       "profileImage": {
         "addPhoto": "Dodaj zdjęcie",
         "uploadProgress": "Przesyłanie: {progress}%"
+      },
+      "close": "Zamknij",
+      "height": {
+        "label": "Wzrost",
+        "placeholder": "np. 175 cm",
+        "required": "Wzrost jest wymagany"
+      },
+      "clothingSize": {
+        "label": "Rozmiar Odzieży",
+        "placeholder": "np. M",
+        "required": "Rozmiar odzieży jest wymagany"
+      },
+      "shoeSize": {
+        "label": "Rozmiar Butów",
+        "placeholder": "np. 38",
+        "required": "Rozmiar butów jest wymagany"
+      }
+    },
+    "buttons": {
+      "saveAndContinue": "Zapisz i Kontynuuj",
+      "saving": "Zapisywanie..."
+    },
+    "instagramPosts": {
+      "title": "Zdjęcia z Instagrama",
+      "subtitle": "Pokaż swoje najlepsze treści z podróży",
+      "placeholder": "Dodaj URL zdjęcia z Instagrama...",
+      "addAnother": "Dodaj kolejne zdjęcie",
+      "instructions": {
+        "title": "Jak dodać zdjęcia z Instagrama:",
+        "step1": "Idź do zdjęcia na Instagram",
+        "step2": "Kliknij trzy kropki (...) i wybierz 'Kopiuj link'",
+        "step3": "Wklej link tutaj - automatycznie pokażemy zdjęcie"
+      }
+    },
+    "instagramConnectionComing": {
+      "title": "Integracja z Instagramem już wkrótce",
+      "description": "Pracujemy nad bezproblemową integracją z Instagramem, aby automatycznie prezentować Twoje treści i wzmocnić Twój profil twórcy.",
+      "features": {
+        "autoSync": "Auto-synchronizacja postów",
+        "portfolioDisplay": "Wyświetlanie portfolio",
+        "engagement": "Metryki zaangażowania"
+      }
+    },
+    "packages": {
+      "title": "Pakiety Twórcy",
+      "mini": {
+        "title": "Mini Social Boost – 200 PLN",
+        "bullets": {
+          "stories": "3 x Instagram Stories",
+          "tagging": "Tagowanie marki + 1 link swipe-up",
+          "delivery": "Dostawa w ciągu 24 godzin od nagrania"
+        }
+      },
+      "content": {
+        "title": "Content Impact – 450 PLN",
+        "bullets": {
+          "video": "1 x Instagram Reel lub TikTok (do 30 sekund)",
+          "story": "1 x Instagram Story promujące treść",
+          "editing": "Montaż treści + dostosowanie do platformy"
+        }
+      },
+      "full": {
+        "title": "Full Campaign Package – 900 PLN",
+        "bullets": {
+          "reelsTikTok": "1 x Instagram Reel i 1 x TikTok (dostosowane do obu platform)",
+          "stories": "3 x Instagram Stories (promujące treść)",
+          "versions": "Wersje pionowe i poziome",
+          "delivery": "Dostawa w ciągu 3 dni roboczych"
+        }
       }
     }
   },

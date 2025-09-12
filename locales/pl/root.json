@@ -9,7 +9,7 @@
   },
   "hero": {
     "badge": "ZDOBĄDŹ CONTENT Z DOWOLNEGO MIEJSCA",
-    "title": "Lumo",
+    "title": "",
     "subtitle": "Zarabiaj tworząc content dla marek z miejsca w którym aktualnie jesteś.",
     "description": "Połącz się z najlepszymi content creatorami w szybki i bezpieczny sposób. ",
     "ctaButton": "Odkryj Twórców",
@@ -61,7 +61,7 @@
       "subtitle": "Znajdź idealnego twórcę dla swojej kampanii i otrzymaj autentyczne treści z dowolnego miejsca na świecie",
       "step1": {
         "title": "Odkryj Twórców",
-        "description": "Przeglądaj naszą wyselekcjonowaną kolekcję twórców podróżniczych i znajdź idealne dopasowanie dla swojej marki i destynacji."
+        "description": "Przeglądaj twórców i znajdź idealne dopasowanie dla swojej marki i destynacji."
       },
       "step2": {
         "title": "Wyślij Oferty",
@@ -85,7 +85,7 @@
       },
       "step2": {
         "title": "Dodaj Plany Podróży",
-        "description": "Udostępnij swoje nadchodzące podróże i destynacje. Marki znajdą Cię na podstawie tego, dokąd się wybierasz."
+        "description": "Udostępnij swoje nadchodzące podróże. Marki znajdą Cię na podstawie tego, dokąd się wybierasz."
       },
       "step3": {
         "title": "Twórz Treści",

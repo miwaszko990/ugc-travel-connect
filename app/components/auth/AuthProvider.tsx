@@ -27,14 +27,25 @@ import type { UserData, UserRole } from '@/app/hooks/auth/types';
 
 // Safe translation accessor so the provider doesn't crash outside NextIntlClientProvider
 function useSafeT(namespace: string) {
-  try {
-     
-    const {useTranslations} = require('next-intl');
-    return useTranslations(namespace);
-  } catch {
-    // Fallback: echo keys so UI remains functional during boot or on non-localized routes
-    return ((key: string) => key) as (key: string, vars?: any) => string;
+  // Check if we're in a context where NextIntl is available
+  if (typeof window !== 'undefined') {
+    try {
+      const { useTranslations } = require('next-intl');
+      return useTranslations(namespace);
+    } catch (error) {
+      console.log('NextIntl not available, using fallback translations');
+    }
   }
+  
+  // Fallback: provide proper Polish translations
+  const translations: Record<string, string> = {
+    'accountCreatedSuccess': 'Konto zostało utworzone pomyślnie!',
+    'accountCreatedLimited': 'Konto zostało utworzone z ograniczoną funkcjonalnością. Skontaktuj się z pomocą techniczną.',
+    'userAccountIncomplete': 'Konto użytkownika niekompletne. Skontaktuj się z pomocą techniczną.',
+    'authenticationError': 'Błąd uwierzytelniania',
+    'authErrorRefresh': 'Spróbuj odświeżyć stronę lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzał.'
+  };
+  return ((key: string) => translations[key] || key) as (key: string, vars?: any) => string;
 }
 
 /**
@@ -62,28 +73,16 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
       const user = userCredential.user;
       
       // Create user document in Firestore using utility function
-      try {
-        const userData = await createUserDocument(user.uid, email, role);
+      // This must happen synchronously before auth state listener processes the user
+      const userData = await createUserDocument(user.uid, email, role);
 
-        // Update state
-        dispatch({ type: 'AUTH_STATE_CHANGED', payload: userData });
-        
-        // Show success message with i18n
-        toast.success(t('accountCreatedSuccess'));
-        
-        return userData;
-        
-      } catch (firestoreError) {
-        console.error('Failed to create user document:', firestoreError);
-        
-        // Even if Firestore fails, still proceed with basic user info
-        const basicUserData = createBasicUserData(user);
-        
-        dispatch({ type: 'AUTH_STATE_CHANGED', payload: basicUserData });
-        toast.error(t('accountCreatedLimited'));
-        
-        return basicUserData;
-      }
+      // Update state immediately to prevent race condition with auth listener
+      dispatch({ type: 'AUTH_STATE_CHANGED', payload: userData });
+      
+      // Show success message with i18n
+      toast.success(t('accountCreatedSuccess'));
+      
+      return userData;
     } catch (error) {
       console.error('Signup error:', error);
       const errorMessage = formatError(error);

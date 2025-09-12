@@ -11,7 +11,7 @@ export default function Footer() {
         <span>{t('copyright')}</span>
       </div>
       <div className="flex items-center gap-6">
-        <Link href="/privacy" className="hover:underline">{t('privacyPolicy')}</Link>
+        <Link href="/privacy" className="hover:underline">{t('privacy')}</Link>
         <Link href="/terms" className="hover:underline">{t('terms')}</Link>
         <Link href="/contact" className="hover:underline">{t('contact')}</Link>
       </div>

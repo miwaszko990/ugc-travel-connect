@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import React from 'react';
 import Image from 'next/image';
 
 interface ImageUploaderProps {
@@ -8,10 +8,10 @@ interface ImageUploaderProps {
   onImageClick: () => void;
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
-  t: (key: string, params?: Record<string, number | string>) => string;
+  t: (key: string) => string;
 }
 
-const ImageUploader = memo(function ImageUploader({
+export default function ImageUploader({
   imagePreview,
   isUploading,
   uploadProgress,
@@ -21,54 +21,50 @@ const ImageUploader = memo(function ImageUploader({
   t
 }: ImageUploaderProps) {
   return (
-    <div className="flex flex-col items-center mb-8">
+    <div className="flex flex-col items-center mb-6">
       <div 
         onClick={onImageClick}
-        className="relative w-32 h-32 rounded-xl overflow-hidden cursor-pointer border-2 border-dashed border-red-burgundy/30 flex items-center justify-center bg-red-burgundy/5 hover:bg-red-burgundy/10 transition-colors"
+        className="relative w-32 h-32 rounded-xl border-2 border-dashed border-red-burgundy/30 bg-red-burgundy/5 cursor-pointer hover:border-red-burgundy/50 hover:bg-red-burgundy/10 transition-colors flex items-center justify-center"
       >
         {imagePreview ? (
           <Image
             src={imagePreview}
             alt="Brand logo preview"
             fill
-            style={{ objectFit: 'cover' }}
-            priority={false}
-            quality={75}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-            sizes="(max-width: 128px) 100vw, 128px"
+            className="object-cover rounded-xl"
+            sizes="128px"
           />
         ) : (
           <div className="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-red-burgundy/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-            <p className="text-xs mt-2 text-red-burgundy">{t('form.logoUpload.addLogo')}</p>
+            <div className="text-3xl mb-2">🏢</div>
+            <span className="text-sm text-gray-500">{t('form.logoUpload.addLogo')}</span>
           </div>
         )}
-        
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={onImageChange}
-          accept="image/*"
-          className="hidden"
-        />
       </div>
       
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={onImageChange}
+        className="hidden"
+        aria-label={t('form.logoUpload.selectImage')}
+      />
+      
       {isUploading && (
-        <div className="text-center mt-2">
-          <p className="text-red-burgundy text-sm">{t('form.logoUpload.uploadProgress', { progress: uploadProgress })}</p>
-          <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
+        <div className="text-center mt-4">
+          <p className="text-sm text-gray-600 mb-2">
+            {t('form.logoUpload.uploadProgress').replace('{progress}', uploadProgress.toString())}
+          </p>
+          <div className="w-32 bg-gray-200 rounded-full h-2">
             <div 
               className="bg-red-burgundy h-2 rounded-full transition-all duration-300" 
               style={{ width: `${uploadProgress}%` }}
-            ></div>
+            />
           </div>
         </div>
       )}
     </div>
   );
-});
+}
 
-export default ImageUploader; 

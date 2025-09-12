@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/auth';
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { updateDoc, getDoc } from 'firebase/firestore';
+import { setDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 import { Spinner } from '@/app/components/ui/spinner';
 import { toast } from 'react-hot-toast';
@@ -246,7 +246,7 @@ export default function BrandProfileSetup() {
       return;
     }
     
-    setIsSubmitting(true);
+    // setIsSubmitting(true); // This is handled by react-hook-form
     
     try {
       console.log('Starting brand profile submission with data:', data);
@@ -284,7 +284,7 @@ export default function BrandProfileSetup() {
       console.log('Final brand profile data being saved:', brandProfileData);
       
       // Update Firestore
-      await updateDoc(doc(db, 'users', user.uid), brandProfileData);
+      await setDoc(doc(db, 'users', user.uid), brandProfileData, { merge: true });
       console.log('Brand profile updated successfully!');
       
       // Show success message but keep loading state for smooth transition
@@ -302,7 +302,7 @@ export default function BrandProfileSetup() {
     } catch (error) {
       console.error('Error updating brand profile:', error);
       toast.error(t('messages.updateFailed'));
-      setIsSubmitting(false);
+      // setIsSubmitting(false); // This is handled by react-hook-form
     }
   }, [user, t, imageFile, imagePreview, handleImageUpload, isEditMode, router, locale]);
 
@@ -342,7 +342,23 @@ export default function BrandProfileSetup() {
         </div>
       )}
 
-      <div className="max-w-[600px] mx-auto bg-white rounded-[24px] shadow-lg p-8">
+      <div className="max-w-[600px] mx-auto bg-white rounded-[24px] shadow-lg p-8 relative">
+        {/* Close button */}
+        <button
+          onClick={() => router.push(`/${locale}/dashboard/brand`)}
+          className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors group"
+          type="button"
+          aria-label={t('form.close') || 'Close'}
+        >
+          <svg 
+            className="w-5 h-5 text-gray-400 group-hover:text-gray-600" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
         <h1 className="text-3xl font-serif font-bold text-center mb-2 text-red-burgundy">
           {pageTitle}
         </h1>

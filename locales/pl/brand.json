@@ -274,7 +274,8 @@
         "update": "Zaktualizuj profil",
         "creating": "Zapisywanie...",
         "updating": "Zapisywanie..."
-      }
+      },
+      "close": "Zamknij"
     },
     "messages": {
       "loginRequired": "Musisz być zalogowany, aby utworzyć profil marki",

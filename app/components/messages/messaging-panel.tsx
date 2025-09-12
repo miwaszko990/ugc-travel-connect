@@ -2,6 +2,16 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+
+// Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
+function useSafeT(namespace: string) {
+  try {
+    return useTranslations(namespace);
+  } catch (error) {
+    console.warn(`NextIntl context not available for namespace ${namespace}, using fallback`);
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
 import { useAuth } from '@/app/hooks/auth';
 import { 
   subscribeToUserConversations, 
@@ -33,10 +43,22 @@ interface MessagingPanelProps {
 
 export default function MessagingPanel({ userRole, selectedConversationId, hideSidebar = false, onMobileBack }: MessagingPanelProps) {
   const { user } = useAuth();
-  const tBrand = useTranslations('brand.messaging');
-  const tCreator = useTranslations('creator.messaging');
+  const tBrand = useSafeT('brand.messaging');
+  const tCreator = useSafeT('creator.messaging');
+  const tPackage = useSafeT('messages.newMessageModal.packageContext');
   // Use appropriate translation based on user role
   const t = userRole === 'brand' ? tBrand : tCreator;
+  
+  // Function to translate package messages in existing messages
+  const translatePackageMessage = (messageText: string): string => {
+    // Replace "Interested in:" with translated version
+    let translatedText = messageText.replace(/📦 Interested in:/g, `📦 ${tPackage('interestedIn')}:`);
+    
+    // Replace "Description:" with translated version  
+    translatedText = translatedText.replace(/Description:/g, `${tPackage('description')}:`);
+    
+    return translatedText;
+  };
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -675,7 +697,7 @@ export default function MessagingPanel({ userRole, selectedConversationId, hideS
                           ? 'bg-red-burgundy text-white' 
                           : 'bg-white text-gray-900 border border-gray-200'
                       }`}>
-                        <p className="text-sm">{message.text}</p>
+                        <p className="text-sm">{translatePackageMessage(message.text)}</p>
                         <div className={`flex items-center justify-between mt-1 ${
                           isFromUser ? 'text-red-burgundy/70' : 'text-gray-500'
                         }`}>

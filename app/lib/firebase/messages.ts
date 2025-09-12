@@ -219,12 +219,12 @@ export async function sendMessage(
         participantInfo: {
           [senderId]: {
             name: senderDisplayName,
-            profilePic: senderData?.profileImageUrl,
+            profilePic: senderData?.profileImageUrl || null,
             role: senderRole
           },
           [receiverId]: {
             name: receiverDisplayName,
-            profilePic: receiverData?.profileImageUrl,
+            profilePic: receiverData?.profileImageUrl || null,
             role: receiverRole
           }
         }
@@ -237,6 +237,9 @@ export async function sendMessage(
         messageCount: threadData.messages.length,
         participantInfo: threadData.participantInfo
       });
+      
+      // Debug: Check for undefined values
+      console.log('🔍 Debugging threadData for undefined values:', JSON.stringify(threadData, null, 2));
       
       const docRef = await addDoc(messageThreadsRef, threadData);
       console.log('✅ Successfully created new thread with ID:', docRef.id);
@@ -278,7 +281,7 @@ export function subscribeToUserConversations(
   const q = query(
     messageThreadsRef,
     where('participants', 'array-contains', userId)
-    // Temporarily removing orderBy until Firestore index is created
+    // Temporarily removing orderBy until Firestore index is fully ready
     // orderBy('updatedAt', 'desc')
   );
   
@@ -795,12 +798,12 @@ export async function sendOfferMessage(
         participantInfo: {
           [senderId]: {
             name: senderDisplayName,
-            profilePic: senderData?.profileImageUrl,
+            profilePic: senderData?.profileImageUrl || null,
             role: senderRole
           },
           [receiverId]: {
             name: receiverDisplayName,
-            profilePic: receiverData?.profileImageUrl,
+            profilePic: receiverData?.profileImageUrl || null,
             role: receiverRole
           }
         }
@@ -891,7 +894,7 @@ export async function acceptOffer(
 
     // Create a pending order that will show in earnings
     // Find the accepted offer message to get the details
-    const acceptedOffer = updatedMessages.find(msg => msg.offerId === offerId && msg.type === 'offer');
+    const acceptedOffer = updatedMessages.find((msg: any) => msg.offerId === offerId && msg.type === 'offer');
     if (acceptedOffer) {
       const orderData = {
         id: offerId,

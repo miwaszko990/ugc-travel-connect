@@ -48,6 +48,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
   const [error, setError] = useState<string | null>(null);
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [creatorPackages, setCreatorPackages] = useState<any[]>([]);
   const [prefilledMessage, setPrefilledMessage] = useState<string>("");
   const [showFullCalendar, setShowFullCalendar] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -99,6 +100,11 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
             status: data.status || 'Planned'
           });
         });
+
+        // Fetch creator packages
+        const servicePackages = creatorData.servicePackages || [];
+        console.log('📦 Fetched creator packages for modal:', servicePackages);
+        setCreatorPackages(servicePackages);
 
         // Create creator profile object
         const profile: CreatorProfile = {
@@ -311,7 +317,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
             </div>
                 </div>
 
-            <CreatorPackages />
+            <CreatorPackages uid={uid} />
 
             {/* Action Buttons */}
             <div className="space-y-4">
@@ -600,6 +606,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
           dateRange: trip.dateRange,
           status: trip.status
         }))}
+        packages={creatorPackages}
       />
     </div>
   );

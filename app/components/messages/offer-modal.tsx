@@ -2,10 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+
+// Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
+function useSafeT(namespace: string) {
+  try {
+    return useTranslations(namespace);
+  } catch (error) {
+    console.warn(`NextIntl context not available for namespace ${namespace}, using fallback`);
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
 import { motion } from 'framer-motion';
 import { X, Package, Edit3 } from 'lucide-react';
 import { useAuth } from '@/app/hooks/auth';
 import { getUserTrips, Trip } from '@/app/lib/firebase/trips';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/app/lib/firebase';
 
 interface OfferModalProps {
   isOpen: boolean;
@@ -44,8 +56,8 @@ const PACKAGES = [
 
 export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creatorName }: OfferModalProps) {
   const { user } = useAuth();
-  const t = useTranslations('brand.messaging.offerModal');
-  const tPackages = useTranslations('brand.messaging.offerModal.packages');
+  const t = useSafeT('brand.messaging.offerModal');
+  const tPackages = useSafeT('brand.messaging.offerModal.packages');
   const [selectedTripId, setSelectedTripId] = useState('');
   const [selectedPackage, setSelectedPackage] = useState('');
   const [description, setDescription] = useState('');
@@ -53,28 +65,41 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loadingTrips, setLoadingTrips] = useState(false);
+  const [creatorPackages, setCreatorPackages] = useState<any[]>([]);
+  const [loadingPackages, setLoadingPackages] = useState(false);
 
-  // Fetch creator's trips when modal opens
+  // Fetch creator's trips and packages when modal opens
   useEffect(() => {
+    console.log('🔄 Offer modal useEffect triggered, isOpen:', isOpen, 'creatorId:', creatorId);
     if (isOpen && creatorId) {
+      console.log('✅ Starting to fetch trips and packages...');
       fetchCreatorTrips();
+      fetchCreatorPackages();
     }
   }, [isOpen, creatorId]);
 
   // Update description and price when package is selected
   useEffect(() => {
     if (selectedPackage) {
+      // First check creator's packages
+      const packageIndex = parseInt(selectedPackage);
+      if (!isNaN(packageIndex) && creatorPackages[packageIndex]) {
+        const creatorPkg = creatorPackages[packageIndex];
+        setDescription(creatorPkg.description || '');
+        setPrice(creatorPkg.price?.toString() || '0');
+      } else {
+        // Fallback to hard-coded packages for backward compatibility
       const pkg = PACKAGES.find(p => p.id === selectedPackage);
       if (pkg) {
-        // Store package ID for dynamic translation
         setDescription(`[PACKAGE:${selectedPackage}]${tPackages(pkg.descriptionKey)}`);
         setPrice(pkg.price.toString());
+        }
       }
     } else if (selectedPackage === 'custom') {
       setDescription('');
       setPrice('');
     }
-  }, [selectedPackage, tPackages]);
+  }, [selectedPackage, tPackages, creatorPackages]);
 
   const fetchCreatorTrips = async () => {
     if (!creatorId) return;
@@ -90,6 +115,36 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
       setTrips([]);
     } finally {
       setLoadingTrips(false);
+    }
+  };
+
+  const fetchCreatorPackages = async () => {
+    if (!creatorId) {
+      console.log('📦 No creatorId provided to fetchCreatorPackages');
+      return;
+    }
+    
+    setLoadingPackages(true);
+    try {
+      console.log('📦 Fetching creator packages for offer modal, creatorId:', creatorId);
+      const userDoc = await getDoc(doc(db, 'users', creatorId));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const servicePackages = userData.servicePackages || [];
+        console.log('📦 Found creator packages:', servicePackages);
+        console.log('📦 Creator packages length:', servicePackages.length);
+        setCreatorPackages(servicePackages);
+      } else {
+        console.log('📦 No creator document found for creatorId:', creatorId);
+        setCreatorPackages([]);
+      }
+    } catch (error) {
+      console.error('📦 Error fetching creator packages:', error);
+      setCreatorPackages([]);
+    } finally {
+      setLoadingPackages(false);
+      console.log('📦 Finished loading packages, final state:', creatorPackages.length);
     }
   };
 
@@ -196,8 +251,39 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
               {t('package.label')}
             </label>
             <div className="space-y-3">
-              {/* Predefined Packages */}
-              {PACKAGES.map((pkg, index) => (
+              {loadingPackages ? (
+                <div className="p-3 text-gray-500 text-sm">Loading packages...</div>
+              ) : creatorPackages.length > 0 ? (
+                /* Creator's Packages */
+                creatorPackages.map((pkg, index) => (
+                  <label key={index} className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="package"
+                      value={index.toString()}
+                      checked={selectedPackage === index.toString()}
+                      onChange={(e) => setSelectedPackage(e.target.value)}
+                      className="w-4 h-4 text-red-burgundy border-gray-300 focus:ring-red-burgundy"
+                    />
+                    <div className="flex-1 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Package className="w-4 h-4 text-red-burgundy" />
+                        <span className="font-medium text-sm text-gray-900">
+                          {pkg.name}
+                        </span>
+                        <span className="text-sm text-red-burgundy font-semibold ml-auto">
+                          PLN {pkg.price}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-600 pl-6">
+                        {pkg.description}
+                      </p>
+                    </div>
+                  </label>
+                ))
+              ) : (
+                /* Fallback to Predefined Packages */
+                PACKAGES.map((pkg, index) => (
                 <label key={pkg.id} className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="radio"
@@ -222,7 +308,8 @@ export default function OfferModal({ isOpen, onClose, onSubmit, creatorId, creat
                     </p>
                   </div>
                 </label>
-              ))}
+                ))
+              )}
               
               {/* Custom Option */}
               <label className="flex items-center gap-3 cursor-pointer">

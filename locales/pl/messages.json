@@ -7,6 +7,10 @@
       "none": "Nie wybrano podróży",
       "generalInquiry": "Ogólne zapytanie"
     },
+    "packageSelection": {
+      "label": "Interesujący Pakiet (Opcjonalne)",
+      "generalInquiry": "Ogólne zapytanie"
+    },
     "form": {
       "placeholder": "Napisz swoją wiadomość tutaj...",
       "button": "Wyślij Wiadomość",
@@ -42,6 +46,10 @@
     },
     "tripContext": {
       "messagingAbout": "Wiadomość o {destination} ({dateRange})"
+    },
+    "packageContext": {
+      "interestedIn": "Zainteresowany",
+      "description": "Opis"
     }
   },
   "brandProfile": {

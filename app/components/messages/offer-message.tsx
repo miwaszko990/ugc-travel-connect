@@ -2,6 +2,16 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+
+// Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
+function useSafeT(namespace: string) {
+  try {
+    return useTranslations(namespace);
+  } catch (error) {
+    console.warn(`NextIntl context not available for namespace ${namespace}, using fallback`);
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
 import { Message } from '@/app/lib/firebase/messages';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -29,8 +39,8 @@ export default function OfferMessage({
 }: OfferMessageProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const t = useTranslations('brand.messaging.offerMessage');
-  const tPackages = useTranslations('brand.messaging.offerModal.packages');
+  const t = useSafeT('brand.messaging.offerMessage');
+  const tPackages = useSafeT('brand.messaging.offerModal.packages');
 
   
   // Helper function to safely convert timestamps to Date objects

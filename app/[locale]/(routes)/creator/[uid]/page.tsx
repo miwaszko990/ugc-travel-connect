@@ -2,10 +2,11 @@ import { Suspense } from 'react';
 import ClientCreatorProfile from './client-page';
 
 // Server component that passes params directly
-export default function CreatorProfilePage({ params }: { params: { uid: string } }) {
+export default async function CreatorProfilePage({ params }: { params: Promise<{ uid: string }> }) {
+  const { uid } = await params;
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ClientCreatorProfile uid={params.uid} />
+      <ClientCreatorProfile uid={uid} />
     </Suspense>
   );
 } // review trigger

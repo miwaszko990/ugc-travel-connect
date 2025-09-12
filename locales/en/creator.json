@@ -279,7 +279,8 @@
       "profileImage": {
         "addPhoto": "Add photo",
         "uploadProgress": "Uploading: {progress}%"
-      }
+      },
+      "close": "Close"
     },
     "profileImage": {
       "title": "Profile Photo",
@@ -287,10 +288,6 @@
       "uploadText": "Click to upload",
       "dragText": "or drag and drop",
       "formatText": "PNG, JPG, GIF up to 10MB"
-    },
-    "buttons": {
-      "save": "Save Profile",
-      "saving": "Saving..."
     },
     "messages": {
       "loginRequired": "You must be logged in to create a profile",
@@ -304,6 +301,105 @@
     "loading": {
       "title": "Loading Profile...",
       "subtitle": "Please wait while we load your profile information"
+    },
+    "fields": {
+      "firstName": {
+        "label": "First Name *",
+        "placeholder": "e.g. Maria",
+        "required": "First name is required"
+      },
+      "lastName": {
+        "label": "Last Name *",
+        "placeholder": "e.g. Kowalski",
+        "required": "Last name is required"
+      },
+      "instagramHandle": {
+        "label": "Instagram",
+        "placeholder": "e.g. mariakowalski",
+        "required": "Instagram handle is required"
+      },
+      "followerCount": {
+        "label": "Follower Count",
+        "placeholder": "e.g. 10000",
+        "required": "Follower count is required"
+      },
+      "homeCity": {
+        "label": "Home City *",
+        "placeholder": "e.g. Warsaw",
+        "required": "Home city is required"
+      },
+      "height": {
+        "label": "Height",
+        "placeholder": "e.g. 175 cm",
+        "required": "Height is required"
+      },
+      "clothingSize": {
+        "label": "Clothing Size",
+        "placeholder": "e.g. M",
+        "required": "Clothing size is required"
+      },
+      "shoeSize": {
+        "label": "Shoe Size",
+        "placeholder": "e.g. 38",
+        "required": "Shoe size is required"
+      },
+      "profileImage": {
+        "addPhoto": "Add Photo",
+        "uploadProgress": "Uploading: {progress}%"
+      }
+    },
+    "buttons": {
+      "saveAndContinue": "Save and Continue",
+      "saving": "Saving..."
+    },
+    "instagramPosts": {
+      "title": "Instagram Photos",
+      "subtitle": "Showcase your best travel content",
+      "placeholder": "Add Instagram photo URL...",
+      "addAnother": "Add another photo",
+      "instructions": {
+        "title": "How to add Instagram photos:",
+        "step1": "Go to the photo on Instagram",
+        "step2": "Click the three dots (...) and select 'Copy link'",
+        "step3": "Paste the link here - we'll automatically show the photo"
+      }
+    },
+    "instagramConnectionComing": {
+      "title": "Instagram Integration Coming Soon",
+      "description": "We're working on seamless Instagram integration to showcase your content automatically and boost your creator profile.",
+      "features": {
+        "autoSync": "Auto-sync posts",
+        "portfolioDisplay": "Portfolio display",
+        "engagement": "Engagement metrics"
+      }
+    },
+    "packages": {
+      "title": "Creator Packages",
+      "mini": {
+        "title": "Mini Social Boost – PLN 200",
+        "bullets": {
+          "stories": "3 x Instagram Stories",
+          "tagging": "Brand tagging + 1 swipe-up link",
+          "delivery": "Delivery within 24 hours of recording"
+        }
+      },
+      "content": {
+        "title": "Content Impact – PLN 450",
+        "bullets": {
+          "video": "1 x Instagram Reel or TikTok video (up to 30 seconds)",
+          "story": "1 x Instagram Story promoting the content",
+          "editing": "Editing the content + adapting it to the platform"
+        }
+      },
+      "full": {
+        "title": "Full Campaign Package – PLN 900",
+        "bullets": {
+          "reelsTikTok": "1 x Instagram Reel and 1 x TikTok (adapted to both platforms)",
+          "stories": "3 x Instagram Stories (promoting the content)",
+          "versions": "Vertical and horizontal versions",
+          "delivery": "Delivery within 3 business days"
+        }
+      }
     }
   },
   "profilePage": {

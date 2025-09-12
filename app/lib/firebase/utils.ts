@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/app/lib/firebase';
+import { db, auth } from '@/app/lib/firebase';
 import { UserData, UserRole } from '@/app/hooks/auth';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
@@ -15,6 +15,8 @@ export async function createUserDocument(uid: string, email: string, role: UserR
     throw new Error('Invalid UID provided to createUserDocument');
   }
   
+  console.log(`🔥 Creating user document for ${uid} with role ${role}`);
+  
   const userRef = doc(db, 'users', uid);
   
   // First check if the document already exists
@@ -22,6 +24,7 @@ export async function createUserDocument(uid: string, email: string, role: UserR
     const docSnapshot = await getDoc(userRef);
     
     if (docSnapshot.exists()) {
+      console.log(`✅ User document already exists for ${uid}`);
       return docSnapshot.data() as UserData;
     }
     
@@ -34,19 +37,34 @@ export async function createUserDocument(uid: string, email: string, role: UserR
       updatedAt: new Date()
     };
     
-    // Create the document in Firestore
-    await setDoc(userRef, userData);
+    console.log(`📝 Writing user document to Firestore for ${uid}:`, userData);
     
-    return userData;
+    // Create the document in Firestore with merge option
+    await setDoc(userRef, userData, { merge: true });
+    
+    console.log(`✅ Successfully created user document for ${uid}`);
+    
+    // Verify the document was created by reading it back
+    const verifySnapshot = await getDoc(userRef);
+    if (verifySnapshot.exists()) {
+      console.log(`✅ Verified user document exists for ${uid}`);
+      return verifySnapshot.data() as UserData;
+    } else {
+      console.error(`❌ Failed to verify user document creation for ${uid}`);
+      return userData; // Return the data we tried to save
+    }
+    
   } catch (error: unknown) {
-    console.error('Error in createUserDocument:', error);
+    console.error('❌ Error in createUserDocument:', error);
     
     // Type guard for Firebase errors
     if (error && typeof error === 'object' && 'code' in error) {
       if (error.code === 'permission-denied') {
-        console.error('Firebase security rules are preventing write. Check your Firestore rules.');
+        console.error('🚫 Firebase security rules are preventing write. Check your Firestore rules.');
+        console.error('Current user auth state:', auth.currentUser?.uid);
+        console.error('Trying to write to users/' + uid);
       } else if (error.code === 'unavailable') {
-        console.error('Firebase service is currently unavailable. Check your internet connection.');
+        console.error('📡 Firebase service is currently unavailable. Check your internet connection.');
         
         // Return fallback data when offline
         return {

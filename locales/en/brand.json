@@ -272,7 +272,8 @@
         "update": "Update Profile",
         "creating": "Saving...",
         "updating": "Saving..."
-      }
+      },
+      "close": "Close"
     },
     "messages": {
       "profileCreated": "Brand profile created successfully!",

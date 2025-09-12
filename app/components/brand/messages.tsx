@@ -2,6 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+
+// Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
+function useSafeT(namespace: string) {
+  try {
+    return useTranslations(namespace);
+  } catch (error) {
+    console.warn(`NextIntl context not available for namespace ${namespace}, using fallback`);
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
 import { useAuth } from '@/app/hooks/auth';
 import { subscribeToUserConversations, Conversation } from '@/app/lib/firebase/messages';
 import MessagingPanel from '@/app/components/messages/messaging-panel';
@@ -139,7 +149,7 @@ function MobileChatView({
 
 export default React.memo(function BrandMessages() {
   const { user } = useAuth();
-  const t = useTranslations('brand.messaging.loading');
+  const t = useSafeT('brand.messaging.loading');
   const searchParams = useSearchParams();
   const chatId = searchParams?.get('chatId') || undefined;
   const [conversations, setConversations] = useState<Conversation[]>([]);

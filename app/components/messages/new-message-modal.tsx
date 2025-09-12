@@ -2,6 +2,16 @@
 
 import { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+
+// Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
+function useSafeT(namespace: string) {
+  try {
+    return useTranslations(namespace);
+  } catch (error) {
+    console.warn(`NextIntl context not available for namespace ${namespace}, using fallback`);
+    return ((key: string) => key) as (key: string, vars?: any) => string;
+  }
+}
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/auth';
 import { sendMessage, getConversationId } from '@/app/lib/firebase/messages';
@@ -24,6 +34,12 @@ interface Trip {
   status: string;
 }
 
+interface Package {
+  name: string;
+  price: string;
+  description: string;
+}
+
 interface NewMessageModalProps {
   creatorId: string;
   creatorName: string;
@@ -31,6 +47,7 @@ interface NewMessageModalProps {
   onClose: () => void;
   initialMessage?: string;
   trips?: Trip[]; // Array of all available trips
+  packages?: Package[]; // Array of creator's packages
 }
 
 export default function NewMessageModal({ 
@@ -39,15 +56,17 @@ export default function NewMessageModal({
   isOpen, 
   onClose,
   initialMessage = '',
-  trips
+  trips,
+  packages
 }: NewMessageModalProps) {
   const [message, setMessage] = useState(initialMessage);
   const [sending, setSending] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [selectedTripIndex, setSelectedTripIndex] = useState<number | null>(null);
+  const [selectedPackageIndex, setSelectedPackageIndex] = useState<number | null>(null);
   const { user } = useAuth();
-  const t = useTranslations('messages.newMessageModal');
+  const t = useSafeT('messages.newMessageModal');
   const router = useRouter();
   const locale = useLocale();
   
@@ -95,6 +114,8 @@ export default function NewMessageModal({
         : user.email || 'Anonymous User';
       const conversationId = getConversationId(user.uid, creatorId);
       let fullMessage = message;
+      
+      // Add trip context if selected
       if (trips && trips.length > 0 && selectedTripIndex !== null) {
         const trip = trips[selectedTripIndex];
         const fromDate = format(new Date(trip.startDate), 'MMM d');
@@ -102,7 +123,22 @@ export default function NewMessageModal({
         const tripHeader = `🛫 ${trip.destination}, ${trip.country} - ${fromDate} – ${toDate}`;
         fullMessage = `${tripHeader}\n\n${message}`;
       }
-      await sendMessage(user.uid, creatorId, fullMessage, senderName, user.profileImageUrl);
+      
+      // Add package context if selected
+      if (packages && packages.length > 0 && selectedPackageIndex !== null) {
+        const pkg = packages[selectedPackageIndex];
+        const packageHeader = `📦 ${t('packageContext.interestedIn')}: ${pkg.name} - PLN ${pkg.price}`;
+        const packageDetails = `${t('packageContext.description')}: ${pkg.description}`;
+        
+        if (fullMessage.includes('🛫')) {
+          // If trip is already added, append package info
+          fullMessage = `${fullMessage}\n\n${packageHeader}\n${packageDetails}`;
+        } else {
+          // If no trip, add package info at the beginning
+          fullMessage = `${packageHeader}\n${packageDetails}\n\n${message}`;
+        }
+      }
+      await sendMessage(user.uid, creatorId, fullMessage, senderName, user.profileImageUrl || undefined);
       toast.success(t('toasts.success'));
       setMessageSent(true);
       setMessage('');
@@ -163,6 +199,45 @@ export default function NewMessageModal({
             </div>
           </div>
         )}
+        
+        {/* Package Selection */}
+        {packages && packages.length > 0 && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t('packageSelection.label')}
+            </label>
+            <select 
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-red-burgundy focus:ring-2 focus:ring-red-burgundy/20 transition-colors"
+              value={selectedPackageIndex ?? -1}
+              onChange={(e) => setSelectedPackageIndex(Number(e.target.value) === -1 ? null : Number(e.target.value))}
+            >
+              <option value={-1}>{t('packageSelection.generalInquiry')}</option>
+              {packages.map((pkg, index) => (
+                <option key={index} value={index}>
+                  📦 {pkg.name} - PLN {pkg.price}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        
+        {/* Package Context Display */}
+        {packages && packages.length > 0 && selectedPackageIndex !== null && (
+          <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <div className="flex items-start gap-2 text-purple-800">
+              <span className="text-lg">📦</span>
+              <div className="flex-1">
+                <div className="font-medium text-sm">
+                  {packages[selectedPackageIndex || 0].name} - PLN {packages[selectedPackageIndex || 0].price}
+                </div>
+                <div className="text-xs text-purple-600 mt-1">
+                  {packages[selectedPackageIndex || 0].description}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
         {messageSent ? (
           <div className="text-green-600 font-semibold py-4 text-center">
             {redirecting ? (
