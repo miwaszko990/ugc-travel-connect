@@ -29,7 +29,7 @@ export default function LumoLandingPage({ searchParams }: { searchParams: { ok?:
             
             {/* Subheading */}
             <p className="mx-auto max-w-xl text-base md:text-lg text-neutral-600">
-              LUMO łączy marki z twórcami, którzy i podróżują do konkretnych miejsc. Zamknięta wersja beta — zapisz się poniżej.
+            jako twórca zarabiaj i dostarczaj content z miejsc, w których właśnie jesteś, a jako marka zamawiaj treści szybciej i wygodniej.
             </p>
             
             {/* CTA Buttons */}
@@ -58,7 +58,7 @@ export default function LumoLandingPage({ searchParams }: { searchParams: { ok?:
       <section className="py-16 md:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-semibold tracking-[-0.01em] text-[#8D2D26] text-left">Dla twórców</h2>
-          <div className="mt-2 text-neutral-600">Zarabiaj na podróżach bez nachalnych ofert</div>
+          <div className="mt-2 text-neutral-600">Zarabiaj na podróżach akceptując konkretne zlecenia</div>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
             <div className="rounded-2xl border border-neutral-200 bg-white/70 shadow-sm hover:shadow-md transition-shadow p-6">
@@ -251,18 +251,18 @@ export default function LumoLandingPage({ searchParams }: { searchParams: { ok?:
                 <div className="text-sm font-medium mb-3">Najbliższe podróże (maks. 3)</div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                   <input name="trip_city[]" placeholder="Miasto" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="trip_from[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="trip_to[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="trip_from[]" placeholder="Data od" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="trip_to[]" placeholder="Data do" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
                 </div>
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                   <input name="trip_city[]" placeholder="Miasto" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="trip_from[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="trip_to[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="trip_from[]" placeholder="Data od" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="trip_to[]" placeholder="Data do" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
                 </div>
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                   <input name="trip_city[]" placeholder="Miasto" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="trip_from[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="trip_to[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="trip_from[]" placeholder="Data od" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="trip_to[]" placeholder="Data do" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
                 </div>
                 <p className="mt-3 text-xs text-neutral-500">Pozostaw puste wiersze, jeśli niepotrzebne.</p>
               </div>
@@ -312,19 +312,19 @@ export default function LumoLandingPage({ searchParams }: { searchParams: { ok?:
                 <div className="text-sm font-medium mb-3">Lokalizacje i okna czasowe (maks. 3)</div>
                 {/* Row 1 */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                  <input name="req_city[]" placeholder="Miasto" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="req_from[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="req_to[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input name="req_city[]" placeholder="Miasto (gdzie potrzebujesz treści)" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="req_from[]" placeholder="Data od" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="req_to[]" placeholder="Data do" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
                 </div>
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                  <input name="req_city[]" placeholder="Miasto" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="req_from[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="req_to[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input name="req_city[]" placeholder="Miasto (gdzie potrzebujesz treści)" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="req_from[]" placeholder="Data od" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="req_to[]" placeholder="Data do" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
                 </div>
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                  <input name="req_city[]" placeholder="Miasto" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="req_from[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
-                  <input type="date" name="req_to[]" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input name="req_city[]" placeholder="Miasto (gdzie potrzebujesz treści)" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="req_from[]" placeholder="Data od" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
+                  <input type="date" name="req_to[]" placeholder="Data do" className="mt-0 w-full rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#8D2D26]/20 focus:border-[#8D2D26] placeholder:text-neutral-400" />
                 </div>
 
                 {/* Job type checkboxes (apply to request in general) */}
@@ -353,40 +353,6 @@ export default function LumoLandingPage({ searchParams }: { searchParams: { ok?:
 
               <button className="mt-3 inline-flex items-center justify-center rounded-2xl bg-[#8D2D26] px-6 py-3 text-white hover:opacity-95 transition w-full md:w-auto">Wyślij zgłoszenie</button>
             </form>
-          </div>
-        </div>
-      </section>
-
-      {/* Bottom CTA Section */}
-      <section className="py-24" style={{backgroundColor: '#FDFCF9'}}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center space-y-12">
-            
-            <div className="space-y-6">
-              <h2 className="text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-red-burgundy">
-                Otrzymaj dostęp do platformy jako pierwsza
-              </h2>
-              <p className="text-xl text-subtext max-w-2xl mx-auto leading-relaxed">
-                Zgarnij pierwszeństwo — jako twórca zarabiaj i dostarczaj content z miejsc, w których właśnie jesteś, a jako marka zamawiaj treści szybciej i mądrzej. Autentyczny UGC — bez niepotrzebnych wiadomości i chaosu.
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 md:gap-4 pt-1">
-              <a 
-                href="#creator-form" 
-                aria-label="Przejdź do formularza Twórcy"
-                className="inline-flex items-center rounded-2xl px-6 md:px-7 py-3 bg-[#8D2D26] text-white hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8D2D26]"
-              >
-                Jestem Twórcą
-              </a>
-              <a 
-                href="#brand-form" 
-                aria-label="Przejdź do formularza Marki"
-                className="inline-flex items-center rounded-2xl px-6 md:px-7 py-3 border border-[#8D2D26]/30 text-[#8D2D26] hover:bg-[#8D2D26]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8D2D26]"
-              >
-                Jestem Marką
-              </a>
-            </div>
           </div>
         </div>
       </section>

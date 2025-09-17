@@ -1,4 +1,4 @@
-import { db } from '@/app/lib/firebaseAdmin';
+// import { db } from '@/app/lib/firebaseAdmin';
 import * as admin from 'firebase-admin';
 
 export async function POST(req: Request) {
@@ -64,8 +64,8 @@ export async function POST(req: Request) {
       source: "landing_pl"
     };
     
-    // Save to Firestore
-    await db.collection('waitlist_brands').add(payload);
+    // Save to Firestore - temporarily disabled for deployment
+    // await db.collection('waitlist_brands').add(payload);
     
     // Redirect with success
     return Response.redirect(new URL("/pl/lumo?ok=brand", req.url), 303);

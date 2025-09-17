@@ -7,6 +7,7 @@ import { collection, query, where, getDocs, orderBy, limit } from 'firebase/fire
 import { useAuth } from '@/app/hooks/auth';
 import CreatorCard from '@/app/components/creator/creator-card';
 import HeroSection from '@/app/components/ui/hero-section';
+import HowItWorks from '@/app/components/ui/how-it-works';
 import Navigation from '@/app/components/ui/navigation';
 import Footer from '@/app/components/ui/footer';
 import dynamic from 'next/dynamic';
@@ -152,6 +153,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-ivory">
       <Navigation sticky={true} />
       <HeroSection />
+      <HowItWorks />
       
       <section id="creators-grid" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
