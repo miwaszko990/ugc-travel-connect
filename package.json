@@ -19,7 +19,8 @@
     "test:e2e:network": "playwright test network-performance.spec.ts",
     "test:e2e:mobile": "playwright test --project='Mobile Chrome'",
     "test:e2e:slow": "playwright test --project='Slow 3G'",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "test:ig": "curl -IL https://lumocreators.com/pl && echo '\n--- Instagram iOS UA ---' && curl -IL -A 'Instagram 300.0.0 iOS' https://lumocreators.com/pl"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",

@@ -20,8 +20,8 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
-  description: "Połącz się z najlepszymi twórcami treści podróżniczych, którzy przekształcają destynacje w fascynujące historie. Wzmocnij swoją markę autentycznymi, luksusowymi treściami.",
+  title: "Lumo",
+  description: "Lumo",
   keywords: "twórcy podróżniczy, marketing turystyczny, treści UGC, współpraca z markami, platforma influencerów, promocja turystyki",
   authors: [{ name: "Lumo Team" }],
   creator: "Lumo",
@@ -40,8 +40,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
-    description: "Połącz się z najlepszymi twórcami treści podróżniczych i przekształć swoją markę dzięki autentycznym treściom.",
+    title: "Lumo",
+    description: "Lumo",
     url: "/",
     siteName: "Lumo",
     images: [
@@ -58,8 +58,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lumo - Luksusowa Platforma Twórców Podróżniczych",
-    description: "Połącz się z najlepszymi twórcami treści podróżniczych i przekształć swoją markę dzięki autentycznym treściom.",
+    title: "Lumo",
+    description: "Lumo",
     images: ["/images/twitter-image.jpg"],
     creator: "@lumo_platform",
   },

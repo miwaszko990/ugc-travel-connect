@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Force Tailwind to include these classes */
 .bg-red-burgundy { background-color: #8B0000 !important; }
 .text-red-burgundy { color: #8B0000 !important; }

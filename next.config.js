@@ -15,6 +15,9 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Critical for Instagram webview - no trailing slashes
+  trailingSlash: false,
+  
   // Production optimizations
   productionBrowserSourceMaps: false,
   compress: true,
@@ -41,6 +44,23 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   
+  // Force non-www domain
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.lumocreators.com',
+          },
+        ],
+        destination: 'https://lumocreators.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
+  
   // Security and performance headers
   async headers() {
     return [
@@ -63,12 +83,10 @@ const nextConfig = {
         ],
       },
       {
-        source: '/(.*)',
+        source: '/:path*',
         headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
+          // REMOVED X-Frame-Options: DENY - Instagram webview needs to embed pages
+          // Instagram's l.instagram.com wraps links in webview which requires frame access
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
@@ -79,11 +97,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), payment=()',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },
