@@ -223,7 +223,7 @@ export default function HomePage({ searchParams }: { searchParams: Promise<{ ok?
           {creatorQuickSignupState.success ? (
             <div className="mt-8 rounded-2xl border border-green-200 bg-green-50 text-green-800 px-6 py-4 max-w-md mx-auto">
               <p className="font-medium">Dziękujemy!</p>
-              <p className="text-sm mt-1">Wyślemy Ci pierwsze oferty w ciągu 24 godzin.</p>
+              <p className="text-sm mt-1">Wyślemy Ci dostęp do platformy już wkrótce.</p>
             </div>
           ) : (
             <form onSubmit={handleCreatorQuickSignup} className="mt-8 max-w-md mx-auto">
@@ -251,16 +251,6 @@ export default function HomePage({ searchParams }: { searchParams: Promise<{ ok?
                   {creatorQuickSignupState.error}
                 </div>
               )}
-              
-              <p className="mt-4 text-sm text-neutral-600">
-                Wolę pełną rejestrację →{' '}
-                <a 
-                  href="#creator-form" 
-                  className="text-[#8D2D26] hover:underline font-medium"
-                >
-                  formularz twórcy
-                </a>
-              </p>
             </form>
           )}
         </div>
@@ -323,7 +313,7 @@ export default function HomePage({ searchParams }: { searchParams: Promise<{ ok?
           {quickSignupState.success ? (
             <div className="mt-8 rounded-2xl border border-green-200 bg-green-50 text-green-800 px-6 py-4 max-w-md mx-auto">
               <p className="font-medium">Dziękujemy!</p>
-              <p className="text-sm mt-1">Wyślemy Ci dostęp w ciągu 24 godzin.</p>
+              <p className="text-sm mt-1">Wyślemy Ci dostęp do platformy już wkrótce.</p>
             </div>
           ) : (
             <form onSubmit={handleQuickSignup} className="mt-8 max-w-md mx-auto">
@@ -351,16 +341,6 @@ export default function HomePage({ searchParams }: { searchParams: Promise<{ ok?
                   {quickSignupState.error}
                 </div>
               )}
-              
-              <p className="mt-4 text-sm text-neutral-600">
-                Wolę pełną rejestrację →{' '}
-                <a 
-                  href="#brand-form" 
-                  className="text-[#8D2D26] hover:underline font-medium"
-                >
-                  formularz marki
-                </a>
-              </p>
             </form>
           )}
         </div>
