@@ -30,12 +30,12 @@ export default function CountdownEarlyAccess() {
       <div className="mt-8 rounded-3xl bg-gradient-to-br from-[#8D2D26]/5 to-[#8D2D26]/10 p-8 sm:p-10 ring-1 ring-neutral-200">
         {/* Heading */}
         <h2 className="text-center text-2xl font-semibold tracking-tight text-[#8D2D26] sm:text-3xl">
-          The platform is launching soon 🚀
+          Platforma wystartuje wkrótce 🚀
         </h2>
         
         {/* Subheading */}
         <p className="mt-3 text-center text-base text-neutral-600 sm:text-lg">
-          Leave your email to get early access as soon as we launch ✨
+          Zostaw e-mail, aby uzyskać wcześniejszy dostęp zaraz po starcie ✨
         </p>
 
         {/* Email sign-up form */}
