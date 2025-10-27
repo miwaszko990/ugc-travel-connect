@@ -3,13 +3,14 @@
 import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 // import { useTranslations } from 'next-intl';
 import { Dialog, Transition } from '@headlessui/react';
 import { useAuth } from '@/app/hooks/auth';
 import UserMenu from '@/app/components/ui/user-menu';
 import { Button } from '@/app/components/ui/button';
 import { LanguageSwitcher } from '@/app/components/ui/language-switcher';
-import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon, BriefcaseIcon } from '@heroicons/react/24/outline';
 
 // Safe translation accessor to avoid crashes when NextIntlClientProvider isn't mounted
 function useSafeT(namespace: string) {
@@ -33,6 +34,7 @@ export default function Navigation({
 }: NavigationProps) {
   const { user } = useAuth();
   const router = useRouter();
+  const locale = useLocale();
   const t = useSafeT('root.navigation');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -119,6 +121,14 @@ export default function Navigation({
                 >
                   <MagnifyingGlassIcon className="h-4 w-4 group-hover:text-red-burgundy transition-colors duration-300" />
                   {t('search')}
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
+                </Link>
+                <Link 
+                  href={`/${locale}/zlecenia`}
+                  className="relative text-sm font-medium text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group flex items-center gap-2"
+                >
+                  <BriefcaseIcon className="h-4 w-4 group-hover:text-red-burgundy transition-colors duration-300" />
+                  Zlecenia
                   <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
                 </Link>
               </nav>
@@ -243,6 +253,14 @@ export default function Navigation({
                           >
                             <MagnifyingGlassIcon className="h-5 w-5" />
                             {t('search')}
+                          </Link>
+                          <Link 
+                            href={`/${locale}/zlecenia`}
+                            className="flex items-center gap-2 text-lg font-medium text-subtext hover:text-red-burgundy transition-all duration-300 py-2"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            <BriefcaseIcon className="h-5 w-5" />
+                            Zlecenia
                           </Link>
                           
                           {/* Mobile Language Switcher */}

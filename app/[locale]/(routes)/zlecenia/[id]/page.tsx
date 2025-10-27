@@ -15,6 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Navigation from '@/app/components/ui/navigation';
+import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
 
 export default function JobDetailsPage() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function JobDetailsPage() {
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [applicationSuccess, setApplicationSuccess] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const [applicationData, setApplicationData] = useState({
     message: '',
@@ -47,6 +49,13 @@ export default function JobDetailsPage() {
       checkIfApplied();
     }
   }, [user?.uid, jobId]);
+
+  // Show auth modal if user is not logged in after loading the job
+  useEffect(() => {
+    if (!loading && job && !user) {
+      setShowAuthModal(true);
+    }
+  }, [loading, job, user]);
 
   const fetchJobDetails = async () => {
     try {
@@ -433,6 +442,15 @@ export default function JobDetailsPage() {
           </div>
         </div>
       )}
+
+      {/* Auth Required Modal */}
+      <AuthRequiredModal 
+        isOpen={showAuthModal} 
+        onClose={() => {
+          setShowAuthModal(false);
+          router.push('/');
+        }} 
+      />
     </div>
   );
 }
