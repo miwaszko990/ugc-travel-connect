@@ -14,6 +14,8 @@ import Navigation from '@/app/components/ui/navigation';
 import { MapPinIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon, CalendarIcon, LinkIcon } from '@heroicons/react/24/outline';
 import dynamic from 'next/dynamic';
 import CreatorPackages from '@/app/components/creator/CreatorPackages';
+import PortfolioMasonry from '@/app/components/creator/PortfolioMasonry';
+import { PortfolioItem } from '@/app/lib/types';
 
 // Import framer-motion normally but conditionally render
 import { motion, AnimatePresence } from 'framer-motion';
@@ -37,6 +39,7 @@ interface CreatorProfile {
   followerCount: number;
   profileImageUrl: string;
   travelPlans: TravelPlan[];
+  portfolio?: PortfolioItem[];
 }
 
 export default function ClientCreatorProfile({ uid }: { uid: string }) {
@@ -106,6 +109,9 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
         console.log('📦 Fetched creator packages for modal:', servicePackages);
         setCreatorPackages(servicePackages);
 
+        // Fetch portfolio items
+        const portfolioItems = creatorData.portfolio || [];
+
         // Create creator profile object
         const profile: CreatorProfile = {
           uid,
@@ -115,7 +121,8 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
           instagramHandle: creatorData.instagramHandle || '',
           followerCount: creatorData.followerCount || 0,
           profileImageUrl: creatorData.profileImageUrl || '/placeholder-profile.jpg',
-          travelPlans
+          travelPlans,
+          portfolio: portfolioItems
         };
 
         setCreator(profile);
@@ -553,8 +560,22 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
               </AnimatePresence>
           </div>
           
+            {/* Portfolio Section */}
+            {creator.portfolio && creator.portfolio.length > 0 && (
+              <div className="mt-8 bg-white rounded-3xl shadow-lg border border-red-burgundy/10 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6 text-red-burgundy">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                  <h2 className="text-2xl font-serif font-bold text-text">Portfolio</h2>
+                </div>
+                
+                <PortfolioMasonry items={creator.portfolio} />
+              </div>
+            )}
+
             {/* Instagram Connection Coming Soon Section */}
-            {!showFullCalendar && (
+            {!showFullCalendar && (!creator.portfolio || creator.portfolio.length === 0) && (
               <div className="mt-8">
                 <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl border border-purple-100 p-8 text-center">
                   <div className="flex justify-center mb-4">

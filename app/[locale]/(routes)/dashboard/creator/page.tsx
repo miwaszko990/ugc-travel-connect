@@ -14,6 +14,7 @@ import { NavigationIcons } from '@/app/lib/navigation-config';
 import TravelPlans from '@/app/components/creator/travel-plans';
 import CreatorMessages from '@/app/components/creator/messages';
 import CreatorEarnings from '@/app/components/creator/earnings';
+import CreatorPortfolio from '@/app/components/creator/portfolio';
 
 
 // Mobile navigation items - stable icons
@@ -47,12 +48,13 @@ function MobileBottomNavigation({
     { key: 'travels', icon: NavigationIcons.travel, index: 0 },
     { key: 'messages', icon: NavigationIcons.messages, index: 1 },
     { key: 'earnings', icon: NavigationIcons.earnings, index: 2 },
-            { 
-          key: 'profile', 
-          icon: NavigationIcons.edit, 
-          index: -2, // Special index for profile
-          action: () => window.location.href = `/${locale}/dashboard/creator/profile-setup` 
-        }
+    { key: 'portfolio', icon: NavigationIcons.portfolio, index: 3 },
+    { 
+      key: 'profile', 
+      icon: NavigationIcons.edit, 
+      index: -2, // Special index for profile
+      action: () => window.location.href = `/${locale}/dashboard/creator/profile-setup` 
+    }
   ];
 
   return (
@@ -94,7 +96,7 @@ export default function CreatorDashboard() {
   const [profile, setProfile] = useState<DocumentData | null>(null);
 
   // Tab logic with performance optimization
-  const tabNames = ['travel-plans', 'messages', 'earnings'];
+  const tabNames = ['travel-plans', 'messages', 'earnings', 'portfolio'];
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   // Initialize tab from URL only once
@@ -167,6 +169,7 @@ export default function CreatorDashboard() {
   
   const MessagesComponent = useMemo(() => <CreatorMessages />, []);
   const EarningsComponent = useMemo(() => <CreatorEarnings />, []);
+  const PortfolioComponent = useMemo(() => <CreatorPortfolio />, []);
 
   if (loading) {
     return (
@@ -238,7 +241,8 @@ export default function CreatorDashboard() {
                 {[
                   { key: 'travels', icon: NavigationIcons.travel, index: 0 },
                   { key: 'messages', icon: NavigationIcons.messages, index: 1 },
-                  { key: 'earnings', icon: NavigationIcons.earnings, index: 2 }
+                  { key: 'earnings', icon: NavigationIcons.earnings, index: 2 },
+                  { key: 'portfolio', icon: NavigationIcons.portfolio, index: 3 }
                 ].map((tab) => {
                   const isActive = selectedIndex === tab.index;
                   return (
@@ -298,6 +302,9 @@ export default function CreatorDashboard() {
                 </div>
                 <div style={{ display: selectedIndex === 2 ? 'block' : 'none' }}>
                   {EarningsComponent}
+                </div>
+                <div style={{ display: selectedIndex === 3 ? 'block' : 'none' }}>
+                  {PortfolioComponent}
                 </div>
               </div>
             </div>

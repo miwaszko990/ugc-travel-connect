@@ -13,13 +13,14 @@ import { NavigationIcons } from '@/app/lib/navigation-config';
 import BrowseCreators from '@/app/components/brand/browse-creators';
 import BrandMessages from '@/app/components/brand/messages';
 import BrandBookings from '@/app/components/brand/bookings';
+import BrandJobs from '@/app/components/brand/jobs';
 
 
 // Mobile navigation items - stable icons
 
 // Tab management
-type BrandTab = 'browse' | 'messages' | 'bookings';
-const BRAND_TABS: BrandTab[] = ['browse', 'messages', 'bookings'];
+type BrandTab = 'browse' | 'messages' | 'bookings' | 'jobs';
+const BRAND_TABS: BrandTab[] = ['browse', 'messages', 'bookings', 'jobs'];
 const DEFAULT_TAB_INDEX = 0;
 
 interface BrandProfile extends DocumentData {
@@ -51,12 +52,13 @@ function MobileBottomNavigation({
     { key: 'browse', icon: NavigationIcons.search, index: 0 },
     { key: 'messages', icon: NavigationIcons.messages, index: 1 },
     { key: 'bookings', icon: NavigationIcons.bookings, index: 2 },
-            { 
-          key: 'profile', 
-          icon: NavigationIcons.edit, 
-          index: -2, // Special index for profile
-          action: () => window.location.href = `/${locale}/dashboard/brand/profile-setup` 
-        }
+    { key: 'jobs', icon: NavigationIcons.briefcase, index: 3 },
+    { 
+      key: 'profile', 
+      icon: NavigationIcons.edit, 
+      index: -2, // Special index for profile
+      action: () => window.location.href = `/${locale}/dashboard/brand/profile-setup` 
+    }
   ];
 
   return (
@@ -193,7 +195,8 @@ export default function BrandDashboard() {
   // Temporary: Removed useMemo to fix infinite loop
   const BrowseCreatorsComponent = <BrowseCreators />;
   const MessagesComponent = <BrandMessages />;
-  const BookingsComponent = <BrandBookings />; 
+  const BookingsComponent = <BrandBookings />;
+  const JobsComponent = <BrandJobs />; 
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#FDFCF9'}}>
@@ -248,7 +251,8 @@ export default function BrandDashboard() {
                 {[
                   { key: 'browse', icon: NavigationIcons.search, index: 0 },
                   { key: 'messages', icon: NavigationIcons.messages, index: 1 },
-                  { key: 'bookings', icon: NavigationIcons.bookings, index: 2 }
+                  { key: 'bookings', icon: NavigationIcons.bookings, index: 2 },
+                  { key: 'jobs', icon: NavigationIcons.briefcase, index: 3 }
                 ].map((tab) => {
                   const isActive = selectedIndex === tab.index;
                   return (
@@ -308,6 +312,9 @@ export default function BrandDashboard() {
                 </div>
                 <div style={{ display: selectedIndex === 2 ? 'block' : 'none' }}>
                   {BookingsComponent}
+                </div>
+                <div style={{ display: selectedIndex === 3 ? 'block' : 'none' }}>
+                  {JobsComponent}
                 </div>
               </div>
             </div>
