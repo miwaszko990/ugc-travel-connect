@@ -168,7 +168,7 @@ export default function JobDetailsPage() {
         {/* Back Button */}
         <Link
           href="/zlecenia"
-          className="inline-flex items-center text-[#8D2D26] hover:underline mb-6"
+          className="inline-flex items-center text-[#8D2D26] hover:underline mb-8 mt-4"
         >
           ← Wróć do listy zleceń
         </Link>
