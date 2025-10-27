@@ -59,16 +59,16 @@ export default function HeroSection() {
 
   // Mock creators for the hero cards with local images
   const featured = {
-    uid: "featured-charlie",
-    firstName: "Charlie", 
-    lastName: "Iwaszko",
+    uid: "featured-laura",
+    firstName: "Laura", 
+    lastName: "Wysocka",
     homeCity: "London, England",
     profileImageUrl: "/charlie-test.jpeg",
     upcomingTrip: { destination: "Cannes", country: "France", dateRange: "Jun 15-20" },
     followers: 54700
   };
 
-  console.log('Using local image for Charlie:', featured.profileImageUrl);
+  console.log('Using local image for Laura:', featured.profileImageUrl);
 
   const mini1 = {
     uid: "mini1",
