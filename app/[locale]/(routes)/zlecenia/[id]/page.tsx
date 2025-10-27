@@ -15,7 +15,6 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Navigation from '@/app/components/ui/navigation';
-import AuthRequiredModal from '@/app/components/ui/auth-required-modal';
 
 export default function JobDetailsPage() {
   const router = useRouter();
@@ -29,7 +28,6 @@ export default function JobDetailsPage() {
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [applicationSuccess, setApplicationSuccess] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const [applicationData, setApplicationData] = useState({
     message: '',
@@ -49,13 +47,6 @@ export default function JobDetailsPage() {
       checkIfApplied();
     }
   }, [user?.uid, jobId]);
-
-  // Show auth modal if user is not logged in after loading the job
-  useEffect(() => {
-    if (!loading && job && !user) {
-      setShowAuthModal(true);
-    }
-  }, [loading, job, user]);
 
   const fetchJobDetails = async () => {
     try {
@@ -319,16 +310,24 @@ export default function JobDetailsPage() {
             )}
 
             {!user && (
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl text-center">
-                <p className="text-gray-700 mb-3">
+              <div className="p-4 bg-[#8D2D26]/10 border border-[#8D2D26]/20 rounded-xl text-center">
+                <p className="text-gray-800 font-medium mb-3">
                   Zaloguj się jako twórca, aby aplikować na to zlecenie
                 </p>
-                <Link
-                  href="/login"
-                  className="inline-block px-6 py-2 bg-[#8D2D26] text-white rounded-xl hover:opacity-95 transition"
-                >
-                  Zaloguj się
-                </Link>
+                <div className="flex gap-3 justify-center">
+                  <Link
+                    href="/auth/login"
+                    className="px-6 py-2 bg-white text-[#8D2D26] border border-[#8D2D26] rounded-lg hover:bg-[#8D2D26] hover:text-white transition font-medium"
+                  >
+                    Zaloguj się
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="px-6 py-2 bg-[#8D2D26] text-white rounded-lg hover:opacity-90 transition font-medium"
+                  >
+                    Zarejestruj się
+                  </Link>
+                </div>
               </div>
             )}
           </div>
@@ -442,15 +441,6 @@ export default function JobDetailsPage() {
           </div>
         </div>
       )}
-
-      {/* Auth Required Modal */}
-      <AuthRequiredModal 
-        isOpen={showAuthModal} 
-        onClose={() => {
-          setShowAuthModal(false);
-          router.push('/');
-        }} 
-      />
     </div>
   );
 }
