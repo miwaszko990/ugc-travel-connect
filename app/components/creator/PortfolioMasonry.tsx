@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { PortfolioItem } from '@/app/lib/types';
 import { XMarkIcon, PlayIcon } from '@heroicons/react/24/solid';
@@ -11,6 +11,12 @@ interface PortfolioMasonryProps {
 
 export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
+
+  // Generate consistent random heights for Pinterest-style layout
+  const itemHeights = useMemo(() => {
+    const heights = [60, 75, 90, 105, 120, 85, 95, 110, 70, 100];
+    return items.map((item, index) => heights[index % heights.length]);
+  }, [items]);
 
   if (!items || items.length === 0) {
     return (
@@ -23,7 +29,7 @@ export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
   // Pinterest-style masonry layout using CSS columns
   return (
     <>
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
         {items.map((item, index) => (
           <div
             key={item.id}
@@ -32,7 +38,7 @@ export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
           >
             <div className="relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white">
               {item.type === 'image' ? (
-                <div className="relative w-full" style={{ paddingBottom: `${Math.random() * 40 + 60}%` }}>
+                <div className="relative w-full" style={{ paddingBottom: `${itemHeights[index]}%` }}>
                   <Image
                     src={item.url}
                     alt={item.title || 'Portfolio item'}
@@ -47,7 +53,7 @@ export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               ) : (
-                <div className="relative w-full" style={{ paddingBottom: `${Math.random() * 40 + 60}%` }}>
+                <div className="relative w-full" style={{ paddingBottom: `${itemHeights[index]}%` }}>
                   {item.thumbnailUrl ? (
                     <Image
                       src={item.thumbnailUrl}
