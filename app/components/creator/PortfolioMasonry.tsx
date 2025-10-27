@@ -12,9 +12,10 @@ interface PortfolioMasonryProps {
 export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
 
-  // Generate consistent random heights for Pinterest-style layout
+  // Generate consistent varied heights for Pinterest-style layout
   const itemHeights = useMemo(() => {
-    const heights = [60, 75, 90, 105, 120, 85, 95, 110, 70, 100];
+    // More varied heights for true Pinterest effect (in percentage)
+    const heights = [75, 130, 90, 150, 65, 110, 85, 140, 95, 120, 70, 100, 125, 80, 145];
     return items.map((item, index) => heights[index % heights.length]);
   }, [items]);
 
