@@ -267,42 +267,6 @@ export default function Navigation({
                           <div className="py-2">
                             <LanguageSwitcher />
                           </div>
-                          
-                          {!user && (
-                            <div className="pt-6 border-t border-border/20 space-y-4">
-                              <button 
-                                onClick={(e) => {
-                                  handleLoginClick(e);
-                                  setMobileMenuOpen(false);
-                                }}
-                                disabled={loginLoading}
-                                className={`flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl transition-all duration-300 font-medium ${
-                                  loginLoading
-                                    ? 'bg-red-burgundy/10 text-red-burgundy cursor-not-allowed'
-                                    : 'text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5'
-                                }`}
-                              >
-                                {loginLoading && <span className="loading loading-spinner loading-xs text-red-burgundy"></span>}
-                                <span>Log in</span>
-                              </button>
-                              
-                              <button 
-                                onClick={(e) => {
-                                  handleSignupClick(e);
-                                  setMobileMenuOpen(false);
-                                }}
-                                disabled={signupLoading}
-                                className={`flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl transition-all duration-300 font-medium shadow-lg ${
-                                  signupLoading
-                                    ? 'bg-red-burgundy/80 text-white cursor-not-allowed'
-                                    : 'bg-red-burgundy hover:bg-red-wine text-ivory'
-                                }`}
-                              >
-                                {signupLoading && <span className="loading loading-spinner loading-xs text-white"></span>}
-                                <span>Sign up</span>
-                              </button>
-                            </div>
-                          )}
                         </div>
                       )}
                     </div>
