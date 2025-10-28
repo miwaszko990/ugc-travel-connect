@@ -22,7 +22,6 @@ export default function GenerateThumbnailsAdmin() {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
 
-      video.crossOrigin = 'anonymous';
       video.preload = 'metadata';
       video.src = videoUrl;
       

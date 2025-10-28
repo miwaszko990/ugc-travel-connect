@@ -46,7 +46,6 @@ export default function PortfolioMasonry({ items, userId, onUpdate }: PortfolioM
           const context = canvas.getContext('2d');
 
           await new Promise<void>((resolve, reject) => {
-            video.crossOrigin = 'anonymous';
             video.preload = 'metadata';
             video.src = item.url;
             
