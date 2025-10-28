@@ -30,7 +30,7 @@ export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
   // Pinterest-style masonry layout using CSS columns
   return (
     <>
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+      <div className="columns-2 lg:columns-3 gap-4">
         {items.map((item, index) => (
           <div
             key={item.id}
