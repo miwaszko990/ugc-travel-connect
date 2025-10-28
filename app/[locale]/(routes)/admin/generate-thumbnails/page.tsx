@@ -17,31 +17,43 @@ export default function GenerateThumbnailsAdmin() {
   };
 
   const generateThumbnailFromVideo = async (videoUrl: string): Promise<Blob | null> => {
-    return new Promise((resolve) => {
-      const video = document.createElement('video');
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
+    return new Promise(async (resolve) => {
+      try {
+        // Fetch video as blob to avoid CORS issues
+        const response = await fetch(videoUrl);
+        const videoBlob = await response.blob();
+        const blobUrl = URL.createObjectURL(videoBlob);
 
-      video.preload = 'metadata';
-      video.src = videoUrl;
-      
-      video.onloadedmetadata = () => {
-        video.currentTime = 1; // Capture at 1 second
-      };
+        const video = document.createElement('video');
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
 
-      video.onseeked = () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+        video.preload = 'metadata';
+        video.src = blobUrl;
         
-        canvas.toBlob((blob) => {
-          resolve(blob);
-        }, 'image/jpeg', 0.7);
-      };
+        video.onloadedmetadata = () => {
+          video.currentTime = 1; // Capture at 1 second
+        };
 
-      video.onerror = () => {
+        video.onseeked = () => {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+          
+          canvas.toBlob((blob) => {
+            URL.revokeObjectURL(blobUrl);
+            resolve(blob);
+          }, 'image/jpeg', 0.7);
+        };
+
+        video.onerror = () => {
+          URL.revokeObjectURL(blobUrl);
+          resolve(null);
+        };
+      } catch (error) {
+        console.error('Error fetching video:', error);
         resolve(null);
-      };
+      }
     });
   };
 

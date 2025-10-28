@@ -40,6 +40,11 @@ export default function PortfolioMasonry({ items, userId, onUpdate }: PortfolioM
 
       for (const item of videosWithoutThumbnails) {
         try {
+          // Fetch video as blob to avoid CORS issues
+          const response = await fetch(item.url);
+          const videoBlob = await response.blob();
+          const blobUrl = URL.createObjectURL(videoBlob);
+
           // Create video element
           const video = document.createElement('video');
           const canvas = document.createElement('canvas');
@@ -47,7 +52,7 @@ export default function PortfolioMasonry({ items, userId, onUpdate }: PortfolioM
 
           await new Promise<void>((resolve, reject) => {
             video.preload = 'metadata';
-            video.src = item.url;
+            video.src = blobUrl;
             
             video.onloadedmetadata = () => {
               video.currentTime = 1; // Capture at 1 second
@@ -72,12 +77,14 @@ export default function PortfolioMasonry({ items, userId, onUpdate }: PortfolioM
                     console.error(`❌ Error uploading thumbnail for ${item.id}:`, error);
                   }
                 }
+                URL.revokeObjectURL(blobUrl);
                 resolve();
               }, 'image/jpeg', 0.7);
             };
 
             video.onerror = () => {
               console.error(`❌ Error loading video ${item.id}`);
+              URL.revokeObjectURL(blobUrl);
               resolve(); // Continue with next video
             };
           });
