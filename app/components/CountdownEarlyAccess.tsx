@@ -41,36 +41,36 @@ export default function CountdownEarlyAccess() {
         {/* Email sign-up form */}
         <form onSubmit={onSubmit} className="mx-auto mt-6 flex w-full max-w-xl gap-3 flex-col sm:flex-row">
           <label htmlFor="early-email" className="sr-only">Email address</label>
-          <input
-            id="early-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            required
+            <input
+              id="early-email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              required
             placeholder="your@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-base outline-none ring-0 placeholder:text-neutral-400 focus:border-[#8D2D26]/30 focus:ring-2 focus:ring-[#8D2D26]/20"
-          />
-          <button
-            type="submit"
-            disabled={status === "loading"}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-base outline-none ring-0 placeholder:text-neutral-400 focus:border-[#8D2D26]/30 focus:ring-2 focus:ring-[#8D2D26]/20"
+            />
+            <button
+              type="submit"
+              disabled={status === "loading"}
             className="shrink-0 rounded-xl bg-[#8D2D26] px-6 py-3 text-white font-medium transition hover:opacity-95 disabled:opacity-60 hover:bg-[#7E241B]"
-          >
-            {status === "loading" ? "Wysyłanie…" : "Zapisz mnie"}
-          </button>
-        </form>
+            >
+              {status === "loading" ? "Wysyłanie…" : "Zapisz mnie"}
+            </button>
+          </form>
 
-        {status === "ok" && (
+          {status === "ok" && (
           <p className="mx-auto mt-4 max-w-xl text-center text-sm text-emerald-700">
-            Dziękujemy! Sprawdzaj skrzynkę — wyślemy dostęp przed startem.
-          </p>
-        )}
-        {status === "err" && (
+              Dziękujemy! Sprawdzaj skrzynkę — wyślemy dostęp przed startem.
+            </p>
+          )}
+          {status === "err" && (
           <p className="mx-auto mt-4 max-w-xl text-center text-sm text-red-600">
-            Coś poszło nie tak. Sprawdź e-mail i spróbuj ponownie.
-          </p>
-        )}
+              Coś poszło nie tak. Sprawdź e-mail i spróbuj ponownie.
+            </p>
+          )}
       </div>
     </section>
   );
