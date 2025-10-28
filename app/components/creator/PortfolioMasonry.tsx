@@ -1,16 +1,21 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { PortfolioItem } from '@/app/lib/types';
 import { XMarkIcon, PlayIcon } from '@heroicons/react/24/solid';
+import { updatePortfolioItem } from '@/app/lib/firebase/portfolio';
+import { uploadPortfolioFile } from '@/app/lib/firebase/portfolio';
 
 interface PortfolioMasonryProps {
   items: PortfolioItem[];
+  userId?: string;
+  onUpdate?: () => void;
 }
 
-export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
+export default function PortfolioMasonry({ items, userId, onUpdate }: PortfolioMasonryProps) {
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
+  const [processingThumbnails, setProcessingThumbnails] = useState(false);
 
   // Generate consistent varied heights for Pinterest-style layout
   const itemHeights = useMemo(() => {
@@ -18,6 +23,78 @@ export default function PortfolioMasonry({ items }: PortfolioMasonryProps) {
     const heights = [75, 130, 90, 150, 65, 110, 85, 140, 95, 120, 70, 100, 125, 80, 145];
     return items.map((item, index) => heights[index % heights.length]);
   }, [items]);
+
+  // Auto-generate thumbnails for videos without them
+  useEffect(() => {
+    if (!userId || processingThumbnails) return;
+
+    const generateMissingThumbnails = async () => {
+      const videosWithoutThumbnails = items.filter(
+        item => item.type === 'video' && !item.thumbnailUrl
+      );
+
+      if (videosWithoutThumbnails.length === 0) return;
+
+      setProcessingThumbnails(true);
+      console.log(`🎬 Generating thumbnails for ${videosWithoutThumbnails.length} videos...`);
+
+      for (const item of videosWithoutThumbnails) {
+        try {
+          // Create video element
+          const video = document.createElement('video');
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+
+          await new Promise<void>((resolve, reject) => {
+            video.crossOrigin = 'anonymous';
+            video.preload = 'metadata';
+            video.src = item.url;
+            
+            video.onloadedmetadata = () => {
+              video.currentTime = 1; // Capture at 1 second
+            };
+
+            video.onseeked = async () => {
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+              
+              canvas.toBlob(async (blob) => {
+                if (blob && userId) {
+                  try {
+                    // Convert blob to file and upload
+                    const thumbnailFile = new File([blob], `thumb_${item.id}.jpg`, { type: 'image/jpeg' });
+                    const thumbnailUrl = await uploadPortfolioFile(thumbnailFile, userId);
+                    
+                    // Update portfolio item
+                    await updatePortfolioItem(userId, item.id, { thumbnailUrl });
+                    console.log(`✅ Thumbnail generated for ${item.id}`);
+                  } catch (error) {
+                    console.error(`❌ Error uploading thumbnail for ${item.id}:`, error);
+                  }
+                }
+                resolve();
+              }, 'image/jpeg', 0.7);
+            };
+
+            video.onerror = () => {
+              console.error(`❌ Error loading video ${item.id}`);
+              resolve(); // Continue with next video
+            };
+          });
+        } catch (error) {
+          console.error(`Error processing video ${item.id}:`, error);
+        }
+      }
+
+      setProcessingThumbnails(false);
+      if (onUpdate) {
+        onUpdate(); // Refresh portfolio after generating thumbnails
+      }
+    };
+
+    generateMissingThumbnails();
+  }, [items, userId, onUpdate, processingThumbnails]);
 
   if (!items || items.length === 0) {
     return (

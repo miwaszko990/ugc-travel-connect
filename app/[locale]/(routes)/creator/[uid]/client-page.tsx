@@ -570,7 +570,7 @@ export default function ClientCreatorProfile({ uid }: { uid: string }) {
                   <h2 className="text-2xl font-serif font-bold text-text">Portfolio</h2>
                 </div>
                 
-                <PortfolioMasonry items={creator.portfolio} />
+                <PortfolioMasonry items={creator.portfolio} userId={uid} />
               </div>
             )}
 

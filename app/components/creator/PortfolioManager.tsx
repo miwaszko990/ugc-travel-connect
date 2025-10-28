@@ -198,7 +198,7 @@ export default function PortfolioManager({ portfolio, onUpdate }: PortfolioManag
       {/* Portfolio Display */}
       {portfolio.length > 0 ? (
         <div className="relative">
-          <PortfolioMasonry items={portfolio} />
+          <PortfolioMasonry items={portfolio} userId={user?.uid} onUpdate={onUpdate} />
           
           {/* Delete buttons overlay - only visible to owner */}
           <div className="absolute inset-0 pointer-events-none">
