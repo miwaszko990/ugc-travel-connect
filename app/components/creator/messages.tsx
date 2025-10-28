@@ -5,6 +5,7 @@ import { useAuth } from '@/app/hooks/auth';
 import { subscribeToUserConversations, Conversation } from '@/app/lib/firebase/messages';
 import MessagingPanel from '@/app/components/messages/messaging-panel';
 import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 // Icons no longer needed - using MessagingPanel's built-in header
 import React from 'react';
 
@@ -27,6 +28,7 @@ function MobileConversationList({
   loading: boolean;
 }) {
   const { user } = useAuth();
+  const t = useTranslations('creator.messages');
 
   if (loading) {
     return (
@@ -45,8 +47,8 @@ function MobileConversationList({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No conversations yet</h3>
-          <p className="text-gray-500 text-sm">Start networking with brands to begin conversations</p>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('noConversations')}</h3>
+          <p className="text-gray-500 text-sm">{t('startNetworking')}</p>
         </div>
       </div>
     );

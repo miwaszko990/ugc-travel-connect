@@ -499,5 +499,9 @@
       "empty": "Brak postów",
       "viewOnInstagram": "Zobacz na Instagramie"
     }
+  },
+  "messages": {
+    "noConversations": "Nie masz jeszcze żadnych rozmów",
+    "startNetworking": "Zacznij nawiązywać kontakty z markami, aby rozpocząć rozmowy"
   }
 }

@@ -515,5 +515,9 @@
       },
       "viewOnInstagram": "View on Instagram"
     }
+  },
+  "messages": {
+    "noConversations": "No conversations yet",
+    "startNetworking": "Start networking with brands to begin conversations"
   }
 }
