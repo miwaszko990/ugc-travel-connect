@@ -22,11 +22,58 @@ export default function PortfolioManager({ portfolio, onUpdate }: PortfolioManag
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const generateVideoThumbnail = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      video.preload = 'metadata';
+      video.src = URL.createObjectURL(file);
+      
+      video.onloadedmetadata = () => {
+        video.currentTime = 1; // Capture frame at 1 second
+      };
+
+      video.onseeked = () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        canvas.toBlob((blob) => {
+          if (blob) {
+            resolve(URL.createObjectURL(blob));
+          } else {
+            reject(new Error('Failed to generate thumbnail'));
+          }
+          URL.revokeObjectURL(video.src);
+        }, 'image/jpeg', 0.7);
+      };
+
+      video.onerror = () => {
+        reject(new Error('Failed to load video'));
+        URL.revokeObjectURL(video.src);
+      };
+    });
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
+      
+      // Generate preview
+      if (file.type.startsWith('video')) {
+        try {
+          const thumbnail = await generateVideoThumbnail(file);
+          setPreviewUrl(thumbnail);
+        } catch (error) {
+          console.error('Error generating thumbnail:', error);
+          setPreviewUrl(URL.createObjectURL(file));
+        }
+      } else {
+        setPreviewUrl(URL.createObjectURL(file));
+      }
     }
   };
 
@@ -46,10 +93,59 @@ export default function PortfolioManager({ portfolio, onUpdate }: PortfolioManag
       // Determine file type
       const fileType = selectedFile.type.startsWith('video') ? 'video' : 'image';
 
+      // Generate and upload thumbnail for videos
+      let thumbnailUrl: string | undefined = undefined;
+      if (fileType === 'video') {
+        try {
+          // Generate thumbnail
+          const video = document.createElement('video');
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+
+          await new Promise<void>((resolve, reject) => {
+            video.preload = 'metadata';
+            video.src = URL.createObjectURL(selectedFile);
+            
+            video.onloadedmetadata = () => {
+              video.currentTime = 1;
+            };
+
+            video.onseeked = async () => {
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+              
+              canvas.toBlob(async (blob) => {
+                if (blob) {
+                  // Convert blob to file
+                  const thumbnailFile = new File([blob], `thumbnail_${selectedFile.name}.jpg`, { type: 'image/jpeg' });
+                  
+                  // Upload thumbnail
+                  thumbnailUrl = await uploadPortfolioFile(
+                    thumbnailFile,
+                    user.uid
+                  );
+                }
+                URL.revokeObjectURL(video.src);
+                resolve();
+              }, 'image/jpeg', 0.7);
+            };
+
+            video.onerror = () => {
+              URL.revokeObjectURL(video.src);
+              reject(new Error('Failed to load video'));
+            };
+          });
+        } catch (error) {
+          console.error('Error generating thumbnail:', error);
+        }
+      }
+
       // Add portfolio item to Firestore
       await addPortfolioItem(user.uid, {
         type: fileType,
         url: fileUrl,
+        thumbnailUrl,
         title: title || undefined,
         description: description || undefined,
         uploadedAt: new Date().toISOString()
