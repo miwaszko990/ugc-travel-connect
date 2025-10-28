@@ -16,7 +16,7 @@ function localePrefix(): string {
 export function navigateToDashboard(role: UserRole, router: ReturnType<typeof useRouter>) {
   const lp = localePrefix();
   if (role === 'creator') {
-    router.push(`${lp}/dashboard/creator`);
+    router.push(`${lp}/dashboard/creator?tab=travel-plans`);
   } else if (role === 'brand') {
     router.push(`${lp}/dashboard/brand`);
   } else {
@@ -112,7 +112,7 @@ export function handleRedirectLoopPrevention(router: ReturnType<typeof useRouter
   if (currentPath.endsWith('/dashboard/creator/profile-setup') && profileComplete === 'true') {
     console.log('⚠️ Detected potential redirect loop! User has completed profile but is on setup page');
     console.log('🛑 EMERGENCY REDIRECT BREAK ACTIVATED');
-    window.location.replace(`${lp}/dashboard/creator?emergency=true`);
+    window.location.replace(`${lp}/dashboard/creator?tab=travel-plans&emergency=true`);
   }
 }
 

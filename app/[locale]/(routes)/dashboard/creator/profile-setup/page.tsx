@@ -277,7 +277,7 @@ export default function CreatorProfileSetup() {
       
       toast.success(isEditMode ? t('messages.profileUpdateSuccess') : t('messages.profileCreateSuccess'));
       
-      router.push(`/${locale}/dashboard/creator`);
+      router.push(`/${locale}/dashboard/creator?tab=travel-plans`);
     } catch (error) {
       console.error('Error updating profile:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
@@ -304,7 +304,7 @@ export default function CreatorProfileSetup() {
       <div className={`bg-white ${AUTH_CONSTANTS.FORM.CARD_RADIUS} shadow-lg p-8 max-w-[600px] w-full relative`}>
         {/* Close button */}
         <button
-          onClick={() => router.push(`/${locale}/dashboard/creator`)}
+          onClick={() => router.push(`/${locale}/dashboard/creator?tab=travel-plans`)}
           className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors group"
           type="button"
           aria-label={t('form.close') || 'Close'}
