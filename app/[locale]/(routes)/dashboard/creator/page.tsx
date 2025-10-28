@@ -268,7 +268,7 @@ export default function CreatorDashboard() {
               </nav>
 
               {/* Profile Section */}
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <button 
                   onClick={() => window.location.href = `/${locale}/dashboard/creator/profile-setup`}
                   className="text-right hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
@@ -279,6 +279,26 @@ export default function CreatorDashboard() {
                   <div className="text-xs text-gray-500 group-hover:text-red-burgundy/70 transition-colors duration-300">
                     Creator Account
                   </div>
+                </button>
+                
+                {/* Logout Button */}
+                <button
+                  onClick={async () => {
+                    if (confirm('Czy na pewno chcesz się wylogować?')) {
+                      const { logout } = await import('@/app/hooks/auth');
+                      const { signOut } = await import('firebase/auth');
+                      const { auth } = await import('@/app/lib/firebase');
+                      await signOut(auth);
+                      window.location.href = `/${locale}`;
+                    }
+                  }}
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-red-burgundy hover:bg-red-burgundy/5 rounded-lg transition-all duration-300"
+                  title="Wyloguj się"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                  </svg>
+                  <span className="hidden xl:inline">Wyloguj</span>
                 </button>
               </div>
             </div>
