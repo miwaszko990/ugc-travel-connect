@@ -140,13 +140,13 @@ export default function Navigation({
             </div>
             
             {/* Auth Controls */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               {!user ? (
                 <>
                   <button
                     onClick={handleLoginClick}
                     disabled={loginLoading}
-                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
+                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 whitespace-nowrap ${
                       loginLoading 
                         ? 'bg-red-burgundy/10 text-red-burgundy cursor-not-allowed'
                         : 'text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5'
@@ -159,7 +159,7 @@ export default function Navigation({
                   <button
                     onClick={handleSignupClick}
                     disabled={signupLoading}
-                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-300 hover:-translate-y-0.5 shadow-sm hover:shadow-md ${
+                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg border transition-all duration-300 hover:-translate-y-0.5 shadow-sm hover:shadow-md whitespace-nowrap ${
                       signupLoading
                         ? 'bg-red-burgundy/80 text-white border-red-burgundy cursor-not-allowed'
                         : 'bg-white text-red-burgundy hover:bg-red-burgundy hover:text-white border-red-burgundy'
