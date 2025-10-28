@@ -45,7 +45,7 @@ export default function LoginPage() {
     reset
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur', // Validate on blur for better UX
+    mode: 'onChange', // Validate on change for immediate feedback
     defaultValues: {
       email: '',
       password: ''
