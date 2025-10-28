@@ -109,13 +109,6 @@ export default function Navigation({
                   <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
                 </Link>
                 <Link 
-                  href="#about" 
-                  className="relative text-sm font-medium text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group"
-                >
-                  {t('about')}
-                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-burgundy group-hover:w-full transition-all duration-300"></div>
-                </Link>
-                <Link 
                   href="/search" 
                   className="relative text-sm font-medium text-subtext hover:text-red-burgundy hover:bg-red-burgundy/5 px-3 py-2 rounded-lg transition-all duration-300 group flex items-center gap-2"
                 >
@@ -238,13 +231,6 @@ export default function Navigation({
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {t('howItWorks')}
-                          </Link>
-                          <Link 
-                            href="#about" 
-                            className="block text-lg font-medium text-subtext hover:text-red-burgundy transition-all duration-300 py-2"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            {t('about')}
                           </Link>
                           <Link 
                             href="/search" 
