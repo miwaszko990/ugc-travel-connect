@@ -538,111 +538,113 @@ export default function CreatorProfileSetup() {
             </div>
           </div>
 
-          {/* Portfolio Upload Section */}
-          <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-2xl">🎨</span>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 font-playfair">
-                  Portfolio
-                </h3>
-                <p className="text-gray-500 text-sm">
-                  Dodaj zdjęcia i wideo do swojego portfolio
+          {/* Portfolio Upload Section - Only show during initial setup, not when editing */}
+          {!isEditMode && (
+            <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">🎨</span>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 font-playfair">
+                    Portfolio
+                  </h3>
+                  <p className="text-gray-500 text-sm">
+                    Dodaj zdjęcia i wideo do swojego portfolio
+                  </p>
+                </div>
+              </div>
+
+              {/* File Upload Area */}
+              <div className="mb-4">
+                <label className="block w-full">
+                  <div className="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center hover:border-purple-500 hover:bg-purple-50 transition cursor-pointer">
+                    <div className="flex flex-col items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-purple-400">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                      </svg>
+                      <p className="text-sm font-medium text-gray-700">
+                        Kliknij lub przeciągnij zdjęcia i wideo
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        JPG, PNG, MP4, MOV (maks. 50MB)
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*,video/*"
+                    multiple
+                    onChange={handlePortfolioFileSelect}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {/* Preview Uploaded Files */}
+              {portfolioFiles.length > 0 && (
+                <div className="space-y-3">
+                  {portfolioFiles.map((file, index) => (
+                    <div key={index} className="bg-white rounded-xl p-4 border border-gray-200">
+                      <div className="flex items-start gap-3">
+                        {/* File Preview */}
+                        <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                          {file.type.startsWith('image') ? (
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={file.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-purple-500">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* File Info and Title */}
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-700 mb-1">{file.name}</p>
+                          <input
+                            type="text"
+                            placeholder="Tytuł (opcjonalnie)"
+                            value={portfolioTitles[index]}
+                            onChange={(e) => updatePortfolioTitle(index, e.target.value)}
+                            className="w-full text-sm px-3 py-1.5 rounded-lg border border-gray-200 focus:border-purple-500 focus:outline-none"
+                          />
+                        </div>
+                        
+                        {/* Remove Button */}
+                        <button
+                          type="button"
+                          onClick={() => removePortfolioFile(index)}
+                          className="text-gray-400 hover:text-red-500 transition"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Instructions */}
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-blue-600">ℹ️</span>
+                  <h4 className="text-sm font-medium text-blue-800">
+                    Informacja
+                  </h4>
+                </div>
+                <p className="text-xs text-blue-700">
+                  Portfolio możesz później edytować w swoim dashboardzie w zakładce "Portfolio". Możesz dodać więcej zdjęć i wideo w każdej chwili.
                 </p>
               </div>
             </div>
-
-            {/* File Upload Area */}
-            <div className="mb-4">
-              <label className="block w-full">
-                <div className="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center hover:border-purple-500 hover:bg-purple-50 transition cursor-pointer">
-                  <div className="flex flex-col items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-purple-400">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                    </svg>
-                    <p className="text-sm font-medium text-gray-700">
-                      Kliknij lub przeciągnij zdjęcia i wideo
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      JPG, PNG, MP4, MOV (maks. 50MB)
-                    </p>
-                  </div>
-                </div>
-                <input
-                  type="file"
-                  accept="image/*,video/*"
-                  multiple
-                  onChange={handlePortfolioFileSelect}
-                  className="hidden"
-                />
-              </label>
-            </div>
-
-            {/* Preview Uploaded Files */}
-            {portfolioFiles.length > 0 && (
-              <div className="space-y-3">
-                {portfolioFiles.map((file, index) => (
-                  <div key={index} className="bg-white rounded-xl p-4 border border-gray-200">
-                    <div className="flex items-start gap-3">
-                      {/* File Preview */}
-                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                        {file.type.startsWith('image') ? (
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={file.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-purple-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* File Info and Title */}
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-700 mb-1">{file.name}</p>
-                        <input
-                          type="text"
-                          placeholder="Tytuł (opcjonalnie)"
-                          value={portfolioTitles[index]}
-                          onChange={(e) => updatePortfolioTitle(index, e.target.value)}
-                          className="w-full text-sm px-3 py-1.5 rounded-lg border border-gray-200 focus:border-purple-500 focus:outline-none"
-                        />
-                      </div>
-                      
-                      {/* Remove Button */}
-                      <button
-                        type="button"
-                        onClick={() => removePortfolioFile(index)}
-                        className="text-gray-400 hover:text-red-500 transition"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Instructions */}
-            <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-blue-600">ℹ️</span>
-                <h4 className="text-sm font-medium text-blue-800">
-                  Informacja
-                </h4>
-              </div>
-              <p className="text-xs text-blue-700">
-                Portfolio możesz później edytować w swoim dashboardzie w zakładce "Portfolio". Możesz dodać więcej zdjęć i wideo w każdej chwili.
-              </p>
-            </div>
-          </div>
+          )}
 
           {/* Custom Service Packages Section */}
           <div className="mt-8">
