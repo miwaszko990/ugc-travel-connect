@@ -85,7 +85,7 @@ export default function Navigation({
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center">
-              <Link href="/" className="flex items-center group">
+              <Link href={`/${locale}`} className="flex items-center group">
                 <div className="relative">
                   <span className="text-3xl font-serif font-bold text-red-burgundy group-hover:text-red-wine transition-all duration-300 transform group-hover:scale-105">
                     Lumo
@@ -217,7 +217,7 @@ export default function Navigation({
                   <Dialog.Panel className="pointer-events-auto relative w-screen max-w-sm">
                     <div className="relative flex w-full max-w-sm flex-col bg-ivory shadow-2xl">
                       <div className="flex items-center justify-between px-6 pt-8 pb-6 border-b border-border/20">
-                        <Link href="/" className="flex items-center group">
+                        <Link href={`/${locale}`} className="flex items-center group" onClick={() => setMobileMenuOpen(false)}>
                           <span className="text-2xl font-serif font-bold text-red-burgundy group-hover:text-red-wine transition-all duration-300">Lumo</span>
                         </Link>
                         <button
