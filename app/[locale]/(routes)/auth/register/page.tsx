@@ -174,7 +174,7 @@ export default function RegisterPage() {
               disabled={loading}
             >
               {loading ? (
-                <div className="flex items-center gap-2 text-white">
+                <div className="flex items-center justify-center gap-2 text-white">
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-r-transparent"></div>
                   <span className="text-white">{t('creatingAccount')}</span>
                 </div>
