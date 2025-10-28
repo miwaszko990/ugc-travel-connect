@@ -6,8 +6,11 @@ import type { UserData, UserRole, AuthAction } from './types';
 
 function localePrefix(): string {
   if (typeof window === 'undefined') return '/pl';
-  const seg = (window.location.pathname.split('/')[1] || 'pl');
-  return `/${seg}`;
+  const segments = window.location.pathname.split('/').filter(Boolean);
+  // Find the locale segment (pl, en, etc.) - it should be the first valid locale
+  const validLocales = ['pl', 'en'];
+  const locale = segments.find(seg => validLocales.includes(seg)) || 'pl';
+  return `/${locale}`;
 }
 
 /**
