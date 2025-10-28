@@ -155,11 +155,11 @@ export default function JobDetailsPage() {
       {/* Navigation Bar */}
       <Navigation sticky={true} />
       
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
         {/* Back Button */}
         <Link
           href="/zlecenia"
-          className="inline-flex items-center text-[#8D2D26] hover:underline mb-8 mt-4"
+          className="inline-flex items-center text-[#8D2D26] hover:underline mb-8"
         >
           ← Wróć do listy zleceń
         </Link>
