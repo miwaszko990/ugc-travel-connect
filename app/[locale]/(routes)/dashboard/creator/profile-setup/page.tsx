@@ -745,7 +745,7 @@ export default function CreatorProfileSetup() {
               {isSubmitting || uploadingPortfolio ? (
                 <div className="flex items-center justify-center gap-2 text-white">
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-r-transparent"></div>
-                  <span>{uploadingPortfolio ? 'Uploading portfolio...' : t('buttons.saving')}</span>
+                  <span>{uploadingPortfolio ? t('buttons.uploadingPortfolio') : t('buttons.saving')}</span>
                 </div>
               ) : (
                 <span className="text-white">{t('buttons.saveAndContinue')}</span>

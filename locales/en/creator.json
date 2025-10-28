@@ -351,7 +351,8 @@
     },
     "buttons": {
       "saveAndContinue": "Save and Continue",
-      "saving": "Saving..."
+      "saving": "Saving...",
+      "uploadingPortfolio": "Uploading portfolio..."
     },
     "instagramPosts": {
       "title": "Instagram Photos",

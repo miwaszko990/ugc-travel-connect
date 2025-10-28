@@ -123,7 +123,8 @@
     },
     "buttons": {
       "saveAndContinue": "Zapisz i Kontynuuj",
-      "saving": "Zapisywanie..."
+      "saving": "Zapisywanie...",
+      "uploadingPortfolio": "Przesyłanie portfolio..."
     },
     "instagramPosts": {
       "title": "Zdjęcia z Instagrama",
