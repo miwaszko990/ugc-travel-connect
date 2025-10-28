@@ -197,22 +197,13 @@ export default function PortfolioManager({ portfolio, onUpdate }: PortfolioManag
 
       {/* Portfolio Display */}
       {portfolio.length > 0 ? (
-        <div className="relative">
-          <PortfolioMasonry items={portfolio} userId={user?.uid} onUpdate={onUpdate} />
-          
-          {/* Delete buttons overlay - only visible to owner */}
-          <div className="absolute inset-0 pointer-events-none">
-            {portfolio.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleRemove(item.id)}
-                className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors pointer-events-auto opacity-0 hover:opacity-100"
-              >
-                <XMarkIcon className="h-4 w-4" />
-              </button>
-            ))}
-          </div>
-        </div>
+        <PortfolioMasonry 
+          items={portfolio} 
+          userId={user?.uid} 
+          onUpdate={onUpdate}
+          onDelete={handleRemove}
+          showDeleteButtons={true}
+        />
       ) : (
         <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-3xl">
           <PhotoIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />

@@ -11,9 +11,11 @@ interface PortfolioMasonryProps {
   items: PortfolioItem[];
   userId?: string;
   onUpdate?: () => void;
+  onDelete?: (itemId: string) => void;
+  showDeleteButtons?: boolean;
 }
 
-export default function PortfolioMasonry({ items, userId, onUpdate }: PortfolioMasonryProps) {
+export default function PortfolioMasonry({ items, userId, onUpdate, onDelete, showDeleteButtons = false }: PortfolioMasonryProps) {
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [processingThumbnails, setProcessingThumbnails] = useState(false);
 
@@ -121,6 +123,21 @@ export default function PortfolioMasonry({ items, userId, onUpdate }: PortfolioM
             onClick={() => setSelectedItem(item)}
           >
             <div className="relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white">
+              {/* Delete Button */}
+              {showDeleteButtons && onDelete && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (confirm('Czy na pewno chcesz usunąć ten element z portfolio?')) {
+                      onDelete(item.id);
+                    }
+                  }}
+                  className="absolute top-2 right-2 z-10 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all opacity-0 group-hover:opacity-100 shadow-lg"
+                >
+                  <XMarkIcon className="h-4 w-4" />
+                </button>
+              )}
+              
               {item.type === 'image' ? (
                 <div className="relative w-full" style={{ paddingBottom: `${itemHeights[index]}%` }}>
                   <Image
